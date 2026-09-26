@@ -29,18 +29,23 @@ export default function HomePage() {
   return (
     <div className="bg-temple-cream min-h-screen">
       {/* 1. Hero Section */}
-      <section className="relative bg-gradient-to-b from-temple-maroon via-temple-maroon-dark to-temple-maroon-deep text-white pt-16 pb-24 overflow-hidden border-b-4 border-temple-gold">
-        {/* Kolam / Temple Background Motifs */}
-        <div className="absolute inset-0 opacity-10 bg-kolam-pattern pointer-events-none"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-temple-gold/10 rounded-full blur-3xl pointer-events-none"></div>
+      <section className="relative bg-temple-maroon-deep text-white pt-16 pb-24 overflow-hidden border-b-4 border-temple-gold">
+        {/* Background Nataraja BG1.png & Temple Gradients */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30 mix-blend-luminosity scale-105 pointer-events-none transition-transform duration-1000"
+          style={{ backgroundImage: `url('/BG1.png')` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-temple-maroon-deep/95 via-temple-maroon/85 to-temple-maroon-deep/90 pointer-events-none" />
+        <div className="absolute inset-0 opacity-10 bg-kolam-pattern pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-temple-gold/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
             {/* Left Column: Hero Text */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-temple-gold/20 border border-temple-gold text-temple-gold-light text-xs font-cinzel tracking-widest uppercase shadow-sm">
-                <Sparkles className="w-3.5 h-3.5 text-temple-gold" />
+              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-temple-gold/20 border border-temple-gold text-temple-gold-light text-xs font-cinzel tracking-widest uppercase shadow-sm">
+                <img src="/logo.png" alt="Sri Ruthralaya Academy Emblem" className="w-5 h-5 object-contain" />
                 <span>18+ Years of Sacred Dance Pedagogy</span>
               </div>
 
@@ -85,22 +90,23 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right Column: Hero Visual Card */}
+            {/* Right Column: Hero Visual Card with BG.2.png */}
             <div className="lg:col-span-5 flex justify-center">
               <div className="relative w-full max-w-md">
                 {/* Decorative Temple Border Frame */}
                 <div className="absolute -inset-3 rounded-2xl border-2 border-temple-gold/50 rotate-1 pointer-events-none"></div>
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-temple-gold bg-temple-maroon">
                   <img
-                    src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80"
-                    alt="Bharatanatyam dancer performing in classical costume"
-                    className="w-full h-[430px] object-cover object-top hover:scale-105 transition-transform duration-700"
+                    src="/BG.2.png"
+                    alt="Bharatanatyam Salangai Footwork & Sacred Temple Rhythm at Sri Ruthralaya"
+                    className="w-full h-[430px] object-cover object-center hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-temple-maroon-deep via-transparent to-black/20 pointer-events-none"></div>
 
                   <div className="absolute bottom-4 left-4 right-4 p-4 rounded-xl bg-temple-maroon-dark/90 border border-temple-gold/40 backdrop-blur-sm text-left">
                     <div className="flex items-center justify-between">
-                      <span className="font-cinzel text-xs font-bold text-temple-gold uppercase tracking-wider">
+                      <span className="font-cinzel text-xs font-bold text-temple-gold uppercase tracking-wider flex items-center gap-1.5">
+                        <img src="/logo.png" alt="" className="w-4 h-4 object-contain inline" />
                         Sri Ruthraalayaa
                       </span>
                       <span className="text-[10px] text-amber-200/70 font-outfit">
@@ -453,27 +459,37 @@ export default function HomePage() {
       {/* 7. Call To Action Banner */}
       <section className="py-16 bg-temple-cream relative">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-temple-maroon via-temple-maroon-dark to-temple-maroon text-white border-2 border-temple-gold shadow-temple-lg">
-            <h2 className="font-cinzel text-2xl sm:text-4xl font-bold text-temple-gold-light">
-              Begin Your Classical Dance Journey
-            </h2>
-            <p className="font-cormorant italic text-base sm:text-xl text-amber-100/90 mt-2 max-w-xl mx-auto">
-              Admissions are now open for new batches. Join Guru Sridevi's lineage and awaken your inner Nataraja.
-            </p>
+          <div className="relative p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-temple-maroon via-temple-maroon-dark to-temple-maroon text-white border-2 border-temple-gold shadow-temple-lg overflow-hidden">
+            {/* Ambient BG1.png backdrop */}
+            <div 
+              className="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-luminosity pointer-events-none"
+              style={{ backgroundImage: `url('/BG1.png')` }}
+            />
+            <div className="relative z-10">
+              <div className="w-16 h-16 rounded-full bg-temple-maroon border-2 border-temple-gold mx-auto mb-4 flex items-center justify-center p-2 shadow-gold-glow">
+                <img src="/logo.png" alt="Sri Ruthralaya" className="w-full h-full object-contain" />
+              </div>
+              <h2 className="font-cinzel text-2xl sm:text-4xl font-bold text-temple-gold-light">
+                Begin Your Classical Dance Journey
+              </h2>
+              <p className="font-cormorant italic text-base sm:text-xl text-amber-100/90 mt-2 max-w-xl mx-auto">
+                Admissions are now open for new batches. Join Guru Sridevi's lineage and awaken your inner Nataraja.
+              </p>
 
-            <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                to="/register"
-                className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-temple-gold to-amber-500 text-temple-maroon-deep font-cinzel font-bold text-sm hover:brightness-110 shadow-gold-glow transition-all"
-              >
-                Apply for Admission Online
-              </Link>
-              <Link
-                to="/contact"
-                className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-temple-gold text-amber-100 hover:bg-temple-gold hover:text-temple-maroon font-cinzel text-sm font-semibold transition-all"
-              >
-                Visit Academy Studio
-              </Link>
+              <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link
+                  to="/register"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-temple-gold to-amber-500 text-temple-maroon-deep font-cinzel font-bold text-sm hover:brightness-110 shadow-gold-glow transition-all"
+                >
+                  Apply for Admission Online
+                </Link>
+                <Link
+                  to="/contact"
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-temple-gold text-amber-100 hover:bg-temple-gold hover:text-temple-maroon font-cinzel text-sm font-semibold transition-all"
+                >
+                  Visit Academy Studio
+                </Link>
+              </div>
             </div>
           </div>
         </div>

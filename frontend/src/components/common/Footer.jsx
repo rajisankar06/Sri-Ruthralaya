@@ -16,8 +16,8 @@ export default function Footer() {
           {/* Col 1: Academy & Guru */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full border border-temple-gold bg-temple-maroon flex items-center justify-center shadow-gold-glow">
-                <MudraIcon name="nataraja" className="w-8 h-8 text-temple-gold" />
+              <div className="w-12 h-12 rounded-full border border-temple-gold bg-white flex items-center justify-center p-1 shadow-gold-glow overflow-hidden">
+                <img src="/logo.png" alt="Sri Ruthraalayaa Logo" className="w-full h-full object-contain" />
               </div>
               <div>
                 <h3 className="font-cinzel font-bold text-lg text-temple-gold-light">

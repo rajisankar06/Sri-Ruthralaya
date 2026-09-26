@@ -50,8 +50,8 @@ export default function Navbar() {
           
           {/* Brand Logo & Name */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-12 h-12 rounded-full border-2 border-temple-gold bg-gradient-to-br from-temple-maroon to-temple-maroon-dark flex items-center justify-center shadow-gold-glow group-hover:scale-105 transition-transform">
-              <MudraIcon name="nataraja" className="w-8 h-8 text-temple-gold" />
+            <div className="w-12 h-12 rounded-full border-2 border-temple-gold bg-white flex items-center justify-center p-1 shadow-gold-glow group-hover:scale-105 transition-transform overflow-hidden">
+              <img src="/logo.png" alt="Sri Ruthraalayaa Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">

@@ -55,12 +55,23 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-temple-cream flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-kolam-pattern">
-      <div className="max-w-md w-full space-y-6 bg-white p-8 sm:p-10 rounded-3xl border-2 border-temple-gold shadow-temple-lg relative overflow-hidden">
+    <div className="min-h-screen relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 overflow-hidden bg-temple-maroon-deep">
+      {/* Background BG1.png & Temple Overlay */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-luminosity scale-105 pointer-events-none"
+        style={{ backgroundImage: `url('/BG1.png')` }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-temple-maroon-deep via-temple-maroon/90 to-temple-maroon-deep/95 pointer-events-none" />
+      <div className="absolute inset-0 opacity-10 bg-kolam-pattern pointer-events-none" />
+
+      <div className="max-w-md w-full space-y-6 bg-white/95 backdrop-blur-sm p-8 sm:p-10 rounded-3xl border-2 border-temple-gold shadow-2xl relative z-10 overflow-hidden">
         
+        {/* Top Gold Ornament */}
+        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-temple-maroon via-temple-gold to-temple-maroon"></div>
+
         <div className="text-center">
-          <div className="w-12 h-12 rounded-full bg-temple-maroon text-temple-gold border-2 border-temple-gold flex items-center justify-center mx-auto shadow-gold-glow">
-            <KeyRound className="w-6 h-6 text-temple-gold" />
+          <div className="w-16 h-16 rounded-full bg-temple-maroon text-temple-gold border-2 border-temple-gold flex items-center justify-center mx-auto shadow-gold-glow p-2 overflow-hidden">
+            <img src="/logo.png" alt="Sri Ruthralaya" className="w-full h-full object-contain" />
           </div>
           <h2 className="mt-3 font-cinzel text-xl font-bold text-temple-maroon tracking-wide">
             Password Recovery

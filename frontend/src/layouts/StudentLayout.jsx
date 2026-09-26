@@ -50,8 +50,8 @@ export default function StudentLayout() {
       {/* Mobile Top Header */}
       <div className="lg:hidden bg-temple-maroon text-white p-4 flex items-center justify-between border-b-2 border-temple-gold shadow-md">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full border border-temple-gold bg-temple-maroon-dark flex items-center justify-center">
-            <MudraIcon name="nataraja" className="w-6 h-6 text-temple-gold" />
+          <div className="w-10 h-10 rounded-full border border-temple-gold bg-white flex items-center justify-center p-1 overflow-hidden">
+            <img src="/logo.png" alt="Sri Ruthraalayaa Logo" className="w-full h-full object-contain" />
           </div>
           <div>
             <h1 className="font-cinzel font-bold text-sm text-temple-gold-light">Sri Ruthraalayaa</h1>
@@ -76,8 +76,8 @@ export default function StudentLayout() {
           {/* Sidebar Header */}
           <div className="p-6 border-b border-temple-gold/30 bg-temple-maroon-dark">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full border-2 border-temple-gold bg-temple-maroon flex items-center justify-center shadow-gold-glow">
-                <MudraIcon name="nataraja" className="w-7 h-7 text-temple-gold" />
+              <div className="w-12 h-12 rounded-full border-2 border-temple-gold bg-white flex items-center justify-center p-1 shadow-gold-glow overflow-hidden">
+                <img src="/logo.png" alt="Sri Ruthraalayaa Logo" className="w-full h-full object-contain" />
               </div>
               <div>
                 <h2 className="font-cinzel font-bold text-sm text-temple-gold-light">

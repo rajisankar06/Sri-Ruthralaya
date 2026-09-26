@@ -65,12 +65,18 @@ export default function StudentDashboard() {
       
       {/* Top Welcome Banner */}
       <div className="p-8 rounded-3xl bg-gradient-to-r from-temple-maroon via-temple-maroon-dark to-temple-maroon text-white border-2 border-temple-gold shadow-temple-lg relative overflow-hidden">
+        {/* Background Nataraja BG1.png */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-luminosity pointer-events-none"
+          style={{ backgroundImage: `url('/BG1.png')` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-temple-maroon-deep/90 via-temple-maroon/80 to-temple-maroon-deep/90 pointer-events-none" />
         <div className="absolute inset-0 opacity-10 bg-kolam-pattern pointer-events-none"></div>
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-temple-gold/20 border border-temple-gold text-temple-gold-light text-xs font-cinzel tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 text-temple-gold" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-temple-gold/20 border border-temple-gold text-temple-gold-light text-xs font-cinzel tracking-wider">
+              <img src="/logo.png" alt="Sri Ruthralaya" className="w-4 h-4 object-contain" />
               <span>Sadhana Portal • Sri Ruthraalayaa</span>
             </div>
 

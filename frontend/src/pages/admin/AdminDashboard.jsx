@@ -202,13 +202,19 @@ export default function AdminDashboard() {
 
       {/* CORE REQUIREMENT SECTION 5: AI INSIGHTS PANEL */}
       <div className="rounded-3xl bg-gradient-to-br from-temple-maroon via-temple-maroon-dark to-temple-maroon-deep text-white border-2 border-temple-gold shadow-2xl p-6 sm:p-8 relative overflow-hidden">
+        {/* Background Nataraja BG1.png */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-luminosity pointer-events-none"
+          style={{ backgroundImage: `url('/BG1.png')` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-temple-maroon-deep/90 via-temple-maroon/80 to-temple-maroon-deep/90 pointer-events-none" />
         <div className="absolute inset-0 opacity-10 bg-kolam-pattern pointer-events-none"></div>
 
         <div className="relative z-10">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-temple-gold/30 pb-4 mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-temple-gold text-temple-maroon-deep flex items-center justify-center shadow-gold-glow flex-shrink-0">
-                <Sparkles className="w-6 h-6 text-temple-maroon" />
+              <div className="w-12 h-12 rounded-full bg-temple-maroon text-temple-gold border-2 border-temple-gold flex items-center justify-center p-2 shadow-gold-glow flex-shrink-0">
+                <img src="/logo.png" alt="Sri Ruthralaya" className="w-full h-full object-contain" />
               </div>
               <div>
                 <div className="flex items-center gap-2">

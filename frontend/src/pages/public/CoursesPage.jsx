@@ -66,17 +66,26 @@ export default function CoursesPage() {
     <div className="bg-temple-cream min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Banner */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <span className="font-cinzel text-xs font-semibold uppercase tracking-widest text-temple-gold px-3 py-1 rounded-full bg-temple-maroon/10 border border-temple-gold/40">
-            Systematic Curriculum
-          </span>
-          <h1 className="font-cinzel text-3xl sm:text-5xl font-bold text-temple-maroon mt-3">
-            Courses &amp; Class Batches
-          </h1>
-          <p className="font-cormorant italic text-lg sm:text-xl text-stone-600 mt-2">
-            From Sacred First Steps to Majestic Solo Arangetram Stage Debuts
-          </p>
+        {/* Banner with Nataraja BG1.png */}
+        <div className="relative rounded-3xl bg-temple-maroon text-white p-8 sm:p-12 mb-12 border-2 border-temple-gold shadow-temple-lg overflow-hidden text-center">
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-luminosity pointer-events-none"
+            style={{ backgroundImage: `url('/BG1.png')` }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-temple-maroon-deep/90 via-temple-maroon/80 to-temple-maroon-deep/90 pointer-events-none" />
+
+          <div className="relative z-10 max-w-3xl mx-auto space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-temple-gold/20 border border-temple-gold text-temple-gold-light text-xs font-cinzel uppercase tracking-widest">
+              <img src="/logo.png" alt="Sri Ruthralaya" className="w-4 h-4 object-contain" />
+              <span>Systematic Curriculum &amp; University Accreditation</span>
+            </div>
+            <h1 className="font-cinzel text-3xl sm:text-5xl font-bold text-white">
+              Courses &amp; Class Batches
+            </h1>
+            <p className="font-cormorant italic text-lg sm:text-xl text-amber-100/90 leading-relaxed">
+              From Sacred First Steps and Adavu Geometry to Majestic Solo Arangetram Stage Debuts
+            </p>
+          </div>
         </div>
 
         <TempleBorder />
@@ -174,6 +183,42 @@ export default function CoursesPage() {
               </div>
             );
           })}
+        </div>
+
+        {/* Featured Showcase: Sacred Salangai Pooja & Aramandi Discipline with BG.2.png */}
+        <div className="mt-16 rounded-3xl bg-gradient-to-r from-temple-maroon via-temple-maroon-dark to-temple-maroon text-white border-2 border-temple-gold shadow-temple-lg p-8 sm:p-12 overflow-hidden relative">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="w-full max-w-sm rounded-2xl overflow-hidden border-2 border-temple-gold shadow-xl">
+                <img 
+                  src="/BG.2.png" 
+                  alt="Aramandi posture and Salangai bells at Sri Ruthralaya" 
+                  className="w-full h-72 object-cover object-center hover:scale-105 transition-transform duration-700"
+                />
+              </div>
+            </div>
+            <div className="lg:col-span-7 space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-temple-gold/20 border border-temple-gold text-temple-gold text-xs font-cinzel">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Anga Shuddhi &amp; Pada Bhedas</span>
+              </div>
+              <h2 className="font-cinzel text-2xl sm:text-3xl font-bold text-white">
+                The Science of Aramandi &amp; Salangai Dedication
+              </h2>
+              <p className="font-outfit text-xs sm:text-sm text-amber-100/90 leading-relaxed">
+                At Sri Ruthralaya, every student begins with rigorous anatomical training in Aramandi (half-sitting posture) and geometric lines of the body. After mastering the foundation Adavus, students receive their consecrated brass bells in the auspicious Salangai Pooja ceremony, stepping into the sacred Margam repertoire.
+              </p>
+              <div className="pt-2">
+                <Link
+                  to="/register"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-temple-gold to-amber-500 text-temple-maroon font-cinzel font-bold text-xs shadow-gold-glow hover:brightness-110 transition-all"
+                >
+                  <span>Apply for Next Admission Cycle</span>
+                  <Award className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
