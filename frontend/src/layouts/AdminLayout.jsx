@@ -9,6 +9,7 @@ import {
   Calendar, 
   Image, 
   MessageSquare, 
+  ShieldCheck,
   Shield, 
   LogOut, 
   Menu, 
@@ -34,6 +35,7 @@ export default function AdminLayout() {
     { name: 'Stage Events & Notices', path: '/admin/events', icon: Calendar },
     { name: 'Photo Gallery Studio', path: '/admin/gallery', icon: Image },
     { name: 'AI Chatbot Logs', path: '/admin/chatbot-logs', icon: MessageSquare },
+    { name: 'DB Activity Audit Logs', path: '/admin/activities', icon: ShieldCheck },
   ];
 
   const handleLogout = async () => {
@@ -43,8 +45,10 @@ export default function AdminLayout() {
 
   const isActive = (path) => {
     if (path === '/admin/events' && (location.pathname === '/admin/events' || location.pathname === '/admin/events-notices')) return true;
+    if (path === '/admin/activities' && (location.pathname === '/admin/activities' || location.pathname === '/admin/activity-logs')) return true;
     return location.pathname === path;
   };
+
 
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col lg:flex-row font-outfit">

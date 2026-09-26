@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Users, 
   Layers, 
@@ -11,9 +12,12 @@ import {
   CheckCircle2, 
   RefreshCw, 
   ArrowUpRight,
-  ShieldAlert
+  ShieldAlert,
+  ShieldCheck,
+  ArrowRight
 } from 'lucide-react';
 import {
+
   ResponsiveContainer,
   LineChart,
   Line,
@@ -451,31 +455,79 @@ export default function AdminDashboard() {
       </div>
 
       {/* Recent Activity Feed */}
-      <div className="p-6 rounded-3xl bg-white border-2 border-temple-gold/40 shadow-temple">
-        <h3 className="font-cinzel font-bold text-base text-temple-maroon mb-4">
-          Recent Academy Operational Activity
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {recentActivity.map((act) => (
-            <div key={act.id} className="p-4 rounded-2xl bg-temple-cream/50 border border-amber-200/60">
-              <span className="text-[10px] font-cinzel font-bold text-temple-gold uppercase">
-                {act.type}
-              </span>
-              <h4 className="font-cinzel font-bold text-xs text-stone-800 mt-1">
-                {act.title}
-              </h4>
-              <p className="text-[11px] text-stone-600 mt-1 leading-snug">
-                {act.detail}
-              </p>
-              <span className="text-[10px] text-stone-400 mt-2 block font-outfit">
-                {act.time}
-              </span>
+      <div className="p-6 rounded-3xl bg-white border-2 border-temple-gold/40 shadow-temple space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+              <h3 className="font-cinzel font-bold text-base text-temple-maroon">
+                Recent Academy Operational Activity
+              </h3>
             </div>
-          ))}
+            <p className="text-xs text-stone-500 font-outfit mt-0.5">
+              Live audit stream of administrative operations persisted directly in PostgreSQL / database ledger.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Link
+              to="/admin/activities"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-temple-cream text-temple-maroon border border-temple-gold/50 hover:bg-temple-maroon hover:text-temple-gold text-xs font-cinzel font-bold transition-all shadow-sm"
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Full Database Audit Ledger</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+
+        {/* Activity Feed Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {recentActivity.length === 0 ? (
+            <div className="col-span-4 p-8 text-center text-xs text-stone-400 font-outfit bg-temple-cream/30 rounded-2xl border border-stone-200">
+              No recent activity logs recorded yet.
+            </div>
+          ) : (
+            recentActivity.map((act) => (
+              <div 
+                key={act.id} 
+                className="p-4 rounded-2xl bg-temple-cream/50 border border-amber-200/60 hover:border-temple-gold/80 hover:bg-white transition-all shadow-sm flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-1 mb-1.5">
+                    <span className="text-[10px] font-cinzel font-bold text-temple-gold uppercase px-2 py-0.5 rounded bg-white border border-temple-gold/30">
+                      {act.type}
+                    </span>
+                    <span className="text-[10px] text-stone-400 font-outfit">
+                      {act.time}
+                    </span>
+                  </div>
+
+                  <h4 className="font-cinzel font-bold text-xs text-stone-800 leading-snug">
+                    {act.title}
+                  </h4>
+                  <p className="text-[11px] text-stone-600 mt-1.5 leading-relaxed line-clamp-3">
+                    {act.detail}
+                  </p>
+                </div>
+
+                <div className="mt-3 pt-2 border-t border-amber-200/40 flex items-center justify-between text-[10px] text-stone-400 font-outfit">
+                  <span className="text-stone-600 font-medium truncate max-w-[150px]">
+                    👤 {act.admin_name || 'Administrator'}
+                  </span>
+                  {act.action && (
+                    <span className="font-mono uppercase text-[9px] text-stone-400">
+                      {act.action}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
     </div>
   );
 }
+

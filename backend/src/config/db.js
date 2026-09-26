@@ -277,6 +277,86 @@ const fallbackStore = {
       created_at: new Date(Date.now() - 3600000 * 2),
     },
   ],
+  adminActivities: [
+    {
+      id: 'act-01',
+      admin_id: 'usr-admin-01',
+      admin_name: 'Guru Nattiyakalaimani R. Sridevi',
+      admin_email: 'admin@sriruthralaya.com',
+      action: 'CREATE_EVENT',
+      entity_type: 'event',
+      entity_id: 'ev-01',
+      title: 'Scheduled Academy Event',
+      details: 'Scheduled Annual Natyanjali Dance Festival 2026 at Sivakasi Town Hall Auditorium',
+      ip_address: '127.0.0.1',
+      created_at: new Date(Date.now() - 3600000 * 2),
+    },
+    {
+      id: 'act-02',
+      admin_id: 'usr-admin-01',
+      admin_name: 'Guru Nattiyakalaimani R. Sridevi',
+      admin_email: 'admin@sriruthralaya.com',
+      action: 'UPLOAD_GALLERY',
+      entity_type: 'gallery',
+      entity_id: 'gal-01',
+      title: 'Uploaded Gallery Media',
+      details: 'Uploaded photo "Arangetram Solo Varnam Presentation" to category performances',
+      ip_address: '127.0.0.1',
+      created_at: new Date(Date.now() - 3600000 * 5),
+    },
+    {
+      id: 'act-03',
+      admin_id: 'usr-admin-01',
+      admin_name: 'Guru Nattiyakalaimani R. Sridevi',
+      admin_email: 'admin@sriruthralaya.com',
+      action: 'MARK_ATTENDANCE',
+      entity_type: 'attendance',
+      entity_id: 'batch-02',
+      title: 'Batch Attendance Marked',
+      details: 'Logged attendance for Madhyama (Intermediate) batch with 94% present',
+      ip_address: '127.0.0.1',
+      created_at: new Date(Date.now() - 3600000 * 20),
+    },
+    {
+      id: 'act-04',
+      admin_id: 'usr-admin-01',
+      admin_name: 'Guru Nattiyakalaimani R. Sridevi',
+      admin_email: 'admin@sriruthralaya.com',
+      action: 'RECORD_PAYMENT',
+      entity_type: 'fee',
+      entity_id: 'fee-sep-usr-stu-01',
+      title: 'Fee Payment Recorded',
+      details: 'Recorded monthly tuition fee ₹2,400 for Ananya Ramachandran (September 2026)',
+      ip_address: '127.0.0.1',
+      created_at: new Date(Date.now() - 3600000 * 36),
+    },
+    {
+      id: 'act-05',
+      admin_id: 'usr-admin-01',
+      admin_name: 'Guru Nattiyakalaimani R. Sridevi',
+      admin_email: 'admin@sriruthralaya.com',
+      action: 'APPROVE_STUDENT',
+      entity_type: 'student',
+      entity_id: 'usr-stu-05',
+      title: 'Approved Student Registration',
+      details: 'Approved admission for Swetha Balaji and assigned to Madhyama Batch',
+      ip_address: '127.0.0.1',
+      created_at: new Date(Date.now() - 3600000 * 52),
+    },
+    {
+      id: 'act-06',
+      admin_id: 'usr-admin-01',
+      admin_name: 'Guru Nattiyakalaimani R. Sridevi',
+      admin_email: 'admin@sriruthralaya.com',
+      action: 'CREATE_NOTICE',
+      entity_type: 'notice',
+      entity_id: 'not-01',
+      title: 'Published Circular Notice',
+      details: 'Published notice: "Navarathri Special Intensive Rehearsal Schedule" targeted to all students',
+      ip_address: '127.0.0.1',
+      created_at: new Date(Date.now() - 3600000 * 68),
+    },
+  ],
 };
 
 // Initialize sample attendance & fees in fallback store
@@ -339,6 +419,117 @@ const fallbackStore = {
   });
 })();
 
+/**
+ * Helper to extract admin user metadata from Express request
+ */
+function getAdminInfoFromReq(req) {
+  const admin_id = req?.user?.id || 'usr-admin-01';
+  const admin_name = req?.user?.name || 'Guru Nattiyakalaimani R. Sridevi';
+  const admin_email = req?.user?.email || 'admin@sriruthralaya.com';
+  const ip_address = req?.headers?.['x-forwarded-for'] || req?.socket?.remoteAddress || '127.0.0.1';
+  return { admin_id, admin_name, admin_email, ip_address };
+}
+
+/**
+ * Record an Admin Activity in database (Prisma table + fallback store)
+ */
+async function recordAdminActivity({
+  admin_id,
+  admin_name = 'Guru Nattiyakalaimani R. Sridevi',
+  admin_email = 'admin@sriruthralaya.com',
+  action,
+  entity_type,
+  entity_id = null,
+  title,
+  details,
+  ip_address = null,
+}) {
+  const newActivity = {
+    id: `act-${Date.now()}-${Math.random().toString(36).substring(7)}`,
+    admin_id: admin_id || 'usr-admin-01',
+    admin_name: admin_name || 'Guru Nattiyakalaimani R. Sridevi',
+    admin_email: admin_email || 'admin@sriruthralaya.com',
+    action,
+    entity_type,
+    entity_id: entity_id ? String(entity_id) : null,
+    title,
+    details: details || title,
+    ip_address: ip_address || null,
+    created_at: new Date(),
+  };
+
+  // Always store in fallback store for immediate consistency
+  fallbackStore.adminActivities.unshift(newActivity);
+
+  // If Prisma database is connected, persist to admin_activities table
+  if (isPrismaConnected && prisma && prisma.adminActivity) {
+    try {
+      await prisma.adminActivity.create({
+        data: {
+          admin_id: newActivity.admin_id,
+          admin_name: newActivity.admin_name,
+          admin_email: newActivity.admin_email,
+          action: newActivity.action,
+          entity_type: newActivity.entity_type,
+          entity_id: newActivity.entity_id,
+          title: newActivity.title,
+          details: newActivity.details,
+          ip_address: newActivity.ip_address,
+          created_at: newActivity.created_at,
+        },
+      });
+    } catch (dbErr) {
+      console.warn('⚠️ Could not write activity to Prisma DB table:', dbErr.message);
+    }
+  }
+
+  return newActivity;
+}
+
+/**
+ * Retrieve Admin Activities (supports filtering & limits)
+ */
+async function getAdminActivities({ limit = 50, entity_type = null, action = null, search = null } = {}) {
+  if (isPrismaConnected && prisma && prisma.adminActivity) {
+    try {
+      const where = {};
+      if (entity_type && entity_type !== 'all') where.entity_type = entity_type;
+      if (action && action !== 'all') where.action = action;
+      if (search) {
+        where.OR = [
+          { title: { contains: search, mode: 'insensitive' } },
+          { details: { contains: search, mode: 'insensitive' } },
+          { admin_name: { contains: search, mode: 'insensitive' } },
+        ];
+      }
+      return await prisma.adminActivity.findMany({
+        where,
+        orderBy: { created_at: 'desc' },
+        take: limit,
+      });
+    } catch (e) {
+      console.warn('Prisma activity query fallback:', e.message);
+    }
+  }
+
+  let list = [...fallbackStore.adminActivities];
+  if (entity_type && entity_type !== 'all') {
+    list = list.filter(a => a.entity_type === entity_type);
+  }
+  if (action && action !== 'all') {
+    list = list.filter(a => a.action === action);
+  }
+  if (search) {
+    const q = search.toLowerCase();
+    list = list.filter(a =>
+      a.title.toLowerCase().includes(q) ||
+      a.details.toLowerCase().includes(q) ||
+      a.admin_name.toLowerCase().includes(q)
+    );
+  }
+  return list.slice(0, limit);
+}
+
 async function checkDatabaseConnection() {
   if (!prisma) return false;
   try {
@@ -362,4 +553,8 @@ module.exports = {
   fallbackStore,
   getIsPrismaConnected: () => isPrismaConnected,
   checkDatabaseConnection,
+  recordAdminActivity,
+  getAdminActivities,
+  getAdminInfoFromReq,
 };
+

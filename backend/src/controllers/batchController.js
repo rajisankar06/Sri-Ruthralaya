@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected } = require('../config/db');
+const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
 const batchSchema = z.object({
   name: z.string().min(2, 'Batch name required'),
@@ -138,31 +138,36 @@ async function createBatch(req, res, next) {
   try {
     const validated = batchSchema.parse(req.body);
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
+    let createdBatch;
 
     if (isDb && prisma) {
-      const batch = await prisma.batch.create({
+      createdBatch = await prisma.batch.create({
         data: validated,
       });
-
-      return res.status(201).json({
-        success: true,
-        data: batch,
-        message: 'Batch created successfully.',
-      });
     } else {
-      const newBatch = {
+      createdBatch = {
         id: `batch-${Date.now()}`,
         ...validated,
         created_at: new Date(),
       };
-      fallbackStore.batches.push(newBatch);
-
-      return res.status(201).json({
-        success: true,
-        data: newBatch,
-        message: 'Batch created successfully.',
-      });
+      fallbackStore.batches.push(createdBatch);
     }
+
+    await recordAdminActivity({
+      ...adminInfo,
+      action: 'CREATE_BATCH',
+      entity_type: 'batch',
+      entity_id: createdBatch.id,
+      title: 'Created Curriculum Batch',
+      details: `Created batch "${validated.name}" (${validated.level}) instructed by ${validated.instructor_name}`,
+    });
+
+    return res.status(201).json({
+      success: true,
+      data: createdBatch,
+      message: 'Batch created successfully.',
+    });
   } catch (error) {
     next(error);
   }
@@ -176,29 +181,36 @@ async function updateBatch(req, res, next) {
     const { id } = req.params;
     const validated = batchSchema.partial().parse(req.body);
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
+    let updatedBatch;
 
     if (isDb && prisma) {
-      const updated = await prisma.batch.update({
+      updatedBatch = await prisma.batch.update({
         where: { id },
         data: validated,
-      });
-
-      return res.status(200).json({
-        success: true,
-        data: updated,
-        message: 'Batch updated successfully.',
       });
     } else {
       const idx = fallbackStore.batches.findIndex(b => b.id === id);
       if (idx === -1) return res.status(404).json({ success: false, data: null, message: 'Batch not found.' });
 
       fallbackStore.batches[idx] = { ...fallbackStore.batches[idx], ...validated };
-      return res.status(200).json({
-        success: true,
-        data: fallbackStore.batches[idx],
-        message: 'Batch updated successfully.',
-      });
+      updatedBatch = fallbackStore.batches[idx];
     }
+
+    await recordAdminActivity({
+      ...adminInfo,
+      action: 'UPDATE_BATCH',
+      entity_type: 'batch',
+      entity_id: id,
+      title: 'Updated Curriculum Batch',
+      details: `Updated batch details for "${updatedBatch.name || validated.name || id}"`,
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: updatedBatch,
+      message: 'Batch updated successfully.',
+    });
   } catch (error) {
     next(error);
   }
@@ -211,17 +223,30 @@ async function deleteBatch(req, res, next) {
   try {
     const { id } = req.params;
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
+    let deletedName = id;
 
     if (isDb && prisma) {
+      const b = await prisma.batch.findUnique({ where: { id } });
+      if (b) deletedName = b.name;
       await prisma.batch.delete({ where: { id } });
-      return res.status(200).json({ success: true, data: null, message: 'Batch deleted successfully.' });
     } else {
       const idx = fallbackStore.batches.findIndex(b => b.id === id);
       if (idx === -1) return res.status(404).json({ success: false, data: null, message: 'Batch not found.' });
-
+      deletedName = fallbackStore.batches[idx].name || id;
       fallbackStore.batches.splice(idx, 1);
-      return res.status(200).json({ success: true, data: null, message: 'Batch deleted successfully.' });
     }
+
+    await recordAdminActivity({
+      ...adminInfo,
+      action: 'DELETE_BATCH',
+      entity_type: 'batch',
+      entity_id: id,
+      title: 'Deleted Curriculum Batch',
+      details: `Deleted batch "${deletedName}"`,
+    });
+
+    return res.status(200).json({ success: true, data: null, message: 'Batch deleted successfully.' });
   } catch (error) {
     next(error);
   }
@@ -234,3 +259,4 @@ module.exports = {
   updateBatch,
   deleteBatch,
 };
+

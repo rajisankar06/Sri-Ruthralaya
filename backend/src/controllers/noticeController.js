@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected } = require('../config/db');
+const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
 const noticeSchema = z.object({
   title: z.string().min(3),
@@ -86,9 +86,11 @@ async function createNotice(req, res, next) {
   try {
     const validated = noticeSchema.parse(req.body);
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
+    let createdNotice;
 
     if (isDb && prisma) {
-      const notice = await prisma.notice.create({
+      createdNotice = await prisma.notice.create({
         data: {
           title: validated.title,
           message: validated.message,
@@ -97,17 +99,25 @@ async function createNotice(req, res, next) {
           student_id: validated.student_id || null,
         },
       });
-
-      return res.status(201).json({ success: true, data: notice, message: 'Notice published.' });
     } else {
-      const newNotice = {
+      createdNotice = {
         id: `not-${Date.now()}`,
         ...validated,
         created_at: new Date(),
       };
-      fallbackStore.notices.unshift(newNotice);
-      return res.status(201).json({ success: true, data: newNotice, message: 'Notice published.' });
+      fallbackStore.notices.unshift(createdNotice);
     }
+
+    await recordAdminActivity({
+      ...adminInfo,
+      action: 'CREATE_NOTICE',
+      entity_type: 'notice',
+      entity_id: createdNotice.id,
+      title: 'Published Circular Notice',
+      details: `Published circular "${validated.title}" targeted to ${validated.target}`,
+    });
+
+    return res.status(201).json({ success: true, data: createdNotice, message: 'Notice published.' });
   } catch (error) {
     next(error);
   }
@@ -120,16 +130,30 @@ async function deleteNotice(req, res, next) {
   try {
     const { id } = req.params;
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
+    let deletedTitle = id;
 
     if (isDb && prisma) {
+      const n = await prisma.notice.findUnique({ where: { id } });
+      if (n) deletedTitle = n.title;
       await prisma.notice.delete({ where: { id } });
-      return res.status(200).json({ success: true, data: null, message: 'Notice deleted.' });
     } else {
       const idx = fallbackStore.notices.findIndex(n => n.id === id);
       if (idx === -1) return res.status(404).json({ success: false, data: null, message: 'Notice not found.' });
+      deletedTitle = fallbackStore.notices[idx].title || id;
       fallbackStore.notices.splice(idx, 1);
-      return res.status(200).json({ success: true, data: null, message: 'Notice deleted.' });
     }
+
+    await recordAdminActivity({
+      ...adminInfo,
+      action: 'DELETE_NOTICE',
+      entity_type: 'notice',
+      entity_id: id,
+      title: 'Deleted Circular Notice',
+      details: `Deleted notice "${deletedTitle}"`,
+    });
+
+    return res.status(200).json({ success: true, data: null, message: 'Notice deleted.' });
   } catch (error) {
     next(error);
   }
@@ -140,3 +164,4 @@ module.exports = {
   createNotice,
   deleteNotice,
 };
+

@@ -36,8 +36,10 @@ import AdminFees from './pages/admin/AdminFees';
 import AdminEventsNotices from './pages/admin/AdminEventsNotices';
 import AdminGallery from './pages/admin/AdminGallery';
 import AdminChatbotLogs from './pages/admin/AdminChatbotLogs';
+import AdminActivityLogs from './pages/admin/AdminActivityLogs';
 
 // Scroll to top helper
+
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -106,7 +108,10 @@ export default function App() {
             <Route path="events-notices" element={<AdminEventsNotices />} />
             <Route path="gallery" element={<AdminGallery />} />
             <Route path="chatbot-logs" element={<AdminChatbotLogs />} />
+            <Route path="activities" element={<AdminActivityLogs />} />
+            <Route path="activity-logs" element={<AdminActivityLogs />} />
           </Route>
+
 
           {/* Fallback Catch-all Route */}
           <Route path="*" element={<Navigate to="/" replace />} />

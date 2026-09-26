@@ -1,8 +1,9 @@
 const bcrypt = require('bcryptjs');
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected } = require('../config/db');
+const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
 const studentCreateSchema = z.object({
+
   name: z.string().min(2),
   email: z.string().email(),
   phone: z.string().optional(),
@@ -256,6 +257,15 @@ async function createStudent(req, res, next) {
         });
       }
 
+      await recordAdminActivity({
+        ...getAdminInfoFromReq(req),
+        action: 'CREATE_STUDENT',
+        entity_type: 'student',
+        entity_id: student.id,
+        title: 'Registered Student Account',
+        details: `Enrolled student "${student.name}" (${student.email})`,
+      });
+
       return res.status(201).json({
         success: true,
         data: student,
@@ -285,6 +295,15 @@ async function createStudent(req, res, next) {
         });
       }
 
+      await recordAdminActivity({
+        ...getAdminInfoFromReq(req),
+        action: 'CREATE_STUDENT',
+        entity_type: 'student',
+        entity_id: newStu.id,
+        title: 'Registered Student Account',
+        details: `Enrolled student "${newStu.name}" (${newStu.email})`,
+      });
+
       return res.status(201).json({
         success: true,
         data: newStu,
@@ -304,6 +323,7 @@ async function approveStudent(req, res, next) {
     const { id } = req.params;
     const { batch_id } = req.body;
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
 
     if (isDb && prisma) {
       const student = await prisma.user.update({
@@ -324,6 +344,15 @@ async function approveStudent(req, res, next) {
           },
         });
       }
+
+      await recordAdminActivity({
+        ...adminInfo,
+        action: 'APPROVE_STUDENT',
+        entity_type: 'student',
+        entity_id: id,
+        title: 'Approved Student Registration',
+        details: `Approved admission registration for "${student.name}"`,
+      });
 
       return res.status(200).json({
         success: true,
@@ -353,6 +382,15 @@ async function approveStudent(req, res, next) {
         }
       }
 
+      await recordAdminActivity({
+        ...adminInfo,
+        action: 'APPROVE_STUDENT',
+        entity_type: 'student',
+        entity_id: id,
+        title: 'Approved Student Registration',
+        details: `Approved admission registration for "${student.name}"`,
+      });
+
       return res.status(200).json({
         success: true,
         data: student,
@@ -372,6 +410,7 @@ async function updateStudent(req, res, next) {
     const { id } = req.params;
     const { name, phone, status, profile_photo_url, batch_id } = req.body;
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
 
     if (isDb && prisma) {
       const updated = await prisma.user.update({
@@ -398,6 +437,15 @@ async function updateStudent(req, res, next) {
           });
         }
       }
+
+      await recordAdminActivity({
+        ...adminInfo,
+        action: 'UPDATE_STUDENT',
+        entity_type: 'student',
+        entity_id: id,
+        title: 'Updated Student Profile',
+        details: `Updated profile details for "${updated.name}"`,
+      });
 
       return res.status(200).json({
         success: true,
@@ -427,6 +475,15 @@ async function updateStudent(req, res, next) {
         }
       }
 
+      await recordAdminActivity({
+        ...adminInfo,
+        action: 'UPDATE_STUDENT',
+        entity_type: 'student',
+        entity_id: id,
+        title: 'Updated Student Profile',
+        details: `Updated profile details for "${s.name}"`,
+      });
+
       return res.status(200).json({
         success: true,
         data: s,
@@ -445,6 +502,7 @@ async function toggleStudentStatus(req, res, next) {
   try {
     const { id } = req.params;
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
 
     if (isDb && prisma) {
       const student = await prisma.user.findUnique({ where: { id } });
@@ -454,6 +512,15 @@ async function toggleStudentStatus(req, res, next) {
       const updated = await prisma.user.update({
         where: { id },
         data: { status: newStatus },
+      });
+
+      await recordAdminActivity({
+        ...adminInfo,
+        action: 'STATUS_CHANGE',
+        entity_type: 'student',
+        entity_id: id,
+        title: 'Changed Student Status',
+        details: `Changed status of "${student.name}" to ${newStatus}`,
       });
 
       return res.status(200).json({
@@ -466,6 +533,16 @@ async function toggleStudentStatus(req, res, next) {
       if (!student) return res.status(404).json({ success: false, data: null, message: 'Student not found.' });
 
       student.status = student.status === 'active' ? 'inactive' : 'active';
+
+      await recordAdminActivity({
+        ...adminInfo,
+        action: 'STATUS_CHANGE',
+        entity_type: 'student',
+        entity_id: id,
+        title: 'Changed Student Status',
+        details: `Changed status of "${student.name}" to ${student.status}`,
+      });
+
       return res.status(200).json({
         success: true,
         data: student,
@@ -476,6 +553,7 @@ async function toggleStudentStatus(req, res, next) {
     next(error);
   }
 }
+
 
 module.exports = {
   getAllStudents,

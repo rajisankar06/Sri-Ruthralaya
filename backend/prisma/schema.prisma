@@ -180,3 +180,20 @@ model ChatbotLog {
 
   @@map("chatbot_logs")
 }
+
+model AdminActivity {
+  id          String   @id @default(uuid())
+  admin_id    String?
+  admin_name  String   @default("Guru Nattiyakalaimani R. Sridevi")
+  admin_email String   @default("admin@sriruthralaya.com")
+  action      String   // CREATE_EVENT, UPDATE_EVENT, DELETE_EVENT, UPLOAD_GALLERY, etc.
+  entity_type String   // event, gallery, student, batch, attendance, fee, notice, auth
+  entity_id   String?
+  title       String
+  details     String   @db.Text
+  ip_address  String?
+  created_at  DateTime @default(now())
+
+  @@map("admin_activities")
+}
+

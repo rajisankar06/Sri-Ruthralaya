@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected } = require('../config/db');
+const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
 const markAttendanceSchema = z.object({
   batch_id: z.string(),
@@ -21,6 +21,7 @@ async function markBatchAttendance(req, res, next) {
     const { batch_id, date, records } = markAttendanceSchema.parse(req.body);
     const dateObj = new Date(date);
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
 
     if (isDb && prisma) {
       const results = [];
@@ -47,6 +48,15 @@ async function markBatchAttendance(req, res, next) {
         });
         results.push(item);
       }
+
+      await recordAdminActivity({
+        ...adminInfo,
+        action: 'MARK_ATTENDANCE',
+        entity_type: 'attendance',
+        entity_id: batch_id,
+        title: 'Batch Attendance Marked',
+        details: `Logged attendance for ${results.length} students on date ${date}`,
+      });
 
       return res.status(200).json({
         success: true,
@@ -81,6 +91,15 @@ async function markBatchAttendance(req, res, next) {
         }
       }
 
+      await recordAdminActivity({
+        ...adminInfo,
+        action: 'MARK_ATTENDANCE',
+        entity_type: 'attendance',
+        entity_id: batch_id,
+        title: 'Batch Attendance Marked',
+        details: `Logged attendance for ${results.length} students on date ${dateStr}`,
+      });
+
       return res.status(200).json({
         success: true,
         data: results,
@@ -91,6 +110,7 @@ async function markBatchAttendance(req, res, next) {
     next(error);
   }
 }
+
 
 /**
  * Bulk upload attendance via CSV data
@@ -209,11 +229,20 @@ async function bulkUploadCSV(req, res, next) {
       }
     }
 
+    await recordAdminActivity({
+      ...adminInfo,
+      action: 'UPLOAD_ATTENDANCE_CSV',
+      entity_type: 'attendance',
+      title: 'Imported Attendance CSV',
+      details: `Imported ${processed} attendance records via CSV spreadsheet upload`,
+    });
+
     return res.status(200).json({
       success: true,
       data: { processedRows: processed },
       message: `Successfully imported ${processed} attendance records via CSV.`,
     });
+
   } catch (error) {
     next(error);
   }

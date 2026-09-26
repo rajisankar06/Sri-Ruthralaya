@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected } = require('../config/db');
+const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
 const gallerySchema = z.object({
   title: z.string().min(2),
@@ -46,21 +46,33 @@ async function addGalleryItem(req, res, next) {
   try {
     const validated = gallerySchema.parse(req.body);
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
+    let createdItem;
 
     if (isDb && prisma) {
-      const item = await prisma.gallery.create({
+      createdItem = await prisma.gallery.create({
         data: validated,
       });
-      return res.status(201).json({ success: true, data: item, message: 'Media item added to gallery.' });
     } else {
-      const newItem = {
+      createdItem = {
         id: `gal-${Date.now()}`,
         ...validated,
         uploaded_at: new Date(),
       };
-      fallbackStore.gallery.unshift(newItem);
-      return res.status(201).json({ success: true, data: newItem, message: 'Media item added to gallery.' });
+      fallbackStore.gallery.unshift(createdItem);
     }
+
+    // Record Admin Activity in DB
+    await recordAdminActivity({
+      ...adminInfo,
+      action: 'UPLOAD_GALLERY',
+      entity_type: 'gallery',
+      entity_id: createdItem.id,
+      title: 'Uploaded Gallery Media',
+      details: `Uploaded photo "${validated.title}" to category "${validated.category}"`,
+    });
+
+    return res.status(201).json({ success: true, data: createdItem, message: 'Media item added to gallery.' });
   } catch (error) {
     next(error);
   }
@@ -73,16 +85,31 @@ async function deleteGalleryItem(req, res, next) {
   try {
     const { id } = req.params;
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
+    let deletedTitle = id;
 
     if (isDb && prisma) {
+      const item = await prisma.gallery.findUnique({ where: { id } });
+      if (item) deletedTitle = item.title;
       await prisma.gallery.delete({ where: { id } });
-      return res.status(200).json({ success: true, data: null, message: 'Media item removed from gallery.' });
     } else {
       const idx = fallbackStore.gallery.findIndex(g => g.id === id);
       if (idx === -1) return res.status(404).json({ success: false, data: null, message: 'Item not found.' });
+      deletedTitle = fallbackStore.gallery[idx].title || id;
       fallbackStore.gallery.splice(idx, 1);
-      return res.status(200).json({ success: true, data: null, message: 'Media item removed from gallery.' });
     }
+
+    // Record Admin Activity in DB
+    await recordAdminActivity({
+      ...adminInfo,
+      action: 'DELETE_GALLERY',
+      entity_type: 'gallery',
+      entity_id: id,
+      title: 'Deleted Gallery Media',
+      details: `Removed gallery photo "${deletedTitle}"`,
+    });
+
+    return res.status(200).json({ success: true, data: null, message: 'Media item removed from gallery.' });
   } catch (error) {
     next(error);
   }
@@ -96,19 +123,32 @@ async function updateGalleryItem(req, res, next) {
     const { id } = req.params;
     const validated = gallerySchema.partial().parse(req.body);
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
+    let updatedItem;
 
     if (isDb && prisma) {
-      const item = await prisma.gallery.update({
+      updatedItem = await prisma.gallery.update({
         where: { id },
         data: validated,
       });
-      return res.status(200).json({ success: true, data: item, message: 'Gallery media updated.' });
     } else {
       const idx = fallbackStore.gallery.findIndex(g => g.id === id);
       if (idx === -1) return res.status(404).json({ success: false, data: null, message: 'Item not found.' });
       fallbackStore.gallery[idx] = { ...fallbackStore.gallery[idx], ...validated };
-      return res.status(200).json({ success: true, data: fallbackStore.gallery[idx], message: 'Gallery media updated.' });
+      updatedItem = fallbackStore.gallery[idx];
     }
+
+    // Record Admin Activity in DB
+    await recordAdminActivity({
+      ...adminInfo,
+      action: 'UPDATE_GALLERY',
+      entity_type: 'gallery',
+      entity_id: id,
+      title: 'Updated Gallery Media',
+      details: `Updated details for gallery photo "${updatedItem.title || validated.title || id}"`,
+    });
+
+    return res.status(200).json({ success: true, data: updatedItem, message: 'Gallery media updated.' });
   } catch (error) {
     next(error);
   }
@@ -120,3 +160,4 @@ module.exports = {
   updateGalleryItem,
   deleteGalleryItem,
 };
+

@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected } = require('../config/db');
+const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
 const eventSchema = z.object({
   title: z.string().min(3),
@@ -36,11 +36,13 @@ async function getAllEvents(req, res, next) {
 async function createEvent(req, res, next) {
   try {
     const validated = eventSchema.parse(req.body);
-    const userId = req.user.id;
+    const userId = req.user?.id || 'usr-admin-01';
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
+    let createdItem;
 
     if (isDb && prisma) {
-      const event = await prisma.event.create({
+      createdItem = await prisma.event.create({
         data: {
           title: validated.title,
           description: validated.description,
@@ -50,9 +52,8 @@ async function createEvent(req, res, next) {
           created_by: userId,
         },
       });
-      return res.status(201).json({ success: true, data: event, message: 'Event created successfully.' });
     } else {
-      const newEvent = {
+      createdItem = {
         id: `ev-${Date.now()}`,
         title: validated.title,
         description: validated.description,
@@ -62,9 +63,20 @@ async function createEvent(req, res, next) {
         created_by: userId,
         created_at: new Date(),
       };
-      fallbackStore.events.push(newEvent);
-      return res.status(201).json({ success: true, data: newEvent, message: 'Event created successfully.' });
+      fallbackStore.events.push(createdItem);
     }
+
+    // Record Admin Activity in DB
+    await recordAdminActivity({
+      ...adminInfo,
+      action: 'CREATE_EVENT',
+      entity_type: 'event',
+      entity_id: createdItem.id,
+      title: 'Scheduled Academy Event',
+      details: `Scheduled event "${validated.title}" on ${new Date(validated.date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })} at ${validated.location || 'Academy Hall'}`,
+    });
+
+    return res.status(201).json({ success: true, data: createdItem, message: 'Event created successfully.' });
   } catch (error) {
     next(error);
   }
@@ -78,9 +90,11 @@ async function updateEvent(req, res, next) {
     const { id } = req.params;
     const validated = eventSchema.partial().parse(req.body);
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
+    let updatedItem;
 
     if (isDb && prisma) {
-      const updated = await prisma.event.update({
+      updatedItem = await prisma.event.update({
         where: { id },
         data: {
           ...(validated.title && { title: validated.title }),
@@ -90,14 +104,25 @@ async function updateEvent(req, res, next) {
           ...(validated.location && { location: validated.location }),
         },
       });
-      return res.status(200).json({ success: true, data: updated, message: 'Event updated.' });
     } else {
       const idx = fallbackStore.events.findIndex(e => e.id === id);
       if (idx === -1) return res.status(404).json({ success: false, data: null, message: 'Event not found.' });
 
       fallbackStore.events[idx] = { ...fallbackStore.events[idx], ...validated };
-      return res.status(200).json({ success: true, data: fallbackStore.events[idx], message: 'Event updated.' });
+      updatedItem = fallbackStore.events[idx];
     }
+
+    // Record Admin Activity in DB
+    await recordAdminActivity({
+      ...adminInfo,
+      action: 'UPDATE_EVENT',
+      entity_type: 'event',
+      entity_id: id,
+      title: 'Updated Academy Event',
+      details: `Updated details for event "${updatedItem.title || validated.title || id}"`,
+    });
+
+    return res.status(200).json({ success: true, data: updatedItem, message: 'Event updated.' });
   } catch (error) {
     next(error);
   }
@@ -110,16 +135,31 @@ async function deleteEvent(req, res, next) {
   try {
     const { id } = req.params;
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
+    let deletedTitle = id;
 
     if (isDb && prisma) {
+      const ev = await prisma.event.findUnique({ where: { id } });
+      if (ev) deletedTitle = ev.title;
       await prisma.event.delete({ where: { id } });
-      return res.status(200).json({ success: true, data: null, message: 'Event deleted.' });
     } else {
       const idx = fallbackStore.events.findIndex(e => e.id === id);
       if (idx === -1) return res.status(404).json({ success: false, data: null, message: 'Event not found.' });
+      deletedTitle = fallbackStore.events[idx].title || id;
       fallbackStore.events.splice(idx, 1);
-      return res.status(200).json({ success: true, data: null, message: 'Event deleted.' });
     }
+
+    // Record Admin Activity in DB
+    await recordAdminActivity({
+      ...adminInfo,
+      action: 'DELETE_EVENT',
+      entity_type: 'event',
+      entity_id: id,
+      title: 'Deleted Academy Event',
+      details: `Deleted event record "${deletedTitle}"`,
+    });
+
+    return res.status(200).json({ success: true, data: null, message: 'Event deleted.' });
   } catch (error) {
     next(error);
   }
@@ -131,3 +171,4 @@ module.exports = {
   updateEvent,
   deleteEvent,
 };
+

@@ -144,8 +144,8 @@ export default function Navbar() {
                 <Link
                   to="/login"
                   className={`flex items-center gap-1.5 px-3.5 py-2 text-xs font-cinzel font-semibold rounded-xl transition-all border ${location.pathname === '/login'
-                      ? 'bg-temple-maroon-dark text-temple-gold border-temple-gold/60 shadow-inner'
-                      : 'text-amber-100 hover:text-temple-gold hover:bg-temple-maroon-dark/60 border-transparent hover:border-temple-gold/40'
+                    ? 'bg-temple-maroon-dark text-temple-gold border-temple-gold/60 shadow-inner'
+                    : 'text-amber-100 hover:text-temple-gold hover:bg-temple-maroon-dark/60 border-transparent hover:border-temple-gold/40'
                     }`}
                 >
                   <LogIn className="w-3.5 h-3.5 text-temple-gold" />

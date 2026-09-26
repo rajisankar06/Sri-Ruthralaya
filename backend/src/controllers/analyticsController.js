@@ -1,4 +1,18 @@
-const { prisma, fallbackStore, getIsPrismaConnected } = require('../config/db');
+const { prisma, fallbackStore, getIsPrismaConnected, getAdminActivities } = require('../config/db');
+
+function formatRelativeTime(date) {
+  if (!date) return 'Recently';
+  const diff = Date.now() - new Date(date).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'Just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days === 1) return 'Yesterday';
+  if (days < 30) return `${days}d ago`;
+  return new Date(date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+}
 
 /**
  * Simple Linear Regression calculation
@@ -6,6 +20,7 @@ const { prisma, fallbackStore, getIsPrismaConnected } = require('../config/db');
  * returns next predicted points
  */
 function calculateLinearRegression(dataPoints) {
+
   // dataPoints: array of numbers [y0, y1, y2, ...]
   const n = dataPoints.length;
   if (n < 2) return dataPoints[0] || 0;
@@ -143,13 +158,19 @@ async function getAdminAnalytics(req, res, next) {
       upcomingEventsCount = fallbackStore.events.length;
     }
 
-    // Recent activity logs
-    const recentActivity = [
-      { id: 1, type: 'registration', title: 'New Registration', detail: 'Priya Vasanth applied for Bala Natya (Pending Approval)', time: '2 hours ago' },
-      { id: 2, type: 'payment', title: 'Fee Paid', detail: 'Ananya Ramachandran paid ₹2,400 via UPI (Sep Fee)', time: '5 hours ago' },
-      { id: 3, type: 'attendance', title: 'Attendance Marked', detail: 'Madhyama Batch attendance logged (94% present)', time: 'Yesterday' },
-      { id: 4, type: 'event', title: 'Event Created', detail: 'Annual Natyanjali Utsav 2026 published', time: '2 days ago' },
-    ];
+    // Dynamic Admin activity logs from database
+    const dbActivities = await getAdminActivities({ limit: 8 });
+    const recentActivity = dbActivities.map(act => ({
+      id: act.id,
+      type: act.entity_type,
+      action: act.action,
+      title: act.title,
+      detail: act.details,
+      time: formatRelativeTime(act.created_at),
+      admin_name: act.admin_name,
+      created_at: act.created_at,
+    }));
+
 
     return res.status(200).json({
       success: true,

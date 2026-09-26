@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs');
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected } = require('../config/db');
+const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require('../utils/token');
+
 
 // Zod validation schemas
 const registerSchema = z.object({
@@ -205,6 +206,21 @@ async function login(req, res, next) {
       status: user.status,
     };
 
+    if (user.role === 'admin') {
+      const adminInfo = getAdminInfoFromReq(req);
+      await recordAdminActivity({
+        ...adminInfo,
+        admin_id: user.id,
+        admin_name: user.name,
+        admin_email: user.email,
+        action: 'ADMIN_LOGIN',
+        entity_type: 'auth',
+        entity_id: user.id,
+        title: 'Admin Session Started',
+        details: `Administrator ${user.name} logged into the academy executive portal`,
+      });
+    }
+
     return res.status(200).json({
       success: true,
       data: {
@@ -213,6 +229,7 @@ async function login(req, res, next) {
       },
       message: `Welcome back, ${user.name}! Successfully signed in.`,
     });
+
   } catch (error) {
     next(error);
   }

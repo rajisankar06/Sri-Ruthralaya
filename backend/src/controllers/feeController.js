@@ -1,6 +1,6 @@
 const PDFDocument = require('pdfkit');
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected } = require('../config/db');
+const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
 const feeRecordSchema = z.object({
   student_id: z.string(),
@@ -108,9 +108,11 @@ async function recordFee(req, res, next) {
   try {
     const validated = feeRecordSchema.parse(req.body);
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
+    let createdFee;
 
     if (isDb && prisma) {
-      const fee = await prisma.fee.create({
+      createdFee = await prisma.fee.create({
         data: {
           student_id: validated.student_id,
           amount: validated.amount,
@@ -121,14 +123,8 @@ async function recordFee(req, res, next) {
           payment_ref: validated.payment_ref || null,
         },
       });
-
-      return res.status(201).json({
-        success: true,
-        data: { ...fee, amount: Number(fee.amount) },
-        message: 'Fee recorded successfully.',
-      });
     } else {
-      const newFee = {
+      createdFee = {
         id: `fee-${Date.now()}`,
         student_id: validated.student_id,
         amount: validated.amount,
@@ -139,14 +135,23 @@ async function recordFee(req, res, next) {
         payment_ref: validated.payment_ref || null,
         created_at: new Date(),
       };
-      fallbackStore.fees.push(newFee);
-
-      return res.status(201).json({
-        success: true,
-        data: newFee,
-        message: 'Fee recorded successfully.',
-      });
+      fallbackStore.fees.push(createdFee);
     }
+
+    await recordAdminActivity({
+      ...adminInfo,
+      action: 'RECORD_FEE',
+      entity_type: 'fee',
+      entity_id: createdFee.id,
+      title: 'Created Fee Invoice',
+      details: `Created fee invoice of ₹${validated.amount} (${validated.month || 'Current Month'})`,
+    });
+
+    return res.status(201).json({
+      success: true,
+      data: { ...createdFee, amount: Number(createdFee.amount) },
+      message: 'Fee recorded successfully.',
+    });
   } catch (error) {
     next(error);
   }
@@ -161,9 +166,11 @@ async function payFee(req, res, next) {
     const { payment_ref } = req.body;
     const ref = payment_ref || `UPI-SR-${Math.floor(100000 + Math.random() * 900000)}`;
     const isDb = getIsPrismaConnected();
+    const adminInfo = getAdminInfoFromReq(req);
+    let feePaid;
 
     if (isDb && prisma) {
-      const updated = await prisma.fee.update({
+      feePaid = await prisma.fee.update({
         where: { id },
         data: {
           status: 'paid',
@@ -171,12 +178,6 @@ async function payFee(req, res, next) {
           payment_ref: ref,
           receipt_url: `/api/v1/fees/receipt/${id}`,
         },
-      });
-
-      return res.status(200).json({
-        success: true,
-        data: { ...updated, amount: Number(updated.amount) },
-        message: 'Payment recorded successfully! Receipt generated.',
       });
     } else {
       const fee = fallbackStore.fees.find(f => f.id === id);
@@ -186,17 +187,28 @@ async function payFee(req, res, next) {
       fee.paid_date = new Date().toISOString().split('T')[0];
       fee.payment_ref = ref;
       fee.receipt_url = `/api/v1/fees/receipt/${id}`;
-
-      return res.status(200).json({
-        success: true,
-        data: fee,
-        message: 'Payment recorded successfully! Receipt generated.',
-      });
+      feePaid = fee;
     }
+
+    await recordAdminActivity({
+      ...adminInfo,
+      action: 'RECORD_PAYMENT',
+      entity_type: 'fee',
+      entity_id: id,
+      title: 'Fee Payment Recorded',
+      details: `Recorded fee payment of ₹${feePaid.amount} (Ref: ${ref})`,
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: { ...feePaid, amount: Number(feePaid.amount) },
+      message: 'Payment recorded successfully! Receipt generated.',
+    });
   } catch (error) {
     next(error);
   }
 }
+
 
 /**
  * Generate PDF receipt using PDFKit
