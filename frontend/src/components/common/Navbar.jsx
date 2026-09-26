@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  Home, 
-  Award, 
-  GraduationCap, 
-  Camera, 
-  Calendar, 
-  PhoneCall, 
-  LogIn, 
-  LogOut, 
-  User, 
-  Shield, 
-  Sparkles, 
-  Phone, 
-  Menu, 
-  X 
+import {
+  Home,
+  Award,
+  GraduationCap,
+  Camera,
+  Calendar,
+  PhoneCall,
+  LogIn,
+  LogOut,
+  User,
+  Shield,
+  Sparkles,
+  Phone,
+  Menu,
+  X
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -60,7 +60,7 @@ export default function Navbar() {
       {/* Main Navbar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          
+
           {/* Brand Logo & Name */}
           <Link to="/" className="flex items-center gap-3 group flex-shrink-0">
             <div className="w-12 h-12 rounded-full border-2 border-temple-gold bg-white flex items-center justify-center p-1 shadow-gold-glow group-hover:scale-105 transition-transform overflow-hidden">
@@ -71,10 +71,12 @@ export default function Navbar() {
                 <span className="font-cinzel font-bold text-lg sm:text-xl tracking-wider text-temple-gold-light group-hover:text-temple-gold transition-colors">
                   Sri Ruthraalayaa
                 </span>
-                <span className="text-temple-gold text-xs">🛕</span>
+                <span>
+                    
+                </span>
               </div>
               <p className="text-[10px] sm:text-xs text-amber-200/80 font-cormorant tracking-widest uppercase">
-                Bharathanatyam Academy &amp; Research
+                Bharathanatyam Academy
               </p>
             </div>
           </Link>
@@ -88,18 +90,16 @@ export default function Navbar() {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`group flex items-center gap-2 px-3 py-2 rounded-xl text-xs xl:text-sm font-cinzel font-semibold tracking-wide transition-all ${
-                    active
-                      ? 'bg-temple-maroon-dark text-temple-gold border border-temple-gold/60 shadow-inner'
-                      : 'text-amber-100/90 hover:text-temple-gold hover:bg-temple-maroon-dark/50'
-                  }`}
+                  className={`group flex items-center gap-2 px-3 py-2 rounded-xl text-xs xl:text-sm font-cinzel font-semibold tracking-wide transition-all ${active
+                    ? 'bg-temple-maroon-dark text-temple-gold border border-temple-gold/60 shadow-inner'
+                    : 'text-amber-100/90 hover:text-temple-gold hover:bg-temple-maroon-dark/50'
+                    }`}
                 >
                   <span
-                    className={`p-1.5 rounded-lg transition-all flex items-center justify-center ${
-                      active
-                        ? 'bg-temple-gold text-temple-maroon-deep shadow-gold-glow'
-                        : 'bg-temple-maroon-dark/80 text-temple-gold group-hover:bg-temple-gold group-hover:text-temple-maroon-deep group-hover:scale-105'
-                    }`}
+                    className={`p-1.5 rounded-lg transition-all flex items-center justify-center ${active
+                      ? 'bg-temple-gold text-temple-maroon-deep shadow-gold-glow'
+                      : 'bg-temple-maroon-dark/80 text-temple-gold group-hover:bg-temple-gold group-hover:text-temple-maroon-deep group-hover:scale-105'
+                      }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
                   </span>
@@ -143,7 +143,11 @@ export default function Navbar() {
               <div className="flex items-center gap-2">
                 <Link
                   to="/login"
-                  className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-cinzel font-semibold rounded-xl text-amber-100 hover:text-temple-gold hover:bg-temple-maroon-dark/60 transition-colors border border-transparent hover:border-temple-gold/40"
+                  className={`flex items-center gap-1.5 px-3.5 py-2 text-xs font-cinzel font-semibold rounded-xl transition-all border ${
+                    location.pathname === '/login'
+                      ? 'bg-temple-maroon-dark text-temple-gold border-temple-gold/60 shadow-inner'
+                      : 'text-amber-100 hover:text-temple-gold hover:bg-temple-maroon-dark/60 border-transparent hover:border-temple-gold/40'
+                  }`}
                 >
                   <LogIn className="w-3.5 h-3.5 text-temple-gold" />
                   <span>Sign In</span>
@@ -183,18 +187,16 @@ export default function Navbar() {
                 key={link.path}
                 to={link.path}
                 onClick={() => setIsOpen(false)}
-                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-cinzel font-semibold tracking-wide transition-all ${
-                  active
-                    ? 'bg-temple-maroon text-temple-gold border-l-4 border-temple-gold shadow'
-                    : 'text-amber-100/90 hover:bg-temple-maroon hover:text-white'
-                }`}
+                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-cinzel font-semibold tracking-wide transition-all ${active
+                  ? 'bg-temple-maroon text-temple-gold border-l-4 border-temple-gold shadow'
+                  : 'text-amber-100/90 hover:bg-temple-maroon hover:text-white'
+                  }`}
               >
                 <span
-                  className={`p-1.5 rounded-lg flex items-center justify-center ${
-                    active
-                      ? 'bg-temple-gold text-temple-maroon-deep shadow-gold-glow'
-                      : 'bg-temple-maroon text-temple-gold border border-temple-gold/30'
-                  }`}
+                  className={`p-1.5 rounded-lg flex items-center justify-center ${active
+                    ? 'bg-temple-gold text-temple-maroon-deep shadow-gold-glow'
+                    : 'bg-temple-maroon text-temple-gold border border-temple-gold/30'
+                    }`}
                 >
                   <Icon className="w-4 h-4" />
                 </span>

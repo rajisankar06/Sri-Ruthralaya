@@ -52,7 +52,7 @@ export default function App() {
       <AuthProvider>
         <ScrollToTop />
         <Routes>
-          
+
           {/* Public Website Routes */}
           <Route element={<PublicLayout />}>
             <Route path="/" element={<HomePage />} />
@@ -61,12 +61,10 @@ export default function App() {
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/events" element={<EventsNoticesPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           </Route>
-
-          {/* Auth Pages (Standalone layouts) */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
           {/* Student Portal Protected Routes */}
           <Route

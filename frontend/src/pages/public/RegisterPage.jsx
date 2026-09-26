@@ -60,7 +60,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 overflow-hidden bg-temple-maroon-deep">
+    <div className="min-h-[calc(100vh-160px)] relative flex items-center justify-center py-12 sm:py-16 px-4 sm:px-6 lg:px-8 overflow-hidden bg-temple-maroon-deep">
       {/* Background BG1.png & Temple Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-luminosity scale-105 pointer-events-none"
