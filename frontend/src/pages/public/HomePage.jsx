@@ -31,7 +31,7 @@ export default function HomePage() {
       {/* 1. Hero Section */}
       <section className="relative bg-temple-maroon-deep text-white pt-16 pb-24 overflow-hidden border-b-4 border-temple-gold">
         {/* Background Nataraja BG1.png & Temple Gradients */}
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30 mix-blend-luminosity scale-105 pointer-events-none transition-transform duration-1000"
           style={{ backgroundImage: `url('/BG1.png')` }}
         />
@@ -41,7 +41,7 @@ export default function HomePage() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
+
             {/* Left Column: Hero Text */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
               <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-temple-gold/20 border border-temple-gold text-temple-gold-light text-xs font-cinzel tracking-widest uppercase shadow-sm">
@@ -131,7 +131,7 @@ export default function HomePage() {
       <section className="py-12 bg-temple-cream-alt border-b border-amber-200/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            
+
             <div className="p-6 rounded-xl bg-white border border-temple-gold/40 shadow-temple">
               <div className="font-cinzel font-bold text-3xl sm:text-4xl text-temple-maroon">
                 18+
@@ -184,7 +184,7 @@ export default function HomePage() {
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mt-12">
-          
+
           <div className="lg:col-span-5 flex justify-center">
             <div className="relative">
               <div className="w-72 h-88 sm:w-80 sm:h-96 rounded-2xl overflow-hidden border-4 border-temple-gold shadow-temple-lg bg-temple-maroon">
@@ -393,75 +393,14 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* 6. Testimonials Highlight */}
-      <section className="py-16 bg-temple-maroon text-white border-t-2 border-temple-gold relative overflow-hidden">
-        <div className="absolute inset-0 opacity-5 bg-kolam-pattern pointer-events-none"></div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-12">
-            <h2 className="font-cinzel text-2xl sm:text-4xl font-bold text-temple-gold-light">
-              Voices of Disciples &amp; Connoisseurs
-            </h2>
-            <p className="font-cormorant italic text-base sm:text-lg text-amber-200/80 mt-1">
-              Celebrating transformation through discipline, music, and divine art
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-6 rounded-2xl bg-temple-maroon-dark/90 border border-temple-gold/40 shadow-xl">
-              <div className="flex text-temple-gold mb-3">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-current" />
-                ))}
-              </div>
-              <p className="font-cormorant italic text-sm text-amber-100/90 leading-relaxed">
-                "Learning under Guru Sridevi for the past 6 years leading up to my Arangetram has shaped my posture, confidence, and soul. Her patience with every adavu is unmatched."
-              </p>
-              <div className="mt-4 pt-3 border-t border-temple-gold/20">
-                <p className="font-cinzel text-xs font-bold text-temple-gold">Diya Soundararajan</p>
-                <p className="text-[10px] text-amber-200/60">Arangetram Disciple, Sivakasi</p>
-              </div>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-temple-maroon-dark/90 border border-temple-gold/40 shadow-xl">
-              <div className="flex text-temple-gold mb-3">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-current" />
-                ))}
-              </div>
-              <p className="font-cormorant italic text-sm text-amber-100/90 leading-relaxed">
-                "My daughter joined Sri Ruthralaya at age 6. The transformation in her discipline and cultural pride has been immense. She cleared her University Grade 2 exam with distinction!"
-              </p>
-              <div className="mt-4 pt-3 border-t border-temple-gold/20">
-                <p className="font-cinzel text-xs font-bold text-temple-gold">Dr. K. Ramachandran</p>
-                <p className="text-[10px] text-amber-200/60">Parent, Thiruthangal</p>
-              </div>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-temple-maroon-dark/90 border border-temple-gold/40 shadow-xl">
-              <div className="flex text-temple-gold mb-3">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-current" />
-                ))}
-              </div>
-              <p className="font-cormorant italic text-sm text-amber-100/90 leading-relaxed">
-                "Sri Ruthraalayaa's Natyanjali performances bring the sacred temple tradition alive. Every varnam and thillana shows rigorous adherence to classical Nattuvangam."
-              </p>
-              <div className="mt-4 pt-3 border-t border-temple-gold/20">
-                <p className="font-cinzel text-xs font-bold text-temple-gold">Smt. Vasumathi Rajan</p>
-                <p className="text-[10px] text-amber-200/60">Carnatic Vocalist &amp; Art Patron</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* 7. Call To Action Banner */}
       <section className="py-16 bg-temple-cream relative">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <div className="relative p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-temple-maroon via-temple-maroon-dark to-temple-maroon text-white border-2 border-temple-gold shadow-temple-lg overflow-hidden">
             {/* Ambient BG1.png backdrop */}
-            <div 
+            <div
               className="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-luminosity pointer-events-none"
               style={{ backgroundImage: `url('/BG1.png')` }}
             />

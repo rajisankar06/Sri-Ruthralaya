@@ -10,7 +10,6 @@ import AboutPage from './pages/public/AboutPage';
 import CoursesPage from './pages/public/CoursesPage';
 import GalleryPage from './pages/public/GalleryPage';
 import EventsNoticesPage from './pages/public/EventsNoticesPage';
-import TestimonialsPage from './pages/public/TestimonialsPage';
 import ContactPage from './pages/public/ContactPage';
 import LoginPage from './pages/public/LoginPage';
 import RegisterPage from './pages/public/RegisterPage';
@@ -61,7 +60,6 @@ export default function App() {
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/events" element={<EventsNoticesPage />} />
-            <Route path="/testimonials" element={<TestimonialsPage />} />
             <Route path="/contact" element={<ContactPage />} />
           </Route>
 

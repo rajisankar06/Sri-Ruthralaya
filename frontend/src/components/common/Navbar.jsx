@@ -15,7 +15,6 @@ export default function Navbar() {
     { name: 'Courses & Batches', path: '/courses' },
     { name: 'Performances Gallery', path: '/gallery' },
     { name: 'Events & Notices', path: '/events' },
-    { name: 'Testimonials', path: '/testimonials' },
     { name: 'Contact Us', path: '/contact' },
   ];
 
