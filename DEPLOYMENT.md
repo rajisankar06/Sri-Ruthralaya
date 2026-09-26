@@ -39,8 +39,8 @@ This guide details the complete production deployment workflow for the **Sri Rut
    - **Environment**: `Node`
    - **Region**: Choose the same or closest region as your Neon database.
    - **Branch**: `main`
-   - **Build Command**: `npm install && npm run build`
-   - **Start Command**: `npm start`
+   - **Build Command**: `npm install`
+   - **Start Command**: `node src/server.js`
 5. Configure **Environment Variables** under the **Environment** tab:
 
    | Key | Value / Example | Note |
@@ -54,14 +54,9 @@ This guide details the complete production deployment workflow for the **Sri Rut
    | `OPENAI_API_KEY` | *sk-...* (optional) | Enables AI chatbot & dashboard insights |
 
 6. Click **Deploy Web Service**.
-7. Run Initial Migrations & Seeds:
-   - In Render, click the **Shell** tab for your service.
-   - Run the database migration and seed:
-     ```bash
-     npx prisma migrate deploy
-     node prisma/seed.js
-     ```
-8. Copy your live backend URL (e.g., `https://sri-ruthralaya-api.onrender.com`).
+   - Render will automatically install packages and launch the server.
+   - Native `pg` connects directly to your Neon database instantly with zero compile steps!
+7. Copy your live backend URL (e.g., `https://sri-ruthralaya-api.onrender.com`).
    - Test it in your browser: `https://sri-ruthralaya-api.onrender.com/api/v1/health`
 
 ---
