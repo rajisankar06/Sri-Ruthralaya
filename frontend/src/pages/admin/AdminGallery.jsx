@@ -1,26 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Plus, Trash2, X, ExternalLink } from 'lucide-react';
+import { 
+  Image as ImageIcon, 
+  Plus, 
+  Trash2, 
+  Edit2, 
+  X, 
+  Upload, 
+  ExternalLink,
+  Filter,
+  Eye,
+  CheckCircle2,
+  Sparkles
+} from 'lucide-react';
+import { Link } from 'react-router-dom';
 import api from '../../services/api';
 
 export default function AdminGallery() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('all');
 
+  // Modal states
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
   const [form, setForm] = useState({
     title: '',
     category: 'performances',
     media_url: '',
     media_type: 'image',
   });
+  const [imagePreview, setImagePreview] = useState('');
 
   useEffect(() => {
     loadGallery();
-  }, []);
+  }, [activeCategory]);
 
   async function loadGallery() {
+    setLoading(true);
     try {
-      const res = await api.get('/gallery');
+      const url = activeCategory === 'all' ? '/gallery' : `/gallery?category=${activeCategory}`;
+      const res = await api.get(url);
       if (res.data.success) {
         setItems(res.data.data);
       }
@@ -31,22 +50,64 @@ export default function AdminGallery() {
     }
   }
 
-  const handleCreate = async (e) => {
+  // Open Create Modal
+  const handleOpenCreate = () => {
+    setEditingItem(null);
+    setForm({
+      title: '',
+      category: 'performances',
+      media_url: '/BG1.png',
+      media_type: 'image',
+    });
+    setImagePreview('/BG1.png');
+    setModalOpen(true);
+  };
+
+  // Open Edit Modal
+  const handleOpenEdit = (item) => {
+    setEditingItem(item);
+    setForm({
+      title: item.title || '',
+      category: item.category || 'performances',
+      media_url: item.media_url || '',
+      media_type: item.media_type || 'image',
+    });
+    setImagePreview(item.media_url || '');
+    setModalOpen(true);
+  };
+
+  // Handle Submit (Create or Edit)
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!form.media_url) {
+      alert('Please upload an image or provide an image URL.');
+      return;
+    }
+
     try {
-      const res = await api.post('/gallery', form);
-      if (res.data.success) {
-        setModalOpen(false);
-        setForm({ title: '', category: 'performances', media_url: '', media_type: 'image' });
-        await loadGallery();
+      if (editingItem) {
+        // Edit
+        const res = await api.put(`/gallery/${editingItem.id}`, form);
+        if (res.data.success) {
+          setModalOpen(false);
+          await loadGallery();
+        }
+      } else {
+        // Create
+        const res = await api.post('/gallery', form);
+        if (res.data.success) {
+          setModalOpen(false);
+          await loadGallery();
+        }
       }
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to add media item.');
+      alert(err.response?.data?.message || 'Failed to save media item.');
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this photo from gallery?')) return;
+  // Handle Delete
+  const handleDelete = async (id, title) => {
+    if (!window.confirm(`Delete "${title || 'this image'}" from the gallery?`)) return;
     try {
       await api.delete(`/gallery/${id}`);
       await loadGallery();
@@ -55,95 +116,200 @@ export default function AdminGallery() {
     }
   };
 
+  // Handle File Upload from device
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 8 * 1024 * 1024) {
+      alert('Image file is too large (maximum 8MB). Please choose a smaller photo.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setForm((prev) => ({ ...prev, media_url: reader.result }));
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const categories = [
+    { id: 'all', name: 'All Gallery Media' },
+    { id: 'performances', name: 'Stage Performances' },
+    { id: 'arangetram', name: 'Arangetrams' },
+    { id: 'salangai-pooja', name: 'Salangai Pooja' },
+    { id: 'classroom', name: 'Classroom & Sadhana' },
+  ];
+
   return (
     <div className="space-y-8 font-outfit">
       
-      {/* Header */}
+      {/* Header with Title & Quick Public View Link */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-temple-maroon">
-            Performance Media &amp; Gallery Management
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-temple-maroon">
+              Photo Gallery &amp; Media Studio
+            </h1>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-cinzel font-bold bg-temple-gold/20 text-temple-maroon border border-temple-gold/40">
+              Admin Upload Studio
+            </span>
+          </div>
           <p className="text-xs sm:text-sm text-stone-500 mt-1">
-            Organize stage photography, Arangetram debuts, and Salangai Pooja dedications (Cloudinary/S3 storage URLs).
+            Upload and curate performance photography, Arangetram debuts, and Salangai Poojas displayed on the public gallery.
           </p>
         </div>
 
-        <button
-          onClick={() => setModalOpen(true)}
-          className="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-temple-maroon text-temple-gold text-xs font-cinzel font-bold shadow flex items-center gap-2 hover:bg-temple-maroon-dark transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Upload Media Item</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <Link
+            to="/gallery"
+            target="_blank"
+            className="px-3.5 py-2 rounded-xl bg-white border border-stone-200 text-stone-700 hover:text-temple-maroon hover:border-temple-gold text-xs font-cinzel font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
+          >
+            <span>View Public Gallery</span>
+            <ExternalLink className="w-3.5 h-3.5" />
+          </Link>
+
+          <button
+            onClick={handleOpenCreate}
+            className="px-4 py-2.5 rounded-xl bg-temple-maroon text-temple-gold text-xs font-cinzel font-bold shadow-md flex items-center gap-2 hover:bg-temple-maroon-dark transition-all transform hover:-translate-y-0.5"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Upload New Image</span>
+          </button>
+        </div>
       </div>
 
-      {/* Grid */}
+      {/* Category Filter Pills */}
+      <div className="flex flex-wrap items-center gap-2 border-b border-stone-200 pb-3">
+        {categories.map((c) => (
+          <button
+            key={c.id}
+            onClick={() => setActiveCategory(c.id)}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-cinzel font-semibold transition-all ${
+              activeCategory === c.id
+                ? 'bg-temple-maroon text-temple-gold shadow'
+                : 'bg-white text-stone-600 border border-stone-200 hover:border-temple-gold hover:text-temple-maroon'
+            }`}
+          >
+            {c.name}
+          </button>
+        ))}
+      </div>
+
+      {/* Gallery Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((item) => (
           <div
             key={item.id}
-            className="rounded-3xl bg-white border-2 border-temple-gold/40 shadow-temple overflow-hidden flex flex-col justify-between group"
+            className="rounded-3xl bg-white border-2 border-temple-gold/40 shadow-temple overflow-hidden flex flex-col justify-between group hover:border-temple-gold transition-all"
           >
-            <div className="h-56 bg-temple-maroon relative overflow-hidden">
+            <div className="h-60 bg-temple-maroon relative overflow-hidden">
               <img
                 src={item.media_url}
                 alt={item.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
-              <span className="absolute top-3 left-3 px-2.5 py-1 rounded bg-temple-maroon/90 text-temple-gold border border-temple-gold/40 text-[10px] font-cinzel uppercase font-bold">
-                {item.category}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+
+              {/* Category Badge */}
+              <span className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg bg-temple-maroon-dark/90 text-temple-gold border border-temple-gold/40 text-[10px] font-cinzel uppercase font-bold shadow">
+                {item.category?.replace('-', ' ')}
               </span>
-              <button
-                onClick={() => handleDelete(item.id)}
-                className="absolute top-3 right-3 p-1.5 rounded-full bg-red-600/90 text-white hover:bg-red-700 transition-colors"
-                title="Delete Media"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+
+              {/* Top Action Buttons (Edit + Delete) */}
+              <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                <button
+                  onClick={() => handleOpenEdit(item)}
+                  className="p-2 rounded-xl bg-white/90 text-temple-maroon hover:bg-temple-gold hover:text-temple-maroon-deep transition-all shadow-md backdrop-blur-xs"
+                  title="Edit Photo"
+                >
+                  <Edit2 className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => handleDelete(item.id, item.title)}
+                  className="p-2 rounded-xl bg-red-600/90 text-white hover:bg-red-700 transition-all shadow-md backdrop-blur-xs"
+                  title="Delete Photo"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
 
-            <div className="p-4 bg-white">
-              <h3 className="font-cinzel font-bold text-sm text-temple-maroon">
-                {item.title}
-              </h3>
-              <p className="text-[11px] text-stone-400 mt-1 truncate">
-                {item.media_url}
-              </p>
+            <div className="p-4 bg-white flex items-center justify-between">
+              <div className="overflow-hidden">
+                <h3 className="font-cinzel font-bold text-sm text-temple-maroon truncate">
+                  {item.title}
+                </h3>
+                <span className="text-[10px] text-stone-400 font-outfit mt-0.5 block truncate">
+                  Uploaded to {item.category}
+                </span>
+              </div>
+
+              <button
+                onClick={() => handleOpenEdit(item)}
+                className="text-xs font-cinzel font-bold text-temple-maroon hover:text-amber-700 flex items-center gap-1 flex-shrink-0"
+              >
+                <Edit2 className="w-3 h-3" />
+                <span>Edit</span>
+              </button>
             </div>
           </div>
         ))}
+
+        {items.length === 0 && !loading && (
+          <div className="col-span-full p-12 bg-white rounded-3xl border-2 border-dashed border-stone-300 text-center space-y-3">
+            <ImageIcon className="w-12 h-12 text-stone-300 mx-auto" />
+            <h3 className="font-cinzel font-bold text-lg text-stone-700">No Gallery Photos in this Category</h3>
+            <p className="text-xs text-stone-500">Click "Upload New Image" above to upload photos from your device.</p>
+          </div>
+        )}
       </div>
 
-      {/* Upload Modal */}
+      {/* Upload / Edit Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-2 border-temple-gold max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
-            <button onClick={() => setModalOpen(false)} className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-stone-100 text-stone-500">
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl border-2 border-temple-gold max-w-md w-full p-6 sm:p-8 shadow-2xl relative my-8">
+            <button
+              onClick={() => setModalOpen(false)}
+              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-stone-100 text-stone-500"
+            >
               <X className="w-5 h-5" />
             </button>
-            <h3 className="font-cinzel font-bold text-xl text-temple-maroon mb-4">Add Gallery Media</h3>
-            <form onSubmit={handleCreate} className="space-y-4 font-outfit">
+
+            <h3 className="font-cinzel font-bold text-xl text-temple-maroon mb-1">
+              {editingItem ? 'Edit Gallery Photo' : 'Upload Gallery Photo'}
+            </h3>
+            <p className="text-xs text-stone-500 font-outfit mb-5">
+              Upload classical Bharatanatyam photos to publish instantly onto the public gallery.
+            </p>
+
+            <form onSubmit={handleSubmit} className="space-y-4 font-outfit">
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">Media Caption / Title *</label>
+                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                  Photo Caption / Title *
+                </label>
                 <input
                   type="text"
                   required
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  placeholder="e.g. Navarasa Abhinaya in Varnam"
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                  placeholder="e.g. Navarasa Abhinaya in Varnam Solo"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">Category *</label>
+                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                  Category *
+                </label>
                 <select
                   value={form.category}
                   onChange={(e) => setForm({ ...form, category: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold text-stone-700"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold text-stone-700"
                 >
-                  <option value="performances">Stage Performances</option>
+                  <option value="performances">Stage Performances &amp; Utsavs</option>
                   <option value="arangetram">Arangetram Solo Debuts</option>
                   <option value="salangai-pooja">Salangai Pooja Ceremony</option>
                   <option value="classroom">Classroom &amp; Practice Drills</option>
@@ -151,20 +317,100 @@ export default function AdminGallery() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">Cloudinary / Direct Image URL *</label>
-                <input
-                  type="url"
-                  required
-                  value={form.media_url}
-                  onChange={(e) => setForm({ ...form, media_url: e.target.value })}
-                  placeholder="https://res.cloudinary.com/... or https://images.unsplash.com/..."
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
-                />
+                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                  Upload Image from Device or Enter URL *
+                </label>
+                
+                <div className="space-y-2">
+                  <div className="flex gap-2 items-center">
+                    <input
+                      type="text"
+                      value={form.media_url}
+                      onChange={(e) => {
+                        setForm({ ...form, media_url: e.target.value });
+                        setImagePreview(e.target.value);
+                      }}
+                      placeholder="Paste image URL or pick file"
+                      className="flex-grow px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs focus:outline-none focus:border-temple-gold"
+                    />
+
+                    <label className="cursor-pointer px-3.5 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-temple-maroon text-xs font-semibold flex items-center gap-1.5 flex-shrink-0">
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>Choose File</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+
+                  {/* Brand Presets */}
+                  <div className="flex gap-1.5 flex-wrap">
+                    <span className="text-[10px] text-stone-500 self-center">Brand Presets:</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setForm({ ...form, media_url: '/BG1.png' });
+                        setImagePreview('/BG1.png');
+                      }}
+                      className="px-2 py-0.5 rounded text-[10px] bg-stone-100 hover:bg-stone-200 text-stone-700"
+                    >
+                      Nataraja BG1
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setForm({ ...form, media_url: '/BG.2.png' });
+                        setImagePreview('/BG.2.png');
+                      }}
+                      className="px-2 py-0.5 rounded text-[10px] bg-stone-100 hover:bg-stone-200 text-stone-700"
+                    >
+                      Salangai BG2
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setForm({ ...form, media_url: '/logo.png' });
+                        setImagePreview('/logo.png');
+                      }}
+                      className="px-2 py-0.5 rounded text-[10px] bg-stone-100 hover:bg-stone-200 text-stone-700"
+                    >
+                      Logo Emblem
+                    </button>
+                  </div>
+
+                  {/* Live Preview Box */}
+                  {imagePreview && (
+                    <div className="h-36 w-full rounded-xl overflow-hidden border-2 border-temple-gold/40 bg-stone-50 relative mt-2">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-full h-full object-cover object-center"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
 
-              <div className="pt-2 flex justify-end gap-2">
-                <button type="button" onClick={() => setModalOpen(false)} className="px-4 py-2 rounded-xl border text-xs text-stone-600">Cancel</button>
-                <button type="submit" className="px-5 py-2 rounded-xl bg-temple-maroon text-temple-gold text-xs font-cinzel font-bold">Save Media</button>
+              <div className="pt-3 flex justify-end gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="px-4 py-2.5 rounded-xl border border-stone-300 text-xs font-medium text-stone-600 hover:bg-stone-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 rounded-xl bg-temple-maroon text-temple-gold text-xs font-cinzel font-bold shadow hover:bg-temple-maroon-dark transition-all"
+                >
+                  {editingItem ? 'Save Changes' : 'Upload to Gallery'}
+                </button>
               </div>
             </form>
           </div>

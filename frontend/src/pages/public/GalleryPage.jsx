@@ -38,17 +38,26 @@ export default function GalleryPage() {
     <div className="bg-temple-cream min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Banner */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <span className="font-cinzel text-xs font-semibold uppercase tracking-widest text-temple-gold px-3 py-1 rounded-full bg-temple-maroon/10 border border-temple-gold/40">
-            Visual Splendor
-          </span>
-          <h1 className="font-cinzel text-3xl sm:text-5xl font-bold text-temple-maroon mt-3">
-            Performance Gallery
-          </h1>
-          <p className="font-cormorant italic text-lg sm:text-xl text-stone-600 mt-2">
-            Moments of devotion, rhythm, and grace captured on temple stages and auditoriums
-          </p>
+        {/* Page Banner with BG1.png */}
+        <div className="relative rounded-3xl bg-temple-maroon text-white p-8 sm:p-12 mb-12 border-2 border-temple-gold shadow-temple-lg overflow-hidden text-center">
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-luminosity pointer-events-none"
+            style={{ backgroundImage: `url('/BG1.png')` }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-temple-maroon-deep/90 via-temple-maroon/80 to-temple-maroon-deep/90 pointer-events-none" />
+
+          <div className="relative z-10 max-w-3xl mx-auto space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-temple-gold/20 border border-temple-gold text-temple-gold-light text-xs font-cinzel uppercase tracking-widest">
+              <img src="/logo.png" alt="Sri Ruthralaya" className="w-4 h-4 object-contain" />
+              <span>Visual Splendor • Sacred Dance Archives</span>
+            </div>
+            <h1 className="font-cinzel text-3xl sm:text-5xl font-bold text-white">
+              Performance Gallery
+            </h1>
+            <p className="font-cormorant italic text-lg sm:text-xl text-amber-100/90 leading-relaxed">
+              Moments of devotion, rhythm, and grace captured on temple stages and auditoriums
+            </p>
+          </div>
         </div>
 
         <TempleBorder />

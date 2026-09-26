@@ -31,8 +31,8 @@ export default function AdminLayout() {
     { name: 'Batches & Curriculum', path: '/admin/batches', icon: Layers },
     { name: 'Attendance & CSV Upload', path: '/admin/attendance', icon: CalendarCheck },
     { name: 'Fee & Invoicing Ledger', path: '/admin/fees', icon: CreditCard },
-    { name: 'Events & Notices', path: '/admin/events-notices', icon: Calendar },
-    { name: 'Gallery Management', path: '/admin/gallery', icon: Image },
+    { name: 'Stage Events & Notices', path: '/admin/events', icon: Calendar },
+    { name: 'Photo Gallery Studio', path: '/admin/gallery', icon: Image },
     { name: 'AI Chatbot Logs', path: '/admin/chatbot-logs', icon: MessageSquare },
   ];
 
@@ -41,7 +41,10 @@ export default function AdminLayout() {
     navigate('/');
   };
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => {
+    if (path === '/admin/events' && (location.pathname === '/admin/events' || location.pathname === '/admin/events-notices')) return true;
+    return location.pathname === path;
+  };
 
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col lg:flex-row font-outfit">

@@ -8,6 +8,7 @@ router.get('/', galleryController.getGallery);
 
 // Admin management
 router.post('/', authenticateToken, requireRole(['admin']), galleryController.addGalleryItem);
+router.put('/:id', authenticateToken, requireRole(['admin']), galleryController.updateGalleryItem);
 router.delete('/:id', authenticateToken, requireRole(['admin']), galleryController.deleteGalleryItem);
 
 module.exports = router;

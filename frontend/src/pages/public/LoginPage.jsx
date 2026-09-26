@@ -67,7 +67,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-[calc(100vh-160px)] relative flex items-center justify-center py-12 sm:py-16 px-4 sm:px-6 lg:px-8 overflow-hidden bg-temple-maroon-deep">
       {/* Background BG1.png & Temple Overlay */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-luminosity scale-105 pointer-events-none"
         style={{ backgroundImage: `url('/BG1.png')` }}
       />
@@ -75,7 +75,7 @@ export default function LoginPage() {
       <div className="absolute inset-0 opacity-10 bg-kolam-pattern pointer-events-none" />
 
       <div className="max-w-md w-full space-y-8 bg-white/95 backdrop-blur-sm p-8 sm:p-10 rounded-3xl border-2 border-temple-gold shadow-2xl relative z-10 overflow-hidden">
-        
+
         {/* Top Gold Ornament */}
         <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-temple-maroon via-temple-gold to-temple-maroon"></div>
 
@@ -96,11 +96,10 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => setActiveTab('student')}
-            className={`py-2 text-xs font-cinzel font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
-              activeTab === 'student'
+            className={`py-2 text-xs font-cinzel font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${activeTab === 'student'
                 ? 'bg-temple-maroon text-temple-gold shadow'
                 : 'text-stone-600 hover:text-temple-maroon'
-            }`}
+              }`}
           >
             <User className="w-3.5 h-3.5" />
             <span>Student Portal</span>
@@ -109,11 +108,10 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => setActiveTab('admin')}
-            className={`py-2 text-xs font-cinzel font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
-              activeTab === 'admin'
+            className={`py-2 text-xs font-cinzel font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${activeTab === 'admin'
                 ? 'bg-temple-maroon text-temple-gold shadow'
                 : 'text-stone-600 hover:text-temple-maroon'
-            }`}
+              }`}
           >
             <Shield className="w-3.5 h-3.5" />
             <span>Admin / Staff</span>
@@ -178,35 +176,6 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* 1-Click Demo Login Shortcuts */}
-        <div className="pt-2 border-t border-stone-100">
-          <p className="text-[11px] font-cinzel text-stone-500 uppercase tracking-wider text-center mb-2">
-            ⚡ Quick Demo Logins:
-          </p>
-          <div className="grid grid-cols-3 gap-1.5 text-[11px] font-medium">
-            <button
-              type="button"
-              onClick={() => fillDemo('admin')}
-              className="py-1.5 px-2 rounded bg-amber-50 border border-amber-300 text-amber-900 hover:bg-amber-100 transition-colors text-center"
-            >
-              Superadmin
-            </button>
-            <button
-              type="button"
-              onClick={() => fillDemo('staff')}
-              className="py-1.5 px-2 rounded bg-amber-50 border border-amber-300 text-amber-900 hover:bg-amber-100 transition-colors text-center"
-            >
-              Instructor
-            </button>
-            <button
-              type="button"
-              onClick={() => fillDemo('student')}
-              className="py-1.5 px-2 rounded bg-amber-50 border border-amber-300 text-amber-900 hover:bg-amber-100 transition-colors text-center"
-            >
-              Student (Ananya)
-            </button>
-          </div>
-        </div>
 
         {/* Registration link */}
         <div className="text-center pt-2">

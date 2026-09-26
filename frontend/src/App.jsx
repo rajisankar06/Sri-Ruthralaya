@@ -102,6 +102,7 @@ export default function App() {
             <Route path="batches" element={<AdminBatches />} />
             <Route path="attendance" element={<AdminAttendance />} />
             <Route path="fees" element={<AdminFees />} />
+            <Route path="events" element={<AdminEventsNotices />} />
             <Route path="events-notices" element={<AdminEventsNotices />} />
             <Route path="gallery" element={<AdminGallery />} />
             <Route path="chatbot-logs" element={<AdminChatbotLogs />} />

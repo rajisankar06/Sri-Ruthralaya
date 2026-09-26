@@ -25,7 +25,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: 'Home', path: '/', icon: Home },
-    { name: 'About Guru', path: '/about', icon: Award },
+    { name: 'About', path: '/about', icon: Award },
     { name: 'Courses', path: '/courses', icon: GraduationCap },
     { name: 'Gallery', path: '/gallery', icon: Camera },
     { name: 'Events', path: '/events', icon: Calendar },
@@ -72,7 +72,7 @@ export default function Navbar() {
                   Sri Ruthraalayaa
                 </span>
                 <span>
-                    
+
                 </span>
               </div>
               <p className="text-[10px] sm:text-xs text-amber-200/80 font-cormorant tracking-widest uppercase">
@@ -143,11 +143,10 @@ export default function Navbar() {
               <div className="flex items-center gap-2">
                 <Link
                   to="/login"
-                  className={`flex items-center gap-1.5 px-3.5 py-2 text-xs font-cinzel font-semibold rounded-xl transition-all border ${
-                    location.pathname === '/login'
+                  className={`flex items-center gap-1.5 px-3.5 py-2 text-xs font-cinzel font-semibold rounded-xl transition-all border ${location.pathname === '/login'
                       ? 'bg-temple-maroon-dark text-temple-gold border-temple-gold/60 shadow-inner'
                       : 'text-amber-100 hover:text-temple-gold hover:bg-temple-maroon-dark/60 border-transparent hover:border-temple-gold/40'
-                  }`}
+                    }`}
                 >
                   <LogIn className="w-3.5 h-3.5 text-temple-gold" />
                   <span>Sign In</span>
