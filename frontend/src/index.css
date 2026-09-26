@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #FDFBF7;
+    color: #2D2424;
+    overflow-x: hidden;
+  }
+
+  /* Custom scrollbars with temple maroon and gold accent */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #FAF5EE;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #D4AF37;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #7B1E1E;
+  }
+}
+
+/* Kolam geometric background motif */
+.bg-kolam-pattern {
+  background-color: #FDFBF7;
+  background-image: radial-gradient(#D4AF37 0.75px, transparent 0.75px), radial-gradient(#7B1E1E 0.75px, #FDFBF7 0.75px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+  background-opacity: 0.05;
+}
+
+.bg-temple-gold-radial {
+  background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.15) 0%, rgba(253, 251, 247, 0) 70%);
+}
+
+/* Traditional temple arch clip path */
+.temple-arch-top {
+  border-top-left-radius: 50% 20px;
+  border-top-right-radius: 50% 20px;
+}
+
+/* Golden shimmer text */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #F59E0B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

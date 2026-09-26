@@ -1,0 +1,174 @@
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, KeyRound, Lock, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
+import api from '../../services/api';
+import MudraIcon from '../../components/common/MudraIcon';
+
+export default function ForgotPasswordPage() {
+  const [step, setStep] = useState(1); // 1: Email, 2: OTP + New Password
+  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [demoOtp, setDemoOtp] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRequestOtp = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+    setError('');
+    setLoading(true);
+
+    try {
+      const res = await api.post('/auth/forgot-password', { email });
+      if (res.data.success) {
+        setDemoOtp(res.data.data?.demoOtp || '8899');
+        setMessage(res.data.message);
+        setStep(2);
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to request reset OTP.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    if (!otp || !newPassword) return;
+    setError('');
+    setLoading(true);
+
+    try {
+      const res = await api.post('/auth/reset-password', { email, otp, newPassword });
+      if (res.data.success) {
+        setMessage('Password reset successfully! Redirecting to login...');
+        setTimeout(() => navigate('/login'), 2000);
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to reset password. Check OTP.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-temple-cream flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-kolam-pattern">
+      <div className="max-w-md w-full space-y-6 bg-white p-8 sm:p-10 rounded-3xl border-2 border-temple-gold shadow-temple-lg relative overflow-hidden">
+        
+        <div className="text-center">
+          <div className="w-12 h-12 rounded-full bg-temple-maroon text-temple-gold border-2 border-temple-gold flex items-center justify-center mx-auto shadow-gold-glow">
+            <KeyRound className="w-6 h-6 text-temple-gold" />
+          </div>
+          <h2 className="mt-3 font-cinzel text-xl font-bold text-temple-maroon tracking-wide">
+            Password Recovery
+          </h2>
+          <p className="text-xs text-stone-500 font-outfit mt-0.5">
+            Sri Ruthralaya Student &amp; Staff Portal
+          </p>
+        </div>
+
+        {error && (
+          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+            <span>{error}</span>
+          </div>
+        )}
+
+        {message && (
+          <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-start gap-2">
+            <CheckCircle className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <span>{message}</span>
+          </div>
+        )}
+
+        {step === 1 ? (
+          <form onSubmit={handleRequestOtp} className="space-y-4 font-outfit">
+            <div>
+              <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                Registered Email Address
+              </label>
+              <div className="relative">
+                <Mail className="w-4 h-4 text-stone-400 absolute left-3.5 top-3" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="e.g. ananya.r@gmail.com"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold bg-temple-cream/30"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 rounded-xl bg-temple-maroon text-temple-gold hover:bg-temple-maroon-dark text-xs sm:text-sm font-cinzel font-bold shadow-md flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+            >
+              <span>{loading ? 'Sending Code...' : 'Request Verification OTP'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleResetPassword} className="space-y-4 font-outfit">
+            {demoOtp && (
+              <div className="p-2.5 rounded-lg bg-amber-50 border border-amber-300 text-[11px] text-amber-800 font-cinzel text-center">
+                Demo Verification OTP: <strong>{demoOtp}</strong>
+              </div>
+            )}
+
+            <div>
+              <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                Verification OTP Code
+              </label>
+              <input
+                type="text"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                required
+                placeholder="Enter 4-digit OTP"
+                className="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold bg-temple-cream/30 text-center tracking-widest font-bold"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                New Password
+              </label>
+              <div className="relative">
+                <Lock className="w-4 h-4 text-stone-400 absolute left-3.5 top-3" />
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  placeholder="New password (min 6 characters)"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold bg-temple-cream/30"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 rounded-xl bg-temple-maroon text-temple-gold hover:bg-temple-maroon-dark text-xs sm:text-sm font-cinzel font-bold shadow-md flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+            >
+              <span>{loading ? 'Updating Password...' : 'Save New Password & Sign In'}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
+        )}
+
+        <div className="text-center pt-2">
+          <Link to="/login" className="text-xs text-temple-maroon font-semibold hover:underline">
+            ← Return to Sign In
+          </Link>
+        </div>
+
+      </div>
+    </div>
+  );
+}

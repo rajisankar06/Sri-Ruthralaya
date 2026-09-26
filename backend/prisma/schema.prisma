@@ -1,0 +1,182 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  student
+  staff
+}
+
+enum UserStatus {
+  pending
+  active
+  inactive
+}
+
+enum AttendanceStatus {
+  present
+  absent
+  late
+}
+
+enum FeeStatus {
+  paid
+  pending
+  overdue
+}
+
+enum NoticeTarget {
+  all
+  batch
+  student
+}
+
+model User {
+  id                String       @id @default(uuid())
+  name              String
+  email             String       @unique
+  password_hash     String
+  role              Role         @default(student)
+  phone             String?
+  profile_photo_url String?
+  status            UserStatus   @default(pending)
+  created_at        DateTime     @default(now())
+  updated_at        DateTime     @updatedAt
+
+  // Relations
+  enrollments       Enrollment[]
+  attendances       Attendance[]
+  fees              Fee[]
+  eventsCreated     Event[]      @relation("EventCreator")
+  chatbotLogs       ChatbotLog[]
+  noticesReceived   Notice[]     @relation("StudentNotices")
+
+  @@map("users")
+}
+
+model Batch {
+  id              String       @id @default(uuid())
+  name            String
+  level           String       // Beginner, Intermediate, Advanced, Arangetram Prep
+  instructor_name String
+  schedule_days   String       // e.g. "Mon, Wed, Fri" or "Saturday, Sunday"
+  schedule_time   String       // e.g. "05:00 PM - 06:30 PM"
+  fee_amount      Decimal      @default(0.00) @db.Decimal(10, 2)
+  created_at      DateTime     @default(now())
+  updated_at      DateTime     @updatedAt
+
+  // Relations
+  enrollments     Enrollment[]
+  attendances     Attendance[]
+  notices         Notice[]     @relation("BatchNotices")
+
+  @@map("batches")
+}
+
+model Enrollment {
+  id          String   @id @default(uuid())
+  student_id  String
+  batch_id    String
+  joined_date DateTime @default(now())
+  status      String   @default("active") // active, completed, dropped
+
+  student     User     @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  batch       Batch    @relation(fields: [batch_id], references: [id], onDelete: Cascade)
+
+  @@unique([student_id, batch_id])
+  @@map("enrollments")
+}
+
+model Attendance {
+  id         String           @id @default(uuid())
+  student_id String
+  batch_id   String
+  date       DateTime         @db.Date
+  status     AttendanceStatus @default(present)
+  remarks    String?
+  created_at DateTime         @default(now())
+
+  student    User             @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  batch      Batch            @relation(fields: [batch_id], references: [id], onDelete: Cascade)
+
+  @@unique([student_id, batch_id, date])
+  @@map("attendances")
+}
+
+model Fee {
+  id          String    @id @default(uuid())
+  student_id  String
+  amount      Decimal   @db.Decimal(10, 2)
+  due_date    DateTime  @db.Date
+  paid_date   DateTime? @db.Date
+  status      FeeStatus @default(pending)
+  receipt_url String?
+  payment_ref String?
+  month       String?   // e.g. "October 2026"
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  student     User      @relation(fields: [student_id], references: [id], onDelete: Cascade)
+
+  @@map("fees")
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  date        DateTime
+  image_url   String?
+  location    String?  @default("Academy Hall, Thiruthangal")
+  created_by  String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  creator     User     @relation("EventCreator", fields: [created_by], references: [id], onDelete: Cascade)
+
+  @@map("events")
+}
+
+model Notice {
+  id         String       @id @default(uuid())
+  title      String
+  message    String       @db.Text
+  target     NoticeTarget @default(all)
+  batch_id   String?
+  student_id String?
+  created_at DateTime     @default(now())
+
+  batch      Batch?       @relation("BatchNotices", fields: [batch_id], references: [id], onDelete: Cascade)
+  student    User?        @relation("StudentNotices", fields: [student_id], references: [id], onDelete: Cascade)
+
+  @@map("notices")
+}
+
+model Gallery {
+  id          String   @id @default(uuid())
+  title       String
+  category    String   @default("performances") // performances, arangetram, salangai-pooja, classroom
+  media_url   String
+  media_type  String   @default("image") // image or video
+  uploaded_at DateTime @default(now())
+
+  @@map("gallery")
+}
+
+model ChatbotLog {
+  id         String   @id @default(uuid())
+  user_id    String?
+  message    String   @db.Text
+  response   String   @db.Text
+  created_at DateTime @default(now())
+
+  user       User?    @relation(fields: [user_id], references: [id], onDelete: SetNull)
+
+  @@map("chatbot_logs")
+}

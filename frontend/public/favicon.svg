@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <circle cx="32" cy="32" r="30" fill="#7B1E1E" stroke="#D4AF37" stroke-width="3"/>
+  <circle cx="32" cy="32" r="24" stroke="#FFF2A8" stroke-width="1" stroke-dasharray="2 2"/>
+  <!-- Classical Mudra / Nataraja Arch silhouette -->
+  <path d="M32 14C23 14 16 21 16 30C16 36 20 42 25 45L32 52L39 45C44 42 48 36 48 30C48 21 41 14 32 14Z" fill="#D4AF37" opacity="0.2"/>
+  <circle cx="32" cy="22" r="4" fill="#D4AF37"/>
+  <path d="M26 31C28 27 36 27 38 31L42 39C42 41 40 43 38 43L35 37L32 46L29 37L26 43C24 43 22 41 22 39L26 31Z" fill="#FFF2A8"/>
+  <circle cx="32" cy="12" r="2" fill="#D4AF37"/>
+</svg>
