@@ -16,8 +16,16 @@ const registerSchema = z.object({
   batch_id: z.string().min(1, 'Please select a preferred training batch'),
 });
 
+const DEFAULT_FALLBACK_BATCHES = [
+  { id: 'd979992a-24b4-41d2-bd34-1709097d3d43', name: 'Bala Natya (Beginner Adavus)', schedule_days: 'Mon, Wed, Fri', fee_amount: 1800 },
+  { id: '60a372cb-6a05-48b8-8dec-808abee75659', name: 'Madhyama (Intermediate Jatiswaram & Shabdam)', schedule_days: 'Tue, Thu, Sat', fee_amount: 2400 },
+  { id: '01797166-7685-4641-824c-d898c29786a4', name: 'Visharada (Advanced Varnam & Padam)', schedule_days: 'Sat, Sun', fee_amount: 3200 },
+  { id: '22a16b97-4584-4865-84db-99fc59482bdd', name: 'Arangetram Margam Intensive', schedule_days: 'Sat, Sun', fee_amount: 4500 },
+];
+
 export default function RegisterPage() {
-  const [batches, setBatches] = useState([]);
+  const [batches, setBatches] = useState(DEFAULT_FALLBACK_BATCHES);
+  const [loadingBatches, setLoadingBatches] = useState(true);
   const [successData, setSuccessData] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const { register: registerUser } = useAuth();
@@ -35,11 +43,16 @@ export default function RegisterPage() {
     async function loadBatches() {
       try {
         const res = await api.get('/batches');
-        if (res.data.success) {
+        if (res.data?.success && Array.isArray(res.data?.data) && res.data.data.length > 0) {
           setBatches(res.data.data);
+        } else {
+          setBatches(DEFAULT_FALLBACK_BATCHES);
         }
       } catch (err) {
-        console.error('Failed to load batches:', err);
+        console.warn('Using default batches fallback:', err.message);
+        setBatches(DEFAULT_FALLBACK_BATCHES);
+      } finally {
+        setLoadingBatches(false);
       }
     }
     loadBatches();
@@ -202,10 +215,12 @@ export default function RegisterPage() {
                     {...register('batch_id')}
                     className="w-full pl-10 pr-4 py-2.5 rounded-md border border-[#333333] text-xs sm:text-sm focus:outline-none focus:border-[#d4af37] bg-[#0f0f0f] text-white"
                   >
-                    <option value="" className="bg-[#0f0f0f]">Select a batch level...</option>
+                    <option value="" className="bg-[#0f0f0f]">
+                      {loadingBatches ? 'Loading available grades...' : 'Select a grade / batch level...'}
+                    </option>
                     {batches.map((b) => (
                       <option key={b.id} value={b.id} className="bg-[#0f0f0f]">
-                        {b.name} ({b.schedule_days} • ₹{b.fee_amount}/mo)
+                        {b.name}{b.schedule_days ? ` (${b.schedule_days}` : ''}{b.fee_amount ? ` • ₹${b.fee_amount}/mo)` : (b.schedule_days ? ')' : '')}
                       </option>
                     ))}
                   </select>
