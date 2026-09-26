@@ -106,18 +106,18 @@ export default function AdminActivityLogs() {
   ];
 
   return (
-    <div className="space-y-8 font-outfit">
+    <div className="space-y-6 font-outfit text-white">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl">
         <div>
-          <span className="text-[10px] font-cinzel font-bold text-temple-gold uppercase tracking-wider px-2.5 py-1 rounded bg-temple-maroon/10 border border-temple-gold/40">
+          <span className="text-[10px] font-cinzel font-bold text-[#d4af37] uppercase tracking-wider px-2.5 py-1 rounded bg-[#0f0f0f] border border-[#333333]">
             Database Audit Ledger
           </span>
-          <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-temple-maroon mt-2">
-            Admin Activities &amp; System Audit
+          <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-white mt-2">
+            Admin Activities &amp; <span className="text-[#d4af37]">System Audit</span>
           </h1>
-          <p className="text-xs sm:text-sm text-stone-500 mt-1 max-w-2xl">
+          <p className="text-xs sm:text-sm text-[#bdbdbd] mt-1 max-w-2xl">
             Immutable database records of all administrative actions executed across student admissions, events, gallery studio, attendance, and fee transactions.
           </p>
         </div>
@@ -126,7 +126,7 @@ export default function AdminActivityLogs() {
           <button
             onClick={loadActivities}
             disabled={loading}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-temple-gold/40 text-stone-700 hover:text-temple-maroon hover:border-temple-gold text-xs font-cinzel font-semibold shadow-sm transition-all"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#0f0f0f] border border-[#333333] hover:border-[#d4af37] text-[#bdbdbd] hover:text-[#d4af37] text-xs font-cinzel font-semibold shadow-sm transition-all"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Refresh</span>
@@ -134,7 +134,7 @@ export default function AdminActivityLogs() {
 
           <button
             onClick={exportJSON}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-temple-maroon text-temple-gold border border-temple-gold/40 text-xs font-cinzel font-semibold shadow-temple hover:bg-temple-maroon-dark transition-all"
+            className="primary-btn text-xs flex items-center gap-1.5 py-2 px-3.5"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export Audit Log</span>
@@ -143,34 +143,34 @@ export default function AdminActivityLogs() {
       </div>
 
       {/* Filter Tabs & Search Bar */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-white border border-temple-gold/40 shadow-temple space-y-4">
+      <div className="p-4 sm:p-5 rounded-2xl bg-[#111111] border border-[#333333] shadow-md space-y-4">
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-3" />
+            <Search className="w-4 h-4 text-[#888888] absolute left-3.5 top-3" />
             <input
               type="text"
               placeholder="Search by action, title, details, administrator or IP address..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-temple-gold focus:ring-1 focus:ring-temple-gold font-outfit text-stone-800"
+              className="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-[#333333] focus:outline-none focus:border-[#d4af37] font-outfit text-white bg-[#0f0f0f] placeholder-[#666666]"
             />
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-outfit text-stone-500">
-            <span className="font-semibold text-stone-700">{filteredActivities.length}</span> activities logged
+          <div className="flex items-center gap-2 text-xs font-outfit text-[#888888]">
+            <span className="font-semibold text-white">{filteredActivities.length}</span> activities logged
           </div>
         </div>
 
         {/* Category Pills */}
-        <div className="flex flex-wrap gap-1.5 pt-2 border-t border-stone-100">
+        <div className="flex flex-wrap gap-1.5 pt-2 border-t border-[#222222]">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setSelectedEntity(cat.id)}
               className={`px-3 py-1.5 rounded-lg text-xs font-cinzel font-bold transition-all ${
                 selectedEntity === cat.id
-                  ? 'bg-temple-maroon text-temple-gold shadow-sm'
-                  : 'bg-stone-50 text-stone-600 hover:bg-stone-100 hover:text-stone-900 border border-stone-200'
+                  ? 'bg-[#d4af37] text-[#111111] shadow'
+                  : 'bg-[#0f0f0f] text-[#bdbdbd] hover:text-[#d4af37] border border-[#333333]'
               }`}
             >
               {cat.label}
@@ -182,52 +182,52 @@ export default function AdminActivityLogs() {
       {/* Activities Timeline / Cards */}
       <div className="space-y-3">
         {loading && activities.length === 0 ? (
-          <div className="text-center py-12 text-stone-400 text-sm font-outfit flex flex-col items-center gap-2">
-            <RefreshCw className="w-6 h-6 animate-spin text-temple-gold" />
+          <div className="text-center py-12 text-[#888888] text-sm font-outfit flex flex-col items-center gap-2">
+            <RefreshCw className="w-6 h-6 animate-spin text-[#d4af37]" />
             <span>Fetching database activity records...</span>
           </div>
         ) : filteredActivities.length === 0 ? (
-          <div className="p-10 rounded-2xl bg-white border border-stone-200 text-center text-stone-500 text-sm font-outfit">
+          <div className="p-10 rounded-2xl bg-[#111111] border border-[#333333] text-center text-[#888888] text-sm font-outfit">
             No admin activities match your filter criteria.
           </div>
         ) : (
           filteredActivities.map((act) => (
             <div
               key={act.id}
-              className="p-4 sm:p-5 rounded-2xl bg-white border border-stone-200 hover:border-temple-gold/60 shadow-sm transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
+              className="p-4 sm:p-5 rounded-2xl bg-[#111111] border border-[#333333] hover:border-[#d4af37]/60 shadow-sm transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
             >
               <div className="flex items-start gap-3.5">
-                <div className="w-10 h-10 rounded-xl bg-stone-50 border border-stone-200 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="w-10 h-10 rounded-xl bg-[#0f0f0f] border border-[#333333] flex items-center justify-center flex-shrink-0 mt-0.5">
                   {getEntityIcon(act.entity_type)}
                 </div>
 
                 <div className="space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-cinzel font-bold border uppercase ${getEntityBadgeStyle(act.entity_type)}`}>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-cinzel font-bold border uppercase bg-[#0f0f0f] text-[#d4af37] border-[#333333]">
                       {act.entity_type}
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-stone-100 text-stone-600 border border-stone-200">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#161616] text-[#888888] border border-[#333333]">
                       {act.action}
                     </span>
-                    <h3 className="font-cinzel font-bold text-sm text-stone-800">
+                    <h3 className="font-cinzel font-bold text-sm text-white">
                       {act.title}
                     </h3>
                   </div>
 
-                  <p className="text-xs text-stone-600 font-outfit leading-relaxed max-w-3xl">
+                  <p className="text-xs text-[#bdbdbd] font-outfit leading-relaxed max-w-3xl">
                     {act.details}
                   </p>
 
-                  <div className="flex flex-wrap items-center gap-3 text-[11px] text-stone-400 font-outfit pt-1">
-                    <span className="flex items-center gap-1 text-stone-600 font-medium">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+                  <div className="flex flex-wrap items-center gap-3 text-[11px] text-[#777777] font-outfit pt-1">
+                    <span className="flex items-center gap-1 text-[#aaaaaa] font-medium">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
                       {act.admin_name || 'Academy Administrator'}
                     </span>
                     {act.ip_address && (
                       <span>IP: {act.ip_address}</span>
                     )}
                     {act.entity_id && (
-                      <span className="font-mono text-[10px] bg-stone-50 px-1.5 py-0.5 rounded border border-stone-200">
+                      <span className="font-mono text-[10px] bg-[#0f0f0f] px-1.5 py-0.5 rounded border border-[#333333] text-[#888888]">
                         Ref: {act.entity_id}
                       </span>
                     )}
@@ -235,12 +235,12 @@ export default function AdminActivityLogs() {
                 </div>
               </div>
 
-              <div className="flex md:flex-col items-center md:items-end justify-between md:justify-center border-t md:border-t-0 pt-2 md:pt-0 border-stone-100 flex-shrink-0">
-                <span className="flex items-center gap-1 text-xs font-semibold text-temple-gold font-cinzel">
+              <div className="flex md:flex-col items-center md:items-end justify-between md:justify-center border-t md:border-t-0 pt-2 md:pt-0 border-[#222222] flex-shrink-0">
+                <span className="flex items-center gap-1 text-xs font-semibold text-[#d4af37] font-cinzel">
                   <Clock className="w-3.5 h-3.5" />
                   {new Date(act.created_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
                 </span>
-                <span className="text-[11px] text-stone-400 font-outfit">
+                <span className="text-[11px] text-[#777777] font-outfit">
                   {new Date(act.created_at).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}
                 </span>
               </div>

@@ -27,54 +27,54 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="bg-temple-cream min-h-screen">
+    <div className="bg-[#0f0f0f] text-[#bdbdbd] min-h-screen">
       {/* 1. Hero Section */}
-      <section className="relative bg-temple-maroon-deep text-white pt-16 pb-24 overflow-hidden border-b-4 border-temple-gold">
-        {/* Background Nataraja BG1.png & Temple Gradients */}
+      <section className="hero relative bg-[#080808] text-white pt-16 pb-24 overflow-hidden border-b border-[#333333]">
+        {/* Background Nataraja BG1.png & Deep Charcoal Gradients */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30 mix-blend-luminosity scale-105 pointer-events-none transition-transform duration-1000"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-25 mix-blend-luminosity scale-105 pointer-events-none transition-transform duration-1000"
           style={{ backgroundImage: `url('/BG1.png')` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-temple-maroon-deep/95 via-temple-maroon/85 to-temple-maroon-deep/90 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#080808]/95 via-[#0f0f0f]/85 to-[#080808]/95 pointer-events-none" />
         <div className="absolute inset-0 opacity-10 bg-kolam-pattern pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-temple-gold/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#d4af37]/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="hero-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
             {/* Left Column: Hero Text */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-temple-gold/20 border border-temple-gold text-temple-gold-light text-xs font-cinzel tracking-widest uppercase shadow-sm">
-                <img src="/logo.png" alt="Sri Ruthralaya Academy Emblem" className="w-5 h-5 object-contain" />
+              <div className="hero-small-title inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#111111] border border-[#333333] text-[#d4af37] text-xs font-cinzel tracking-[3px] uppercase shadow-sm">
+                <img src="/logo.png" alt="Sri Ruthralaya Academy Emblem" className="w-4 h-4 object-contain" />
                 <span>18+ Years of Sacred Dance Pedagogy</span>
               </div>
 
-              <h1 className="font-cinzel text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-tight">
+              <h1 className="font-cinzel text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.1]">
                 Embrace the Divine Art of{' '}
-                <span className="text-gold-gradient block mt-1">
+                <span className="text-[#d4af37] block mt-1 font-cinzel">
                   Bharathanatyam
                 </span>
               </h1>
 
-              <p className="font-cormorant italic text-lg sm:text-2xl text-amber-100/90 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              <p className="hero-description font-cormorant italic text-lg sm:text-2xl text-[#eeeeee] leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 "Where the hand goes, the eyes follow; where the eyes go, the mind goes; where the mind goes, expression arises; and where expression arises, aesthetic bliss is born."
               </p>
-              <p className="text-xs text-amber-200/60 font-cinzel tracking-widest uppercase">
+              <p className="text-xs text-[#999999] font-cinzel tracking-widest uppercase">
                 — Abhinaya Darpana (Nandikesvara)
               </p>
 
-              <div className="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+              <div className="hero-buttons pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                 <Link
                   to="/register"
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-lg bg-gradient-to-r from-temple-gold to-amber-500 text-temple-maroon-deep font-cinzel font-bold text-sm hover:brightness-110 shadow-gold-glow flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5"
+                  className="primary-btn w-full sm:w-auto font-outfit"
                 >
-                  <MudraIcon name="nataraja" className="w-5 h-5 text-temple-maroon" />
-                  Begin Your Sadhana (Join Now)
+                  <MudraIcon name="nataraja" className="w-5 h-5 text-[#111111]" />
+                  <span>Begin Your Sadhana (Join Now)</span>
                 </Link>
 
                 <Link
                   to="/courses"
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-lg bg-temple-maroon-dark/80 border border-temple-gold text-temple-gold-light hover:bg-temple-gold hover:text-temple-maroon font-cinzel text-sm font-semibold transition-all flex items-center justify-center gap-2"
+                  className="secondary-btn w-full sm:w-auto font-outfit"
                 >
                   <span>Explore Batches</span>
                   <ArrowRight className="w-4 h-4" />
@@ -82,10 +82,10 @@ export default function HomePage() {
               </div>
 
               {/* Guru Accreditation Badge */}
-              <div className="pt-6 border-t border-temple-gold/20 flex items-center justify-center lg:justify-start gap-3 text-xs text-amber-200/80 font-outfit">
-                <Award className="w-5 h-5 text-temple-gold flex-shrink-0" />
+              <div className="pt-6 border-t border-[#333333] flex items-center justify-center lg:justify-start gap-3 text-xs text-[#aaaaaa] font-outfit">
+                <Award className="w-5 h-5 text-[#d4af37] flex-shrink-0" />
                 <span>
-                  Under the Guidance of <strong>Guru Nattiyakalaimani R. Sridevi</strong> (Diploma in Dance, BFA Dance)
+                  Under the Guidance of <strong className="text-white">Guru Nattiyakalaimani R. Sridevi</strong> (Diploma in Dance, BFA Dance)
                 </span>
               </div>
             </div>
@@ -93,27 +93,27 @@ export default function HomePage() {
             {/* Right Column: Hero Visual Card with BG.2.png */}
             <div className="lg:col-span-5 flex justify-center">
               <div className="relative w-full max-w-md">
-                {/* Decorative Temple Border Frame */}
-                <div className="absolute -inset-3 rounded-2xl border-2 border-temple-gold/50 rotate-1 pointer-events-none"></div>
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-temple-gold bg-temple-maroon">
+                {/* Decorative Gold Border Frame */}
+                <div className="absolute -inset-3 rounded-2xl border border-[#d4af37]/40 rotate-1 pointer-events-none"></div>
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-[#d4af37] bg-[#111111]">
                   <img
                     src="/BG.2.png"
                     alt="Bharatanatyam Salangai Footwork & Sacred Temple Rhythm at Sri Ruthralaya"
                     className="w-full h-[430px] object-cover object-center hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-temple-maroon-deep via-transparent to-black/20 pointer-events-none"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-black/30 pointer-events-none"></div>
 
-                  <div className="absolute bottom-4 left-4 right-4 p-4 rounded-xl bg-temple-maroon-dark/90 border border-temple-gold/40 backdrop-blur-sm text-left">
+                  <div className="absolute bottom-4 left-4 right-4 p-4 rounded-xl bg-[#0f0f0f]/90 border border-[#333333] backdrop-blur-sm text-left">
                     <div className="flex items-center justify-between">
-                      <span className="font-cinzel text-xs font-bold text-temple-gold uppercase tracking-wider flex items-center gap-1.5">
+                      <span className="font-cinzel text-xs font-bold text-[#d4af37] uppercase tracking-wider flex items-center gap-1.5">
                         <img src="/logo.png" alt="" className="w-4 h-4 object-contain inline" />
                         Sri Ruthraalayaa
                       </span>
-                      <span className="text-[10px] text-amber-200/70 font-outfit">
+                      <span className="text-[10px] text-[#aaaaaa] font-outfit">
                         Thiruthangal near Sivakasi
                       </span>
                     </div>
-                    <p className="mt-1 font-cormorant text-sm italic text-amber-100">
+                    <p className="mt-1 font-cormorant text-sm italic text-[#bdbdbd]">
                       Adavus • Margam • Salangai Pooja • Arangetram Solo Debuts
                     </p>
                   </div>
@@ -128,203 +128,218 @@ export default function HomePage() {
       <TempleBorder />
 
       {/* 2. Key Metrics & Pillars */}
-      <section className="py-12 bg-temple-cream-alt border-b border-amber-200/50">
+      <section className="py-12 bg-[#111111] border-b border-[#333333]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
 
-            <div className="p-6 rounded-xl bg-white border border-temple-gold/40 shadow-temple">
-              <div className="font-cinzel font-bold text-3xl sm:text-4xl text-temple-maroon">
+            <div className="p-6 rounded-xl bg-[#0f0f0f] border border-[#333333] shadow-md hover:border-[#d4af37]/50 transition-colors">
+              <div className="font-cinzel font-bold text-3xl sm:text-4xl text-[#d4af37]">
                 18+
               </div>
-              <div className="text-xs sm:text-sm font-semibold text-stone-700 mt-1 uppercase font-cinzel tracking-wider">
+              <div className="text-xs sm:text-sm font-semibold text-white mt-1 uppercase font-cinzel tracking-wider">
                 Years of Heritage
               </div>
-              <p className="text-xs text-stone-500 mt-1">In Thiruthangal &amp; Sivakasi</p>
+              <p className="text-xs text-[#888888] mt-1">In Thiruthangal &amp; Sivakasi</p>
             </div>
 
-            <div className="p-6 rounded-xl bg-white border border-temple-gold/40 shadow-temple">
-              <div className="font-cinzel font-bold text-3xl sm:text-4xl text-temple-maroon">
+            <div className="p-6 rounded-xl bg-[#0f0f0f] border border-[#333333] shadow-md hover:border-[#d4af37]/50 transition-colors">
+              <div className="font-cinzel font-bold text-3xl sm:text-4xl text-[#d4af37]">
                 100+
               </div>
-              <div className="text-xs sm:text-sm font-semibold text-stone-700 mt-1 uppercase font-cinzel tracking-wider">
+              <div className="text-xs sm:text-sm font-semibold text-white mt-1 uppercase font-cinzel tracking-wider">
                 Active Learners
               </div>
-              <p className="text-xs text-stone-500 mt-1">From Beginners to Arangetram</p>
+              <p className="text-xs text-[#888888] mt-1">From Beginners to Arangetram</p>
             </div>
 
-            <div className="p-6 rounded-xl bg-white border border-temple-gold/40 shadow-temple">
-              <div className="font-cinzel font-bold text-3xl sm:text-4xl text-temple-maroon">
+            <div className="p-6 rounded-xl bg-[#0f0f0f] border border-[#333333] shadow-md hover:border-[#d4af37]/50 transition-colors">
+              <div className="font-cinzel font-bold text-3xl sm:text-4xl text-[#d4af37]">
                 100%
               </div>
-              <div className="text-xs sm:text-sm font-semibold text-stone-700 mt-1 uppercase font-cinzel tracking-wider">
+              <div className="text-xs sm:text-sm font-semibold text-white mt-1 uppercase font-cinzel tracking-wider">
                 Exam Pass Rate
               </div>
-              <p className="text-xs text-stone-500 mt-1">TN Music &amp; Fine Arts Univ</p>
+              <p className="text-xs text-[#888888] mt-1">TN Music &amp; Fine Arts Univ</p>
             </div>
 
-            <div className="p-6 rounded-xl bg-white border border-temple-gold/40 shadow-temple">
-              <div className="font-cinzel font-bold text-3xl sm:text-4xl text-temple-maroon">
+            <div className="p-6 rounded-xl bg-[#0f0f0f] border border-[#333333] shadow-md hover:border-[#d4af37]/50 transition-colors">
+              <div className="font-cinzel font-bold text-3xl sm:text-4xl text-[#d4af37]">
                 30+
               </div>
-              <div className="text-xs sm:text-sm font-semibold text-stone-700 mt-1 uppercase font-cinzel tracking-wider">
+              <div className="text-xs sm:text-sm font-semibold text-white mt-1 uppercase font-cinzel tracking-wider">
                 Solo Arangetrams
               </div>
-              <p className="text-xs text-stone-500 mt-1">Grand Stage Debuts</p>
+              <p className="text-xs text-[#888888] mt-1">Grand Stage Debuts</p>
             </div>
 
           </div>
         </div>
       </section>
 
-      {/* 3. Guru & Academy Legacy Section */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <KolamDivider
-          title="The Guru-Shishya Tradition"
-          subtitle="Honoring the timeless temple traditions of Bharatanatyam with authenticity and discipline"
-        />
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mt-12">
-
-          <div className="lg:col-span-5 flex justify-center">
-            <div className="relative">
-              <div className="w-72 h-88 sm:w-80 sm:h-96 rounded-2xl overflow-hidden border-4 border-temple-gold shadow-temple-lg bg-temple-maroon">
-                <img
-                  src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80"
-                  alt="Guru Nattiyakalaimani R. Sridevi"
-                  className="w-full h-full object-cover object-center"
-                />
-              </div>
-              <div className="absolute -bottom-5 -right-5 p-4 rounded-xl bg-temple-maroon text-white border-2 border-temple-gold shadow-lg text-center max-w-[200px]">
-                <p className="font-cinzel text-xs font-bold text-temple-gold">
-                  Guru R. Sridevi
-                </p>
-                <p className="text-[10px] text-amber-200/80 font-cormorant italic">
-                  Diploma in Dance, Title of Nattiyakalaimani, BFA Dance
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="lg:col-span-7 space-y-5 text-stone-700">
-            <h3 className="font-cinzel text-2xl sm:text-3xl font-bold text-temple-maroon leading-snug">
-              Nurturing Grace, Precision, and Devotion for over 18 Years
-            </h3>
-
-            <p className="font-outfit text-sm sm:text-base leading-relaxed">
-              At <strong>Sri Ruthraalayaa Dance Academy</strong> in Thiruthangal near Sivakasi, dance is taught not merely as a performing art, but as a sacred yoga connecting body, rhythm, and devotion. Founded and directed by <strong>Guru Nattiyakalaimani R. Sridevi</strong>, the academy has trained over 100+ students and consistently prepared disciples for Tamil Nadu Music and Fine Arts University grade examinations.
+      {/* 3. Guru & Academy Legacy Section (About) */}
+      <section className="about py-20 bg-[#0f0f0f]">
+        <div className="about-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="section-title text-[#d4af37] text-xs sm:text-sm tracking-[3px] uppercase font-cinzel font-semibold block mb-2">
+              The Guru-Shishya Tradition
+            </span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-cinzel font-bold text-white leading-tight">
+              Honoring the Sacred Heritage with <span className="text-[#d4af37]">Grace &amp; Precision</span>
+            </h2>
+            <p className="about-text text-[#bdbdbd] max-w-2xl mx-auto mt-4 text-base sm:text-lg leading-relaxed">
+              At Sri Ruthraalayaa Dance Academy in Thiruthangal near Sivakasi, dance is taught not merely as a performing art, but as a sacred yoga connecting body, rhythm, and devotion.
             </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="p-4 rounded-xl bg-white border border-amber-200 shadow-sm flex items-start gap-3">
-                <div className="p-2 rounded bg-temple-maroon/10 text-temple-maroon mt-1">
-                  <MudraIcon name="pataka" className="w-5 h-5 text-temple-maroon" />
-                </div>
-                <div>
-                  <h4 className="font-cinzel text-sm font-semibold text-temple-maroon">Authentic Adavus</h4>
-                  <p className="text-xs text-stone-600 mt-1">Rigorous training in Aramandi posture, footwork, and Asamyuta/Samyuta Hastas.</p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-white border border-amber-200 shadow-sm flex items-start gap-3">
-                <div className="p-2 rounded bg-temple-maroon/10 text-temple-maroon mt-1">
-                  <Music className="w-5 h-5 text-temple-maroon" />
-                </div>
-                <div>
-                  <h4 className="font-cinzel text-sm font-semibold text-temple-maroon">Nattuvangam &amp; Thalam</h4>
-                  <p className="text-xs text-stone-600 mt-1">Disciples master complex Carnatic rhythmic cycles (Talam) and cymbals coordination.</p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-white border border-amber-200 shadow-sm flex items-start gap-3">
-                <div className="p-2 rounded bg-temple-maroon/10 text-temple-maroon mt-1">
-                  <Heart className="w-5 h-5 text-temple-maroon" />
-                </div>
-                <div>
-                  <h4 className="font-cinzel text-sm font-semibold text-temple-maroon">Navarasa Abhinaya</h4>
-                  <p className="text-xs text-stone-600 mt-1">Expressive storytelling bringing epics and bhakti poetry vividly to life.</p>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-xl bg-white border border-amber-200 shadow-sm flex items-start gap-3">
-                <div className="p-2 rounded bg-temple-maroon/10 text-temple-maroon mt-1">
-                  <Award className="w-5 h-5 text-temple-maroon" />
-                </div>
-                <div>
-                  <h4 className="font-cinzel text-sm font-semibold text-temple-maroon">Arangetram Guidance</h4>
-                  <p className="text-xs text-stone-600 mt-1">Comprehensive solo debut preparation with full live Carnatic ensemble.</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <Link
-                to="/about"
-                className="inline-flex items-center gap-2 text-sm font-cinzel font-bold text-temple-maroon hover:text-amber-700 transition-colors"
-              >
-                <span>Read Guru Sridevi's Full Pedagogical Biography</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
           </div>
 
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mt-12">
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="relative">
+                <div className="w-72 h-88 sm:w-80 sm:h-96 rounded-2xl overflow-hidden border-2 border-[#d4af37] shadow-[0_0_25px_rgba(212,175,55,0.25)] bg-[#111111]">
+                  <img
+                    src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80"
+                    alt="Guru Nattiyakalaimani R. Sridevi"
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+                <div className="absolute -bottom-5 -right-5 p-4 rounded-xl bg-[#111111] text-white border border-[#d4af37] shadow-xl text-center max-w-[210px]">
+                  <p className="font-cinzel text-xs font-bold text-[#d4af37]">
+                    Guru R. Sridevi
+                  </p>
+                  <p className="text-[10px] text-[#aaaaaa] font-cormorant italic mt-0.5">
+                    Diploma in Dance, Title of Nattiyakalaimani, BFA Dance
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-7 space-y-6">
+              <h3 className="font-cinzel text-2xl sm:text-3xl font-bold text-white leading-snug">
+                Nurturing Grace, Precision, and Devotion for over <span className="text-[#d4af37]">18 Years</span>
+              </h3>
+
+              <p className="font-outfit text-sm sm:text-base text-[#bdbdbd] leading-relaxed">
+                Founded and directed by <strong className="text-white">Guru Nattiyakalaimani R. Sridevi</strong>, the academy has trained over 100+ students and prepared disciples for Tamil Nadu Music and Fine Arts University grade examinations with a 100% record of distinction.
+              </p>
+
+              <div className="about-features grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <div className="p-4 rounded-xl bg-[#111111] border border-[#333333] shadow-sm flex items-start gap-3">
+                  <div className="p-2 rounded bg-[#0f0f0f] border border-[#333333] text-[#d4af37] mt-1">
+                    <MudraIcon name="pataka" className="w-5 h-5 text-[#d4af37]" />
+                  </div>
+                  <div>
+                    <h4 className="font-cinzel text-sm font-semibold text-[#d4af37]">Authentic Adavus</h4>
+                    <p className="text-xs text-[#aaaaaa] mt-1">Rigorous training in Aramandi posture, footwork, and Asamyuta/Samyuta Hastas.</p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#111111] border border-[#333333] shadow-sm flex items-start gap-3">
+                  <div className="p-2 rounded bg-[#0f0f0f] border border-[#333333] text-[#d4af37] mt-1">
+                    <Music className="w-5 h-5 text-[#d4af37]" />
+                  </div>
+                  <div>
+                    <h4 className="font-cinzel text-sm font-semibold text-[#d4af37]">Nattuvangam &amp; Thalam</h4>
+                    <p className="text-xs text-[#aaaaaa] mt-1">Disciples master complex Carnatic rhythmic cycles (Talam) and cymbals coordination.</p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#111111] border border-[#333333] shadow-sm flex items-start gap-3">
+                  <div className="p-2 rounded bg-[#0f0f0f] border border-[#333333] text-[#d4af37] mt-1">
+                    <Heart className="w-5 h-5 text-[#d4af37]" />
+                  </div>
+                  <div>
+                    <h4 className="font-cinzel text-sm font-semibold text-[#d4af37]">Navarasa Abhinaya</h4>
+                    <p className="text-xs text-[#aaaaaa] mt-1">Expressive storytelling bringing epics and bhakti poetry vividly to life.</p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#111111] border border-[#333333] shadow-sm flex items-start gap-3">
+                  <div className="p-2 rounded bg-[#0f0f0f] border border-[#333333] text-[#d4af37] mt-1">
+                    <Award className="w-5 h-5 text-[#d4af37]" />
+                  </div>
+                  <div>
+                    <h4 className="font-cinzel text-sm font-semibold text-[#d4af37]">Arangetram Guidance</h4>
+                    <p className="text-xs text-[#aaaaaa] mt-1">Comprehensive solo debut preparation with full live Carnatic ensemble.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  to="/about"
+                  className="inline-flex items-center gap-2 text-sm font-cinzel font-bold text-[#d4af37] hover:text-[#ffd700] transition-colors"
+                >
+                  <span>Read Guru Sridevi's Full Pedagogical Biography</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
       {/* 4. Featured Courses / Batches */}
-      <section className="py-16 bg-temple-cream-alt border-y border-amber-200/50">
+      <section className="courses py-20 bg-[#111111] border-y border-[#333333]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <KolamDivider
-            title="Training Batches & Curriculum"
-            subtitle="Carefully structured levels catering from age 5 beginners to professional stage artists"
-          />
+          <div className="courses-header text-center mb-12">
+            <span className="text-[#d4af37] text-xs sm:text-sm tracking-[3px] uppercase font-cinzel font-semibold block mb-2">
+              Curriculum &amp; Training
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-cinzel font-bold text-white">
+              Training Batches &amp; <span className="text-[#d4af37]">Syllabus Levels</span>
+            </h2>
+            <p className="text-[#aaaaaa] text-sm sm:text-base mt-2 max-w-xl mx-auto">
+              Carefully structured levels catering from age 5 beginners to professional stage artists
+            </p>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
+          <div className="course-cards grid grid-cols-1 md:grid-cols-3 gap-8">
             {batches.map((batch) => (
               <div
                 key={batch.id}
-                className="rounded-2xl bg-white border-2 border-temple-gold/40 overflow-hidden shadow-temple hover:shadow-temple-lg transition-all duration-300 flex flex-col justify-between group"
+                className="course-card rounded-xl bg-[#0f0f0f] border border-[#333333] overflow-hidden shadow-lg hover:border-[#d4af37] transition-all duration-300 flex flex-col justify-between group text-left p-6"
               >
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="px-3 py-1 rounded-full text-xs font-cinzel font-semibold bg-temple-maroon text-temple-gold">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="px-3 py-1 rounded-md text-xs font-cinzel font-semibold bg-[#1a1a1a] text-[#d4af37] border border-[#333333]">
                       {batch.level}
                     </span>
-                    <span className="text-xs text-stone-500 font-outfit">
+                    <span className="text-xs text-[#888888] font-outfit">
                       {batch.studentCount || 20}+ Enrolled
                     </span>
                   </div>
 
-                  <h3 className="font-cinzel font-bold text-xl text-temple-maroon group-hover:text-amber-700 transition-colors">
+                  <h3 className="font-cinzel font-bold text-xl text-[#d4af37] group-hover:text-[#ffd700] transition-colors mb-2">
                     {batch.name}
                   </h3>
 
-                  <p className="text-xs text-stone-600 mt-2 font-outfit">
-                    Instructor: <strong>{batch.instructor_name}</strong>
+                  <p className="text-xs text-[#bbbbbb] mb-4 font-outfit">
+                    Instructor: <strong className="text-white">{batch.instructor_name}</strong>
                   </p>
 
-                  <div className="mt-4 pt-4 border-t border-stone-100 space-y-2 text-xs text-stone-600 font-outfit">
+                  <div className="pt-3 border-t border-[#222222] space-y-2 text-xs text-[#888888] font-outfit">
                     <div className="flex justify-between">
-                      <span className="text-stone-400">Class Days:</span>
-                      <span className="font-semibold text-stone-800">{batch.schedule_days}</span>
+                      <span className="text-[#666666]">Class Days:</span>
+                      <span className="font-semibold text-[#dddddd]">{batch.schedule_days}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-stone-400">Class Timings:</span>
-                      <span className="font-semibold text-stone-800">{batch.schedule_time}</span>
+                      <span className="text-[#666666]">Class Timings:</span>
+                      <span className="font-semibold text-[#dddddd]">{batch.schedule_time}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-6 bg-temple-cream/50 border-t border-amber-200/40 flex items-center justify-between">
+                <div className="mt-6 pt-4 border-t border-[#222222] flex items-center justify-between">
                   <div>
-                    <span className="text-xs text-stone-500 block">Tuition Fee</span>
-                    <span className="font-cinzel font-bold text-lg text-temple-maroon">
-                      ₹{batch.fee_amount.toLocaleString('en-IN')}<span className="text-xs font-normal text-stone-500">/mo</span>
+                    <span className="text-[10px] text-[#777777] block uppercase tracking-wider">Tuition Fee</span>
+                    <span className="font-cinzel font-bold text-lg text-white">
+                      ₹{batch.fee_amount.toLocaleString('en-IN')}<span className="text-xs font-normal text-[#888888]">/mo</span>
                     </span>
                   </div>
 
                   <Link
                     to="/register"
-                    className="px-4 py-2 rounded-lg bg-temple-maroon text-temple-gold hover:bg-temple-maroon-dark text-xs font-cinzel font-semibold shadow transition-all"
+                    className="px-4 py-2 rounded-md bg-[#d4af37] text-[#111111] hover:bg-transparent hover:text-[#d4af37] border border-[#d4af37] text-xs font-bold font-outfit shadow transition-all"
                   >
                     Enroll Now
                   </Link>
@@ -333,10 +348,10 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="text-center mt-10">
+          <div className="text-center mt-12">
             <Link
               to="/courses"
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-temple-gold bg-white text-temple-maroon font-cinzel font-semibold text-xs hover:bg-temple-gold hover:text-white transition-all shadow-sm"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-md border border-[#d4af37] bg-transparent text-[#d4af37] font-semibold text-xs hover:bg-[#d4af37] hover:text-[#111111] transition-all shadow-sm"
             >
               <span>View All 4 Levels &amp; Detailed University Syllabus</span>
               <ArrowRight className="w-4 h-4" />
@@ -347,84 +362,157 @@ export default function HomePage() {
 
       {/* 5. Upcoming Events & Temple Notices */}
       {events.length > 0 && (
-        <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <KolamDivider
-            title="Academy Events & Stage Performances"
-            subtitle="Experience the vibrant classical calendar of Sri Ruthraalayaa in Sivakasi and beyond"
-          />
+        <section className="events py-20 bg-[#0f0f0f]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="events-header text-center mb-12">
+              <span className="text-[#d4af37] text-xs sm:text-sm tracking-[3px] uppercase font-cinzel font-semibold block mb-2">
+                Performances &amp; Celebrations
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-cinzel font-bold text-white">
+                Academy Events &amp; <span className="text-[#d4af37]">Stage Performances</span>
+              </h2>
+              <p className="text-[#aaaaaa] text-sm sm:text-base mt-2 max-w-xl mx-auto">
+                Experience the vibrant classical calendar of Sri Ruthraalayaa in Sivakasi and beyond
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-            {events.map((ev) => (
-              <div
-                key={ev.id}
-                className="flex flex-col sm:flex-row bg-white rounded-2xl border border-temple-gold/40 overflow-hidden shadow-temple"
-              >
-                <div className="sm:w-2/5 h-48 sm:h-auto relative overflow-hidden bg-temple-maroon">
-                  <img
-                    src={ev.image_url || 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=600&q=80'}
-                    alt={ev.title}
-                    className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded bg-temple-maroon text-temple-gold text-xs font-cinzel font-bold">
-                    {new Date(ev.date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}
-                  </div>
-                </div>
-
-                <div className="sm:w-3/5 p-6 flex flex-col justify-between">
-                  <div>
-                    <h3 className="font-cinzel font-bold text-lg text-temple-maroon">
-                      {ev.title}
-                    </h3>
-                    <p className="text-xs text-stone-600 mt-2 font-outfit line-clamp-3 leading-relaxed">
-                      {ev.description}
-                    </p>
-                  </div>
-
-                  <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500 font-outfit">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-temple-gold" />
-                      {new Date(ev.date).toLocaleDateString('en-IN', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' })}
+            <div className="event-list grid grid-cols-1 md:grid-cols-2 gap-8">
+              {events.map((ev) => (
+                <div
+                  key={ev.id}
+                  className="event-card flex flex-col sm:flex-row bg-[#111111] rounded-xl border border-[#333333] overflow-hidden shadow-lg hover:border-[#d4af37]/60 transition-colors"
+                >
+                  <div className="event-date min-w-[90px] text-center p-5 border-b sm:border-b-0 sm:border-r border-[#444444] bg-[#0c0c0c] flex flex-col justify-center items-center">
+                    <strong className="block text-[#d4af37] font-bold text-2xl font-cinzel">
+                      {new Date(ev.date).getDate()}
+                    </strong>
+                    <span className="text-[#aaaaaa] text-xs uppercase tracking-wider font-medium">
+                      {new Date(ev.date).toLocaleDateString('en-IN', { month: 'short' })}
                     </span>
                   </div>
+
+                  <div className="event-info p-5 flex flex-col justify-between flex-1">
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="event-type text-[#d4af37] text-[11px] font-semibold tracking-wider uppercase">
+                          Performance
+                        </span>
+                        <span className="text-[11px] text-[#777777] flex items-center gap-1 font-outfit">
+                          <Calendar className="w-3 h-3 text-[#d4af37]" />
+                          {new Date(ev.date).toLocaleDateString('en-IN', { weekday: 'short' })}
+                        </span>
+                      </div>
+                      <h3 className="text-white font-cinzel font-bold text-lg mb-2">
+                        {ev.title}
+                      </h3>
+                      <p className="text-[#999999] text-xs font-outfit line-clamp-2 leading-relaxed">
+                        {ev.description}
+                      </p>
+                    </div>
+
+                    <div className="mt-4 pt-3 border-t border-[#222222] flex items-center justify-between text-xs">
+                      <span className="text-[#777777]">Sivakasi / Thiruthangal</span>
+                      <Link to="/events" className="text-[#d4af37] hover:text-[#ffd700] font-medium flex items-center gap-1">
+                        <span>Details</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
       )}
 
+      {/* 6. Gallery Preview Section Matching User CSS */}
+      <section className="gallery py-20 bg-[#111111] border-y border-[#333333]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="gallery-header text-center mb-12">
+            <span className="text-[#d4af37] text-xs sm:text-sm tracking-[3px] uppercase font-cinzel font-semibold block mb-2">
+              Visual Chronicles
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-cinzel font-bold text-white">
+              Academy Gallery &amp; <span className="text-[#d4af37]">Moments of Art</span>
+            </h2>
+            <p className="text-[#aaaaaa] text-sm sm:text-base mt-2 max-w-xl mx-auto">
+              Portraying the devotion, rhythmic footwork, and stage debacles of our talented disciples
+            </p>
+          </div>
 
+          <div className="gallery-grid max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="gallery-item h-64 overflow-hidden rounded-xl border border-[#333333] group bg-[#0f0f0f]">
+              <img
+                src="/BG.2.png"
+                alt="Dance Salangai Footwork"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <div className="gallery-item h-64 overflow-hidden rounded-xl border border-[#333333] group bg-[#0f0f0f]">
+              <img
+                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80"
+                alt="Guru Sridevi"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <div className="gallery-item h-64 overflow-hidden rounded-xl border border-[#333333] group bg-[#0f0f0f]">
+              <img
+                src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=600&q=80"
+                alt="Classical Stage Lighting"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+            <div className="gallery-item h-64 overflow-hidden rounded-xl border border-[#333333] group bg-[#0f0f0f]">
+              <img
+                src="/BG1.png"
+                alt="Nataraja Cosmic Dance"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+          </div>
+
+          <div className="text-center mt-10">
+            <Link
+              to="/gallery"
+              className="secondary-btn"
+            >
+              <span>Explore Full Photo &amp; Video Archive</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* 7. Call To Action Banner */}
-      <section className="py-16 bg-temple-cream relative">
+      <section className="py-20 bg-[#0f0f0f] relative">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <div className="relative p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-temple-maroon via-temple-maroon-dark to-temple-maroon text-white border-2 border-temple-gold shadow-temple-lg overflow-hidden">
-            {/* Ambient BG1.png backdrop */}
+          <div className="relative p-8 sm:p-12 rounded-2xl bg-[#111111] text-white border border-[#333333] shadow-2xl overflow-hidden">
+            {/* Ambient BG1 backdrop */}
             <div
-              className="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-luminosity pointer-events-none"
+              className="absolute inset-0 bg-cover bg-center opacity-15 mix-blend-luminosity pointer-events-none"
               style={{ backgroundImage: `url('/BG1.png')` }}
             />
             <div className="relative z-10">
-              <div className="w-16 h-16 rounded-full bg-temple-maroon border-2 border-temple-gold mx-auto mb-4 flex items-center justify-center p-2 shadow-gold-glow">
+              <div className="w-16 h-16 rounded-full bg-[#080808] border border-[#d4af37] mx-auto mb-4 flex items-center justify-center p-2 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
                 <img src="/logo.png" alt="Sri Ruthralaya" className="w-full h-full object-contain" />
               </div>
-              <h2 className="font-cinzel text-2xl sm:text-4xl font-bold text-temple-gold-light">
-                Begin Your Classical Dance Journey
+              <h2 className="font-cinzel text-2xl sm:text-4xl font-bold text-white">
+                Begin Your Classical <span className="text-[#d4af37]">Dance Journey</span>
               </h2>
-              <p className="font-cormorant italic text-base sm:text-xl text-amber-100/90 mt-2 max-w-xl mx-auto">
+              <p className="font-cormorant italic text-base sm:text-xl text-[#bdbdbd] mt-2 max-w-xl mx-auto">
                 Admissions are now open for new batches. Join Guru Sridevi's lineage and awaken your inner Nataraja.
               </p>
 
-              <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
                   to="/register"
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-temple-gold to-amber-500 text-temple-maroon-deep font-cinzel font-bold text-sm hover:brightness-110 shadow-gold-glow transition-all"
+                  className="primary-btn w-full sm:w-auto"
                 >
                   Apply for Admission Online
                 </Link>
                 <Link
                   to="/contact"
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-temple-gold text-amber-100 hover:bg-temple-gold hover:text-temple-maroon font-cinzel text-sm font-semibold transition-all"
+                  className="secondary-btn w-full sm:w-auto"
                 >
                   Visit Academy Studio
                 </Link>

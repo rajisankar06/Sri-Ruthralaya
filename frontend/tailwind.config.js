@@ -7,92 +7,96 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Direct Requested Palette Roles
-        terracotta: '#9B3D2E',      // Primary
-        'deep-brown': '#4A211B',    // Primary Dark
-        'muted-gold': '#B78A4A',    // Accent
-        'warm-cream': '#FAF6EE',    // Background
-        sand: '#F0E5D2',            // Section BG
-        ivory: '#FFFDF8',           // Card
-        espresso: '#30221E',        // Heading
-        'warm-gray': '#665A54',     // Body
-        'soft-tan': '#D8C8B3',      // Border
-        sage: '#637A61',            // Success
-        ochre: '#B27A32',           // Warning
-        brick: '#A7463A',           // Error
+        // Direct Requested User Palette
+        dark: {
+          base: '#0f0f0f',          // Main body background
+          surface: '#111111',       // Elevated cards / navbar / sections
+          deep: '#080808',          // Footer / deepest background
+          card: '#161616',          // Card surface
+          border: '#333333',        // Standard dark border
+          'border-light': '#444444',// Lighter divider
+          'border-dark': '#222222', // Deep divider
+        },
+        gold: {
+          DEFAULT: '#d4af37',       // Signature Royal Gold
+          light: '#f3e5ab',
+          bright: '#ffd700',
+          dark: '#b89025',
+          pale: '#262010',
+        },
 
         // Mapped to temple semantic system
         temple: {
-          maroon: '#9B3D2E',        // Primary: Terracotta
-          'maroon-dark': '#4A211B', // Primary Dark: Deep Brown
-          'maroon-deep': '#30221E', // Heading: Espresso / Deep Brown
-          'maroon-light': '#B44D3D',
-          gold: '#B78A4A',          // Accent: Muted Gold
-          'gold-light': '#D8B681',
-          'gold-bright': '#C79854',
-          'gold-pale': '#F7EFE1',
-          'gold-dark': '#8E6731',
-          cream: '#FAF6EE',         // Background: Warm Cream
-          'cream-alt': '#F0E5D2',   // Section BG: Sand
-          ivory: '#FFFDF8',         // Card: Ivory
-          sand: '#F0E5D2',          // Section BG: Sand
-          tan: '#D8C8B3',           // Border: Soft Tan
-          espresso: '#30221E',      // Heading: Espresso
-          'warm-gray': '#665A54',   // Body: Warm Gray
+          maroon: '#111111',        // Elevated dark surface
+          'maroon-dark': '#0f0f0f', // Base dark background
+          'maroon-deep': '#080808', // Deepest dark background (footer)
+          'maroon-light': '#1c1c1c',// Secondary dark surface
+          gold: '#d4af37',          // Accent: Signature Gold
+          'gold-light': '#f3e5ab',
+          'gold-bright': '#ffd700',
+          'gold-pale': '#262010',
+          'gold-dark': '#b89025',
+          cream: '#0f0f0f',         // Background: Dark Base
+          'cream-alt': '#111111',   // Section BG: Dark Surface
+          ivory: '#161616',         // Card Surface
+          sand: '#141414',          // Section BG
+          tan: '#333333',           // Border
+          espresso: '#ffffff',      // Headings: Pure White
+          'warm-gray': '#bdbdbd',   // Body Text
         },
 
-        // Overriding neutral scales to harmoniously blend with the palette
+        // Overriding neutral scales to harmoniously blend with the dark palette
         stone: {
-          50: '#FAF6EE',            // Warm Cream
-          100: '#F5EFE4',
-          200: '#E8DCCC',
-          300: '#D8C8B3',           // Border: Soft Tan
-          400: '#A8998C',
-          500: '#837367',
-          600: '#665A54',           // Body: Warm Gray
-          700: '#4D403A',
-          800: '#30221E',           // Heading: Espresso
-          900: '#231815',
-          950: '#140C0A',
+          50: '#080808',
+          100: '#0f0f0f',
+          200: '#161616',
+          300: '#222222',
+          400: '#333333',
+          500: '#777777',
+          600: '#999999',
+          700: '#aaaaaa',
+          800: '#bdbdbd',
+          900: '#eeeeee',
+          950: '#ffffff',
         },
 
         amber: {
-          50: '#FAF6EE',
-          100: '#F7EFE1',
-          200: '#EAD6B5',
-          300: '#D8B681',
-          400: '#C79854',
-          500: '#B78A4A',           // Accent: Muted Gold
-          600: '#B27A32',           // Warning: Ochre
-          700: '#9B3D2E',           // Primary: Terracotta
-          800: '#6F2B20',
-          900: '#4A211B',           // Primary Dark: Deep Brown
+          50: '#1a160c',
+          100: '#f3e5ab',
+          200: '#ebd885',
+          300: '#e0c45b',
+          400: '#d4af37',
+          500: '#d4af37',           // Signature Gold
+          600: '#b89025',
+          700: '#9c771b',
+          800: '#785910',
+          900: '#4d3708',
         },
 
         emerald: {
-          50: '#F4F7F4',
-          100: '#E6ECE5',
-          200: '#C7D5C5',
-          300: '#A2B9A0',
-          400: '#7E9B7C',
-          500: '#637A61',           // Success: Sage
-          600: '#4F634E',
-          700: '#3D4E3C',
-          800: '#2D392C',
-          900: '#1D251C',
+          50: '#0c1a0f',
+          100: '#142918',
+          200: '#1e3d24',
+          300: '#2d5c36',
+          400: '#438050',
+          500: '#5ca36b',
+          600: '#78b884',
+          700: '#99cca2',
+          800: '#c0e0c6',
+          900: '#e5f3e8',
         },
 
         red: {
-          50: '#FDF5F4',
-          100: '#FAECE9',
-          200: '#F2D3CD',
-          300: '#E5B1A8',
-          400: '#C97467',
-          500: '#A7463A',           // Error: Brick
-          600: '#9B3D2E',           // Primary: Terracotta
-          700: '#7E2E23',
-          800: '#5A1D15',
-          900: '#3B100B',
+          50: '#1a0c0c',
+          100: '#291414',
+          200: '#421f1f',
+          300: '#662f2f',
+          400: '#944242',
+          500: '#c45a5a',
+          600: '#db7878',
+          700: '#e89b9b',
+          800: '#f2c4c4',
+          900: '#fae8e8',
         },
       },
       fontFamily: {
@@ -101,14 +105,14 @@ export default {
         outfit: ['Outfit', 'sans-serif'],
       },
       backgroundImage: {
-        'temple-gradient': 'linear-gradient(135deg, #9B3D2E 0%, #4A211B 100%)',
-        'gold-shimmer': 'linear-gradient(90deg, #B78A4A 0%, #D8B681 50%, #B78A4A 100%)',
-        'cream-gradient': 'linear-gradient(180deg, #FAF6EE 0%, #F0E5D2 100%)',
+        'temple-gradient': 'linear-gradient(135deg, #111111 0%, #080808 100%)',
+        'gold-shimmer': 'linear-gradient(90deg, #d4af37 0%, #ffd700 50%, #d4af37 100%)',
+        'cream-gradient': 'linear-gradient(180deg, #0f0f0f 0%, #111111 100%)',
       },
       boxShadow: {
-        'temple': '0 10px 30px -5px rgba(155, 61, 46, 0.14), 0 4px 6px -2px rgba(183, 138, 74, 0.1)',
-        'temple-lg': '0 20px 40px -10px rgba(74, 33, 27, 0.22), 0 8px 10px -4px rgba(183, 138, 74, 0.12)',
-        'gold-glow': '0 0 25px rgba(183, 138, 74, 0.35)',
+        'temple': '0 10px 30px -5px rgba(0, 0, 0, 0.7), 0 4px 6px -2px rgba(212, 175, 55, 0.12)',
+        'temple-lg': '0 20px 40px -10px rgba(0, 0, 0, 0.9), 0 8px 10px -4px rgba(212, 175, 55, 0.25)',
+        'gold-glow': '0 0 25px rgba(212, 175, 55, 0.45)',
       },
       animation: {
         'float-slow': 'float 6s ease-in-out infinite',

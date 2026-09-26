@@ -39,50 +39,47 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-temple-maroon text-white shadow-temple border-b-2 border-temple-gold/40">
+    <header className="sticky top-0 z-40 bg-[#111111] text-white shadow-xl border-b border-[#333333]">
       {/* Top micro-bar */}
-      <div className="bg-temple-maroon-dark text-xs py-1.5 px-4 text-temple-gold-light border-b border-temple-gold/20 flex justify-between items-center">
+      <div className="bg-[#080808] text-xs py-1.5 px-4 text-[#d4af37] border-b border-[#222222] flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <span className="font-cinzel tracking-widest text-[11px] text-temple-gold">
+          <span className="font-cinzel tracking-widest text-[11px] text-[#d4af37]">
             || SRI RUTHRALAYAA DANCE ACADEMY — THIRUTHANGAL, SIVAKASI ||
           </span>
         </div>
-        <div className="hidden sm:flex items-center gap-4 text-xs text-amber-100/90 font-outfit">
-          <span className="flex items-center gap-1.5">
-            <Phone className="w-3.5 h-3.5 text-temple-gold" />
+        <div className="hidden sm:flex items-center gap-4 text-xs text-[#bdbdbd] font-outfit">
+          <span className="flex items-center gap-1.5 hover:text-[#d4af37] transition-colors">
+            <Phone className="w-3.5 h-3.5 text-[#d4af37]" />
             +91 98421 23456
           </span>
-          <span className="text-temple-gold/60">•</span>
-          <span className="italic font-cormorant text-sm">18+ Years of Classical Dance Heritage</span>
+          <span className="text-[#444444]">•</span>
+          <span className="italic font-cormorant text-sm text-[#aaaaaa]">18+ Years of Classical Dance Heritage</span>
         </div>
       </div>
 
       {/* Main Navbar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-[75px]">
 
           {/* Brand Logo & Name */}
-          <Link to="/" className="flex items-center gap-3 group flex-shrink-0">
-            <div className="w-12 h-12 rounded-full border-2 border-temple-gold bg-white flex items-center justify-center p-1 shadow-gold-glow group-hover:scale-105 transition-transform overflow-hidden">
+          <Link to="/" className="brand flex items-center gap-3 group flex-shrink-0">
+            <div className="w-12 h-12 rounded-full border border-[#d4af37] bg-[#111111] flex items-center justify-center p-1 shadow-[0_0_15px_rgba(212,175,55,0.25)] group-hover:scale-105 transition-transform overflow-hidden">
               <img src="/logo.png" alt="Sri Ruthraalayaa Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-cinzel font-bold text-lg sm:text-xl tracking-wider text-temple-gold-light group-hover:text-temple-gold transition-colors">
+                <span className="logo font-cinzel font-bold text-xl sm:text-2xl tracking-wider text-[#d4af37] group-hover:text-[#ffd700] transition-colors">
                   Sri Ruthraalayaa
                 </span>
-                <span>
-
-                </span>
               </div>
-              <p className="text-[10px] sm:text-xs text-amber-200/80 font-cormorant tracking-widest uppercase">
+              <p className="text-[10px] sm:text-xs text-[#aaaaaa] font-cormorant tracking-widest uppercase">
                 Bharathanatyam Academy
               </p>
             </div>
           </Link>
 
-          {/* Desktop Navigation Links — Neatly Arranged with Icons */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          {/* Desktop Navigation Links */}
+          <nav className="nav-links hidden lg:flex items-center gap-2 xl:gap-3">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const active = isActive(link.path);
@@ -90,16 +87,18 @@ export default function Navbar() {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`group flex items-center gap-2 px-3 py-2 rounded-xl text-xs xl:text-sm font-cinzel font-semibold tracking-wide transition-all ${active
-                    ? 'bg-temple-maroon-dark text-temple-gold border border-temple-gold/60 shadow-inner'
-                    : 'text-amber-100/90 hover:text-temple-gold hover:bg-temple-maroon-dark/50'
-                    }`}
+                  className={`group flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-outfit font-medium transition-all ${
+                    active
+                      ? 'bg-[#0f0f0f] text-[#d4af37] border border-[#d4af37]/60 shadow-inner'
+                      : 'text-white hover:text-[#d4af37] hover:bg-[#0f0f0f]/60'
+                  }`}
                 >
                   <span
-                    className={`p-1.5 rounded-lg transition-all flex items-center justify-center ${active
-                      ? 'bg-temple-gold text-temple-maroon-deep shadow-gold-glow'
-                      : 'bg-temple-maroon-dark/80 text-temple-gold group-hover:bg-temple-gold group-hover:text-temple-maroon-deep group-hover:scale-105'
-                      }`}
+                    className={`p-1 rounded-md transition-all flex items-center justify-center ${
+                      active
+                        ? 'bg-[#d4af37] text-[#111111]'
+                        : 'bg-[#1a1a1a] text-[#d4af37] group-hover:bg-[#d4af37] group-hover:text-[#111111]'
+                    }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
                   </span>
@@ -109,14 +108,14 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Desktop Auth / Action Buttons with Icons */}
-          <div className="hidden md:flex items-center gap-2.5 flex-shrink-0">
+          {/* Desktop Auth / Action Buttons with User CSS specifications */}
+          <div className="nav-buttons hidden md:flex items-center gap-3 flex-shrink-0">
             {isAuthenticated ? (
               <div className="flex items-center gap-2">
                 {isAdmin && (
                   <Link
                     to="/admin/dashboard"
-                    className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-cinzel font-semibold rounded-xl border border-temple-gold bg-temple-maroon-dark text-temple-gold hover:bg-temple-gold hover:text-temple-maroon transition-all shadow"
+                    className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-md border border-[#d4af37] bg-[#0f0f0f] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#111111] transition-all shadow"
                   >
                     <Shield className="w-3.5 h-3.5" />
                     <span>Admin Panel</span>
@@ -125,7 +124,7 @@ export default function Navbar() {
                 {isStudent && (
                   <Link
                     to="/student/dashboard"
-                    className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-cinzel font-semibold rounded-xl border border-temple-gold bg-temple-maroon-dark text-temple-gold hover:bg-temple-gold hover:text-temple-maroon transition-all shadow"
+                    className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-md border border-[#d4af37] bg-[#0f0f0f] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#111111] transition-all shadow"
                   >
                     <User className="w-3.5 h-3.5" />
                     <span>My Dashboard</span>
@@ -133,27 +132,24 @@ export default function Navbar() {
                 )}
                 <button
                   onClick={logout}
-                  className="p-2 rounded-xl text-amber-200/70 hover:text-white hover:bg-temple-maroon-dark transition-colors border border-transparent hover:border-temple-gold/30"
+                  className="p-2 rounded-lg text-[#999999] hover:text-white hover:bg-[#0f0f0f] transition-colors border border-transparent hover:border-[#333333]"
                   title="Logout"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <Link
                   to="/login"
-                  className={`flex items-center gap-1.5 px-3.5 py-2 text-xs font-cinzel font-semibold rounded-xl transition-all border ${location.pathname === '/login'
-                    ? 'bg-temple-maroon-dark text-temple-gold border-temple-gold/60 shadow-inner'
-                    : 'text-amber-100 hover:text-temple-gold hover:bg-temple-maroon-dark/60 border-transparent hover:border-temple-gold/40'
-                    }`}
+                  className="login-btn"
                 >
-                  <LogIn className="w-3.5 h-3.5 text-temple-gold" />
+                  <LogIn className="w-3.5 h-3.5 text-[#d4af37]" />
                   <span>Sign In</span>
                 </Link>
                 <Link
                   to="/register"
-                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-cinzel font-bold rounded-xl bg-gradient-to-r from-temple-gold to-amber-500 text-temple-maroon-deep hover:brightness-110 transition-all shadow-md transform hover:-translate-y-0.5"
+                  className="join-btn"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Join Academy</span>
@@ -166,7 +162,7 @@ export default function Navbar() {
           <div className="flex lg:hidden items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-xl text-temple-gold hover:bg-temple-maroon-dark border border-temple-gold/30 focus:outline-none transition-colors"
+              className="p-2 rounded-lg text-[#d4af37] hover:bg-[#0f0f0f] border border-[#333333] focus:outline-none transition-colors"
               aria-label="Toggle Navigation Menu"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -177,7 +173,7 @@ export default function Navbar() {
 
       {/* Mobile Drawer with Arranged Icons */}
       {isOpen && (
-        <div className="lg:hidden bg-temple-maroon-dark border-t border-temple-gold/30 px-4 pt-3 pb-6 space-y-2">
+        <div className="lg:hidden bg-[#111111] border-t border-[#333333] px-4 pt-3 pb-6 space-y-2">
           {navLinks.map((link) => {
             const Icon = link.icon;
             const active = isActive(link.path);
@@ -186,16 +182,18 @@ export default function Navbar() {
                 key={link.path}
                 to={link.path}
                 onClick={() => setIsOpen(false)}
-                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-cinzel font-semibold tracking-wide transition-all ${active
-                  ? 'bg-temple-maroon text-temple-gold border-l-4 border-temple-gold shadow'
-                  : 'text-amber-100/90 hover:bg-temple-maroon hover:text-white'
-                  }`}
+                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium tracking-wide transition-all ${
+                  active
+                    ? 'bg-[#0f0f0f] text-[#d4af37] border-l-4 border-[#d4af37]'
+                    : 'text-white hover:bg-[#0f0f0f] hover:text-[#d4af37]'
+                }`}
               >
                 <span
-                  className={`p-1.5 rounded-lg flex items-center justify-center ${active
-                    ? 'bg-temple-gold text-temple-maroon-deep shadow-gold-glow'
-                    : 'bg-temple-maroon text-temple-gold border border-temple-gold/30'
-                    }`}
+                  className={`p-1.5 rounded-md flex items-center justify-center ${
+                    active
+                      ? 'bg-[#d4af37] text-[#111111]'
+                      : 'bg-[#1c1c1c] text-[#d4af37] border border-[#333333]'
+                  }`}
                 >
                   <Icon className="w-4 h-4" />
                 </span>
@@ -204,14 +202,14 @@ export default function Navbar() {
             );
           })}
 
-          <div className="pt-4 border-t border-temple-gold/20 flex flex-col gap-2">
+          <div className="pt-4 border-t border-[#333333] flex flex-col gap-2">
             {isAuthenticated ? (
               <>
                 {isAdmin && (
                   <Link
                     to="/admin/dashboard"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-2 py-2.5 text-xs font-cinzel font-bold rounded-xl bg-temple-gold text-temple-maroon-deep shadow"
+                    className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold rounded-lg bg-[#d4af37] text-[#111111] shadow"
                   >
                     <Shield className="w-4 h-4" />
                     <span>Admin Portal</span>
@@ -221,7 +219,7 @@ export default function Navbar() {
                   <Link
                     to="/student/dashboard"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-2 py-2.5 text-xs font-cinzel font-bold rounded-xl bg-temple-gold text-temple-maroon-deep shadow"
+                    className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold rounded-lg bg-[#d4af37] text-[#111111] shadow"
                   >
                     <User className="w-4 h-4" />
                     <span>Student Portal</span>
@@ -232,7 +230,7 @@ export default function Navbar() {
                     logout();
                     setIsOpen(false);
                   }}
-                  className="flex items-center justify-center gap-2 py-2 text-xs font-cinzel text-amber-200/80 hover:text-white"
+                  className="flex items-center justify-center gap-2 py-2 text-xs text-[#999999] hover:text-white"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Sign Out</span>
@@ -243,15 +241,15 @@ export default function Navbar() {
                 <Link
                   to="/login"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center gap-1.5 py-2.5 text-center text-xs font-cinzel font-semibold border border-temple-gold/50 rounded-xl text-amber-100 hover:bg-temple-maroon"
+                  className="login-btn justify-center"
                 >
-                  <LogIn className="w-3.5 h-3.5 text-temple-gold" />
+                  <LogIn className="w-3.5 h-3.5 text-[#d4af37]" />
                   <span>Sign In</span>
                 </Link>
                 <Link
                   to="/register"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center gap-1.5 py-2.5 text-center text-xs font-cinzel font-bold rounded-xl bg-gradient-to-r from-temple-gold to-amber-500 text-temple-maroon-deep shadow"
+                  className="join-btn justify-center"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Join Academy</span>

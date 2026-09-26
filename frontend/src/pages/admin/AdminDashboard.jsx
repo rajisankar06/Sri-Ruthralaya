@@ -14,10 +14,16 @@ import {
   ArrowUpRight,
   ShieldAlert,
   ShieldCheck,
-  ArrowRight
+  ArrowRight,
+  PlusCircle,
+  CreditCard,
+  Bell,
+  Image as ImageIcon,
+  Clock,
+  Activity,
+  Award
 } from 'lucide-react';
 import {
-
   ResponsiveContainer,
   LineChart,
   Line,
@@ -99,137 +105,278 @@ export default function AdminDashboard() {
 
   const recentActivity = analytics?.recentActivity || [];
 
+  const batchCapacities = [
+    { name: 'Bala Natya (Beginner)', level: 'Beginner', enrolled: 32, capacity: 35, time: 'Mon, Wed, Fri • 4:30 PM', instructor: 'Guru R. Sridevi' },
+    { name: 'Madhyama Natya (Intermediate)', level: 'Intermediate', enrolled: 26, capacity: 30, time: 'Tue, Thu, Sat • 5:00 PM', instructor: 'Guru R. Sridevi' },
+    { name: 'Natya Praveena (Advanced)', level: 'Advanced', enrolled: 22, capacity: 25, time: 'Mon, Wed, Sat • 6:30 PM', instructor: 'Guru R. Sridevi' },
+    { name: 'Arangetram Margam Intensive', level: 'Arangetram Prep', enrolled: 15, capacity: 15, time: 'Daily Sadhana • 6:00 AM', instructor: 'Guru R. Sridevi' },
+  ];
+
   return (
-    <div className="space-y-8 font-outfit">
+    <div className="space-y-8 font-outfit text-white">
       
-      {/* Executive Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Executive Header & Quick Actions Bar */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-2xl">
         <div>
-          <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-temple-maroon">
-            Executive Analytics &amp; Academy Operations
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[11px] font-cinzel tracking-widest text-[#d4af37] uppercase font-bold">
+              Operations Center • Academic Year 2026-27
+            </span>
+          </div>
+          <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-white">
+            Executive Analytics &amp; <span className="text-[#d4af37]">Academy Operations</span>
           </h1>
-          <p className="text-xs sm:text-sm text-stone-500 mt-1 font-outfit">
+          <p className="text-xs sm:text-sm text-[#bdbdbd] mt-1 font-outfit">
             Real-time enrollment trajectories, batch attendance metrics, revenue tracking, and LLM-driven strategic insights.
           </p>
         </div>
 
-        <button
-          onClick={loadAllData}
-          className="self-start md:self-auto px-4 py-2 rounded-xl bg-white border border-stone-200 text-stone-700 hover:text-temple-maroon hover:border-temple-gold text-xs font-cinzel font-semibold shadow-xs flex items-center gap-1.5 transition-colors"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-          <span>Refresh Data</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={loadAllData}
+            disabled={loading}
+            className="px-4 py-2.5 rounded-xl bg-[#0f0f0f] border border-[#333333] hover:border-[#d4af37] text-[#bdbdbd] hover:text-[#d4af37] text-xs font-cinzel font-semibold shadow-md flex items-center gap-2 transition-all"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#d4af37]' : ''}`} />
+            <span>{loading ? 'Refreshing...' : 'Refresh Metrics'}</span>
+          </button>
+        </div>
       </div>
 
-      {/* KPI Cards Row */}
+      {/* Quick Operational Shortcuts Bar */}
+      <div className="p-4 rounded-2xl bg-[#111111] border border-[#333333] shadow-lg">
+        <div className="flex items-center justify-between mb-3 px-2">
+          <span className="text-xs font-cinzel uppercase tracking-wider text-[#d4af37] font-bold flex items-center gap-2">
+            <Activity className="w-4 h-4 text-[#d4af37]" />
+            Direct Administrative Workflows
+          </span>
+          <span className="text-[11px] text-[#777777]">1-Click Rapid Navigation</span>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <Link
+            to="/admin/students"
+            className="flex items-center gap-2 p-3 rounded-xl bg-[#0f0f0f] border border-[#333333] hover:border-[#d4af37] hover:bg-[#161616] text-xs text-[#bdbdbd] hover:text-white transition-all group"
+          >
+            <Users className="w-4 h-4 text-[#d4af37] group-hover:scale-110 transition-transform" />
+            <span className="font-medium truncate">Enrolled Disciples</span>
+          </Link>
+
+          <Link
+            to="/admin/attendance"
+            className="flex items-center gap-2 p-3 rounded-xl bg-[#0f0f0f] border border-[#333333] hover:border-[#d4af37] hover:bg-[#161616] text-xs text-[#bdbdbd] hover:text-white transition-all group"
+          >
+            <CalendarCheck className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+            <span className="font-medium truncate">Attendance Matrix</span>
+          </Link>
+
+          <Link
+            to="/admin/fees"
+            className="flex items-center gap-2 p-3 rounded-xl bg-[#0f0f0f] border border-[#333333] hover:border-[#d4af37] hover:bg-[#161616] text-xs text-[#bdbdbd] hover:text-white transition-all group"
+          >
+            <CreditCard className="w-4 h-4 text-[#d4af37] group-hover:scale-110 transition-transform" />
+            <span className="font-medium truncate">Tuition Ledger</span>
+          </Link>
+
+          <Link
+            to="/admin/batches"
+            className="flex items-center gap-2 p-3 rounded-xl bg-[#0f0f0f] border border-[#333333] hover:border-[#d4af37] hover:bg-[#161616] text-xs text-[#bdbdbd] hover:text-white transition-all group"
+          >
+            <Layers className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
+            <span className="font-medium truncate">Curriculum Batches</span>
+          </Link>
+
+          <Link
+            to="/admin/events"
+            className="flex items-center gap-2 p-3 rounded-xl bg-[#0f0f0f] border border-[#333333] hover:border-[#d4af37] hover:bg-[#161616] text-xs text-[#bdbdbd] hover:text-white transition-all group"
+          >
+            <Calendar className="w-4 h-4 text-rose-400 group-hover:scale-110 transition-transform" />
+            <span className="font-medium truncate">Stage Events</span>
+          </Link>
+
+          <Link
+            to="/admin/gallery"
+            className="flex items-center gap-2 p-3 rounded-xl bg-[#0f0f0f] border border-[#333333] hover:border-[#d4af37] hover:bg-[#161616] text-xs text-[#bdbdbd] hover:text-white transition-all group"
+          >
+            <ImageIcon className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform" />
+            <span className="font-medium truncate">Photo Studio</span>
+          </Link>
+        </div>
+      </div>
+
+      {/* KPI Cards Row in Dark Gold Theme */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         
         {/* KPI 1: Active Learners */}
-        <div className="p-5 rounded-2xl bg-white border border-temple-gold/40 shadow-temple flex flex-col justify-between">
-          <div className="flex items-center justify-between text-stone-500">
-            <span className="text-[11px] font-cinzel uppercase font-semibold">Active Learners</span>
-            <Users className="w-4 h-4 text-temple-gold" />
+        <div className="p-5 rounded-2xl bg-[#111111] border border-[#333333] hover:border-[#d4af37]/60 shadow-xl flex flex-col justify-between transition-all">
+          <div className="flex items-center justify-between text-[#888888]">
+            <span className="text-[11px] font-cinzel uppercase font-semibold text-[#aaaaaa]">Active Learners</span>
+            <Users className="w-4 h-4 text-[#d4af37]" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="font-cinzel font-bold text-2xl sm:text-3xl text-temple-maroon">
+            <span className="font-cinzel font-bold text-2xl sm:text-3xl text-white">
               {kpis.totalStudents}
             </span>
-            <span className="text-[11px] text-emerald-600 font-semibold flex items-center">
+            <span className="text-[11px] text-emerald-400 font-semibold flex items-center">
               <TrendingUp className="w-3 h-3 mr-0.5" /> +16%
             </span>
           </div>
-          <span className="text-[10px] text-stone-400 mt-1">Across all 4 levels</span>
+          <span className="text-[10px] text-[#777777] mt-1">Across all 4 levels</span>
         </div>
 
         {/* KPI 2: Pending Applications */}
-        <div className="p-5 rounded-2xl bg-white border border-amber-300/80 shadow-temple flex flex-col justify-between">
-          <div className="flex items-center justify-between text-stone-500">
-            <span className="text-[11px] font-cinzel uppercase font-semibold">Pending Review</span>
-            <ShieldAlert className="w-4 h-4 text-amber-600" />
+        <div className="p-5 rounded-2xl bg-[#111111] border border-[#333333] hover:border-amber-500/60 shadow-xl flex flex-col justify-between transition-all">
+          <div className="flex items-center justify-between text-[#888888]">
+            <span className="text-[11px] font-cinzel uppercase font-semibold text-[#aaaaaa]">Pending Review</span>
+            <ShieldAlert className="w-4 h-4 text-amber-400" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="font-cinzel font-bold text-2xl sm:text-3xl text-amber-700">
+            <span className="font-cinzel font-bold text-2xl sm:text-3xl text-amber-400">
               {kpis.pendingRegistrations}
             </span>
-            <span className="text-[11px] text-amber-700 font-medium">Awaiting approval</span>
+            <span className="text-[11px] text-amber-300 font-medium">Awaiting review</span>
           </div>
-          <span className="text-[10px] text-stone-400 mt-1">1-click approve below</span>
+          <span className="text-[10px] text-[#777777] mt-1">1-click approve in Disciples</span>
         </div>
 
         {/* KPI 3: Monthly Revenue */}
-        <div className="p-5 rounded-2xl bg-white border border-temple-gold/40 shadow-temple flex flex-col justify-between">
-          <div className="flex items-center justify-between text-stone-500">
-            <span className="text-[11px] font-cinzel uppercase font-semibold">October Revenue</span>
-            <DollarSign className="w-4 h-4 text-emerald-600" />
+        <div className="p-5 rounded-2xl bg-[#111111] border border-[#333333] hover:border-emerald-500/60 shadow-xl flex flex-col justify-between transition-all">
+          <div className="flex items-center justify-between text-[#888888]">
+            <span className="text-[11px] font-cinzel uppercase font-semibold text-[#aaaaaa]">October Revenue</span>
+            <DollarSign className="w-4 h-4 text-emerald-400" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="font-cinzel font-bold text-2xl sm:text-3xl text-emerald-700">
+            <span className="font-cinzel font-bold text-2xl sm:text-3xl text-emerald-400">
               ₹{(kpis.monthlyRevenue / 1000).toFixed(0)}k
             </span>
-            <span className="text-[10px] text-stone-400">collected</span>
+            <span className="text-[10px] text-[#777777]">collected</span>
           </div>
-          <span className="text-[10px] text-rose-600 font-medium">₹{kpis.totalDues?.toLocaleString('en-IN')} pending dues</span>
+          <span className="text-[10px] text-rose-400 font-medium">₹{kpis.totalDues?.toLocaleString('en-IN')} pending dues</span>
         </div>
 
         {/* KPI 4: Average Attendance */}
-        <div className="p-5 rounded-2xl bg-white border border-temple-gold/40 shadow-temple flex flex-col justify-between">
-          <div className="flex items-center justify-between text-stone-500">
-            <span className="text-[11px] font-cinzel uppercase font-semibold">Avg Attendance</span>
-            <CalendarCheck className="w-4 h-4 text-temple-maroon" />
+        <div className="p-5 rounded-2xl bg-[#111111] border border-[#333333] hover:border-[#d4af37]/60 shadow-xl flex flex-col justify-between transition-all">
+          <div className="flex items-center justify-between text-[#888888]">
+            <span className="text-[11px] font-cinzel uppercase font-semibold text-[#aaaaaa]">Avg Attendance</span>
+            <CalendarCheck className="w-4 h-4 text-[#d4af37]" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="font-cinzel font-bold text-2xl sm:text-3xl text-temple-maroon">
+            <span className="font-cinzel font-bold text-2xl sm:text-3xl text-white">
               {kpis.averageAttendance}%
             </span>
-            <span className="text-[11px] text-emerald-600 font-semibold">Target &gt;85%</span>
+            <span className="text-[11px] text-emerald-400 font-semibold">Target &gt;85%</span>
           </div>
-          <span className="text-[10px] text-stone-400 mt-1">Across 4 batch sessions</span>
+          <span className="text-[10px] text-[#777777] mt-1">Across 4 batch sessions</span>
         </div>
 
         {/* KPI 5: Active Batches */}
-        <div className="p-5 rounded-2xl bg-white border border-temple-gold/40 shadow-temple flex flex-col justify-between col-span-2 sm:col-span-1">
-          <div className="flex items-center justify-between text-stone-500">
-            <span className="text-[11px] font-cinzel uppercase font-semibold">Active Batches</span>
-            <Layers className="w-4 h-4 text-temple-gold" />
+        <div className="p-5 rounded-2xl bg-[#111111] border border-[#333333] hover:border-[#d4af37]/60 shadow-xl flex flex-col justify-between col-span-2 sm:col-span-1 transition-all">
+          <div className="flex items-center justify-between text-[#888888]">
+            <span className="text-[11px] font-cinzel uppercase font-semibold text-[#aaaaaa]">Active Batches</span>
+            <Layers className="w-4 h-4 text-[#d4af37]" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="font-cinzel font-bold text-2xl sm:text-3xl text-stone-800">
+            <span className="font-cinzel font-bold text-2xl sm:text-3xl text-white">
               {kpis.activeBatches}
             </span>
-            <span className="text-[11px] text-stone-500 font-medium">Bala to Margam</span>
+            <span className="text-[11px] text-[#888888] font-medium">Bala to Margam</span>
           </div>
-          <span className="text-[10px] text-stone-400 mt-1">3 upcoming events</span>
+          <span className="text-[10px] text-[#777777] mt-1">3 upcoming events</span>
         </div>
 
       </div>
 
-      {/* CORE REQUIREMENT SECTION 5: AI INSIGHTS PANEL */}
-      <div className="rounded-3xl bg-gradient-to-br from-temple-maroon via-temple-maroon-dark to-temple-maroon-deep text-white border-2 border-temple-gold shadow-2xl p-6 sm:p-8 relative overflow-hidden">
-        {/* Background Nataraja BG1.png */}
+      {/* Batch Capacity & Class Status Overview Widget */}
+      <div className="p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6 border-b border-[#222222] pb-4">
+          <div>
+            <h3 className="font-cinzel font-bold text-base text-white flex items-center gap-2">
+              <Award className="w-4 h-4 text-[#d4af37]" />
+              Classroom Batches &amp; Capacity Utilization
+            </h3>
+            <p className="text-xs text-[#888888] mt-0.5">
+              Current seat allocation and instructor scheduling across all 4 pedagogical tiers
+            </p>
+          </div>
+          <Link
+            to="/admin/batches"
+            className="text-xs font-cinzel font-bold text-[#d4af37] hover:underline flex items-center gap-1 self-start sm:self-auto"
+          >
+            <span>Manage Batches</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {batchCapacities.map((b, idx) => {
+            const pct = Math.round((b.enrolled / b.capacity) * 100);
+            return (
+              <div key={idx} className="p-4 rounded-2xl bg-[#0f0f0f] border border-[#222222] hover:border-[#333333] transition-all flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-cinzel uppercase px-2 py-0.5 rounded bg-[#1a1a1a] border border-[#333333] text-[#d4af37]">
+                      {b.level}
+                    </span>
+                    <span className="text-xs font-bold text-white">
+                      {b.enrolled} / {b.capacity} Disciples
+                    </span>
+                  </div>
+                  <h4 className="font-cinzel font-bold text-sm text-white line-clamp-1 mb-1">
+                    {b.name}
+                  </h4>
+                  <p className="text-[11px] text-[#888888] flex items-center gap-1 mb-3">
+                    <Clock className="w-3 h-3 text-[#d4af37]" />
+                    <span>{b.time}</span>
+                  </p>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between text-[11px] text-[#888888] mb-1">
+                    <span>Capacity Filled</span>
+                    <span className={pct >= 90 ? 'text-amber-400 font-bold' : 'text-emerald-400 font-bold'}>
+                      {pct}%
+                    </span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-[#1a1a1a] overflow-hidden">
+                    <div 
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        pct >= 90 ? 'bg-amber-400' : 'bg-[#d4af37]'
+                      }`}
+                      style={{ width: `${Math.min(pct, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* AI INSIGHTS PANEL (Dark Gold Luxury Theme) */}
+      <div className="rounded-3xl bg-[#111111] text-white border border-[#333333] hover:border-[#d4af37]/60 shadow-2xl p-6 sm:p-8 relative overflow-hidden transition-all">
+        {/* Subtle Nataraja Background */}
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-luminosity pointer-events-none"
+          className="absolute inset-0 bg-cover bg-center opacity-10 mix-blend-luminosity pointer-events-none"
           style={{ backgroundImage: `url('/BG1.png')` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-temple-maroon-deep/90 via-temple-maroon/80 to-temple-maroon-deep/90 pointer-events-none" />
-        <div className="absolute inset-0 opacity-10 bg-kolam-pattern pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0f0f0f]/95 via-[#111111]/90 to-[#0f0f0f]/95 pointer-events-none" />
 
         <div className="relative z-10">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-temple-gold/30 pb-4 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#222222] pb-5 mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-temple-maroon text-temple-gold border-2 border-temple-gold flex items-center justify-center p-2 shadow-gold-glow flex-shrink-0">
+              <div className="w-12 h-12 rounded-full bg-[#0a0a0a] text-[#d4af37] border-2 border-[#d4af37] flex items-center justify-center p-2 shadow-lg flex-shrink-0">
                 <img src="/logo.png" alt="Sri Ruthralaya" className="w-full h-full object-contain" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="font-cinzel font-bold text-lg sm:text-xl text-temple-gold-light">
+                  <h2 className="font-cinzel font-bold text-lg sm:text-xl text-[#d4af37]">
                     AI Strategic Intelligence &amp; Trend Insights
                   </h2>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
                     Live LLM Model Active
                   </span>
                 </div>
-                <p className="text-xs text-amber-200/80 font-cormorant italic">
+                <p className="text-xs text-[#888888] font-cormorant italic mt-0.5">
                   Autonomous qualitative analysis synthesized from aggregated academy metrics (OpenAI / Claude / DB Engine)
                 </p>
               </div>
@@ -238,7 +385,7 @@ export default function AdminDashboard() {
             <button
               onClick={handleRegenerateAi}
               disabled={refreshingAi}
-              className="self-start sm:self-auto px-4 py-2 rounded-xl bg-temple-gold text-temple-maroon-deep hover:brightness-110 text-xs font-cinzel font-bold shadow flex items-center gap-1.5 transition-all disabled:opacity-50"
+              className="primary-btn self-start sm:self-auto text-xs py-2 px-4 shadow flex items-center gap-2 disabled:opacity-50"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${refreshingAi ? 'animate-spin' : ''}`} />
               <span>{refreshingAi ? 'Analyzing Data...' : 'Regenerate Analysis'}</span>
@@ -250,7 +397,7 @@ export default function AdminDashboard() {
             
             {/* Left Col: 3 Positive Trends */}
             <div className="lg:col-span-7 space-y-3">
-              <h3 className="font-cinzel text-xs uppercase tracking-wider text-temple-gold font-bold flex items-center gap-2">
+              <h3 className="font-cinzel text-xs uppercase tracking-wider text-[#d4af37] font-bold flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-emerald-400" />
                 3 Key Observed Trends
               </h3>
@@ -261,7 +408,7 @@ export default function AdminDashboard() {
                   "Senior Batch Dedication: The Arangetram Intensive batch demonstrates an extraordinary 98% attendance rate.",
                   "Stellar Retention Rate: 97.1% disciple retention rate showcases exceptional student-guru bonding.",
                 ]).map((trend, i) => (
-                  <div key={i} className="p-3.5 rounded-xl bg-black/30 border border-temple-gold/30 flex items-start gap-2.5 text-xs text-amber-100/90 leading-relaxed font-outfit">
+                  <div key={i} className="p-3.5 rounded-xl bg-[#0f0f0f] border border-[#222222] flex items-start gap-2.5 text-xs text-[#bdbdbd] leading-relaxed font-outfit">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
                     <span>{trend}</span>
                   </div>
@@ -274,22 +421,22 @@ export default function AdminDashboard() {
               
               {/* Risk Card */}
               <div>
-                <h3 className="font-cinzel text-xs uppercase tracking-wider text-amber-300 font-bold flex items-center gap-2 mb-2">
+                <h3 className="font-cinzel text-xs uppercase tracking-wider text-amber-400 font-bold flex items-center gap-2 mb-2">
                   <AlertTriangle className="w-4 h-4 text-amber-400" />
                   Identified Operational Risk
                 </h3>
-                <div className="p-3.5 rounded-xl bg-amber-950/50 border border-amber-400/40 text-xs text-amber-100/90 leading-relaxed font-outfit">
+                <div className="p-3.5 rounded-xl bg-[#18140c] border border-amber-500/40 text-xs text-[#f1ddba] leading-relaxed font-outfit">
                   {aiInsights?.risk || "Beginner Adavu Consistency: Bala Natya attendance currently trails at 89%, accompanied by ₹22,000 in pending term dues requiring follow-up."}
                 </div>
               </div>
 
               {/* Actionable Recommendation Card */}
               <div>
-                <h3 className="font-cinzel text-xs uppercase tracking-wider text-emerald-300 font-bold flex items-center gap-2 mb-2">
+                <h3 className="font-cinzel text-xs uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-2 mb-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   Strategic Actionable Recommendation
                 </h3>
-                <div className="p-3.5 rounded-xl bg-emerald-950/50 border border-emerald-400/40 text-xs text-emerald-100/90 leading-relaxed font-outfit">
+                <div className="p-3.5 rounded-xl bg-[#0d1712] border border-emerald-500/40 text-xs text-[#c6ebd4] leading-relaxed font-outfit">
                   {aiInsights?.recommendation || "Institute a 'Natyarambha Milestone Showcase' after completing the first 20 Adavus with a parent observation session to bolster retention."}
                 </div>
               </div>
@@ -300,22 +447,22 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* CORE REQUIREMENT SECTION 5: CHARTS GRID (Recharts) */}
+      {/* CHARTS GRID (Recharts with Dark Theme) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
         {/* Chart 1: Monthly Enrollment Trend with Linear Regression Forecast Line */}
-        <div className="p-6 rounded-3xl bg-white border-2 border-temple-gold/40 shadow-temple">
+        <div className="p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="font-cinzel font-bold text-base text-temple-maroon">
+              <h3 className="font-cinzel font-bold text-base text-white">
                 Monthly Enrollment &amp; Regression Forecast
               </h3>
-              <p className="text-xs text-stone-500 mt-0.5">
+              <p className="text-xs text-[#888888] mt-0.5">
                 Historical active disciples + dotted projected trajectory for next 2 months
               </p>
             </div>
             <div className="text-right">
-              <span className="text-xs font-bold text-emerald-700 font-cinzel">
+              <span className="text-xs font-bold text-emerald-400 font-cinzel">
                 Next Mo: ~{charts.forecast?.nextMonth || 104} Students
               </span>
             </div>
@@ -324,30 +471,30 @@ export default function AdminDashboard() {
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={charts.monthlyEnrollmentTrend} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E8DCCC" />
-                <XAxis dataKey="month" stroke="#665A54" fontSize={11} />
-                <YAxis stroke="#665A54" fontSize={11} domain={[30, 120]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#222222" />
+                <XAxis dataKey="month" stroke="#888888" fontSize={11} />
+                <YAxis stroke="#888888" fontSize={11} domain={[30, 120]} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#FAF6EE', borderColor: '#B78A4A', borderRadius: '12px', fontSize: '12px' }}
+                  contentStyle={{ backgroundColor: '#111111', borderColor: '#d4af37', borderRadius: '12px', fontSize: '12px', color: '#ffffff' }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
                 <Line
                   type="monotone"
                   dataKey="students"
                   name="Enrolled Disciples"
-                  stroke="#9B3D2E"
+                  stroke="#d4af37"
                   strokeWidth={3}
-                  activeDot={{ r: 6 }}
+                  activeDot={{ r: 6, fill: '#d4af37' }}
                   connectNulls={false}
                 />
                 <Line
                   type="monotone"
                   dataKey="forecast"
                   name="Linear Regression Forecast (Dotted)"
-                  stroke="#B78A4A"
-                  strokeWidth={3}
+                  stroke="#10b981"
+                  strokeWidth={2}
                   strokeDasharray="5 5"
-                  activeDot={{ r: 6 }}
+                  activeDot={{ r: 6, fill: '#10b981' }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -355,13 +502,13 @@ export default function AdminDashboard() {
         </div>
 
         {/* Chart 2: Batch Attendance % Trend */}
-        <div className="p-6 rounded-3xl bg-white border-2 border-temple-gold/40 shadow-temple">
+        <div className="p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="font-cinzel font-bold text-base text-temple-maroon">
+              <h3 className="font-cinzel font-bold text-base text-white">
                 Attendance Percentage by Batch Level
               </h3>
-              <p className="text-xs text-stone-500 mt-0.5">
+              <p className="text-xs text-[#888888] mt-0.5">
                 Current month average attendance vs 85% university benchmark
               </p>
             </div>
@@ -370,28 +517,28 @@ export default function AdminDashboard() {
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={charts.batchAttendanceTrend} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E8DCCC" />
-                <XAxis dataKey="batch" stroke="#665A54" fontSize={11} />
-                <YAxis stroke="#665A54" fontSize={11} domain={[70, 100]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#222222" />
+                <XAxis dataKey="batch" stroke="#888888" fontSize={11} />
+                <YAxis stroke="#888888" fontSize={11} domain={[70, 100]} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#FAF6EE', borderColor: '#B78A4A', borderRadius: '12px', fontSize: '12px' }}
+                  contentStyle={{ backgroundColor: '#111111', borderColor: '#d4af37', borderRadius: '12px', fontSize: '12px', color: '#ffffff' }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Bar dataKey="attendancePct" name="Attendance %" fill="#9B3D2E" radius={[6, 6, 0, 0]} />
-                <Line type="monotone" dataKey="target" name="Exam Target (85%)" stroke="#B78A4A" strokeWidth={2} />
+                <Bar dataKey="attendancePct" name="Attendance %" fill="#d4af37" radius={[6, 6, 0, 0]} />
+                <Line type="monotone" dataKey="target" name="Exam Target (85%)" stroke="#10b981" strokeWidth={2} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Chart 3: Revenue vs Dues (Stacked Bar Chart) */}
-        <div className="p-6 rounded-3xl bg-white border-2 border-temple-gold/40 shadow-temple">
+        <div className="p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="font-cinzel font-bold text-base text-temple-maroon">
+              <h3 className="font-cinzel font-bold text-base text-white">
                 Revenue Collection vs Pending Dues
               </h3>
-              <p className="text-xs text-stone-500 mt-0.5">
+              <p className="text-xs text-[#888888] mt-0.5">
                 Monthly collected tuition revenue compared to outstanding dues (INR)
               </p>
             </div>
@@ -400,33 +547,33 @@ export default function AdminDashboard() {
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={charts.revenueVsDues} margin={{ top: 10, right: 20, left: -5, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E8DCCC" />
-                <XAxis dataKey="month" stroke="#665A54" fontSize={11} />
-                <YAxis stroke="#665A54" fontSize={11} tickFormatter={(v) => `₹${v/1000}k`} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#222222" />
+                <XAxis dataKey="month" stroke="#888888" fontSize={11} />
+                <YAxis stroke="#888888" fontSize={11} tickFormatter={(v) => `₹${v/1000}k`} />
                 <Tooltip
                   formatter={(v) => `₹${v.toLocaleString('en-IN')}`}
-                  contentStyle={{ backgroundColor: '#FAF6EE', borderColor: '#B78A4A', borderRadius: '12px', fontSize: '12px' }}
+                  contentStyle={{ backgroundColor: '#111111', borderColor: '#d4af37', borderRadius: '12px', fontSize: '12px', color: '#ffffff' }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Bar dataKey="collected" name="Tuition Collected (₹)" stackId="a" fill="#637A61" radius={[0, 0, 0, 0]} />
-                <Bar dataKey="pending" name="Pending Dues (₹)" stackId="a" fill="#B27A32" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="collected" name="Tuition Collected (₹)" stackId="a" fill="#10b981" radius={[0, 0, 0, 0]} />
+                <Bar dataKey="pending" name="Pending Dues (₹)" stackId="a" fill="#e11d48" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Chart 4: Student Retention Trend over Terms */}
-        <div className="p-6 rounded-3xl bg-white border-2 border-temple-gold/40 shadow-temple">
+        <div className="p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="font-cinzel font-bold text-base text-temple-maroon">
+              <h3 className="font-cinzel font-bold text-base text-white">
                 Student Retention &amp; Completion Rate
               </h3>
-              <p className="text-xs text-stone-500 mt-0.5">
+              <p className="text-xs text-[#888888] mt-0.5">
                 Term-over-term retention percentage showing high disciple longevity
               </p>
             </div>
-            <span className="text-xs font-cinzel font-bold text-emerald-700">97.1% Peak</span>
+            <span className="text-xs font-cinzel font-bold text-emerald-400">97.1% Peak</span>
           </div>
 
           <div className="h-72 w-full">
@@ -434,19 +581,19 @@ export default function AdminDashboard() {
               <AreaChart data={charts.retentionTrend} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
                 <defs>
                   <linearGradient id="retentionGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#B78A4A" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#9B3D2E" stopOpacity={0.1}/>
+                    <stop offset="5%" stopColor="#d4af37" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#d4af37" stopOpacity={0.05}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E8DCCC" />
-                <XAxis dataKey="term" stroke="#665A54" fontSize={10} />
-                <YAxis stroke="#665A54" fontSize={11} domain={[90, 100]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#222222" />
+                <XAxis dataKey="term" stroke="#888888" fontSize={10} />
+                <YAxis stroke="#888888" fontSize={11} domain={[90, 100]} />
                 <Tooltip
                   formatter={(v) => `${v}%`}
-                  contentStyle={{ backgroundColor: '#FAF6EE', borderColor: '#B78A4A', borderRadius: '12px', fontSize: '12px' }}
+                  contentStyle={{ backgroundColor: '#111111', borderColor: '#d4af37', borderRadius: '12px', fontSize: '12px', color: '#ffffff' }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Area type="monotone" dataKey="retentionRate" name="Retention %" stroke="#9B3D2E" strokeWidth={2} fillOpacity={1} fill="url(#retentionGrad)" />
+                <Area type="monotone" dataKey="retentionRate" name="Retention %" stroke="#d4af37" strokeWidth={2} fillOpacity={1} fill="url(#retentionGrad)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -455,16 +602,16 @@ export default function AdminDashboard() {
       </div>
 
       {/* Recent Activity Feed */}
-      <div className="p-6 rounded-3xl bg-white border-2 border-temple-gold/40 shadow-temple space-y-5">
+      <div className="p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <h3 className="font-cinzel font-bold text-base text-temple-maroon">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+              <h3 className="font-cinzel font-bold text-base text-white">
                 Recent Academy Operational Activity
               </h3>
             </div>
-            <p className="text-xs text-stone-500 font-outfit mt-0.5">
+            <p className="text-xs text-[#888888] font-outfit mt-0.5">
               Live audit stream of administrative operations persisted directly in PostgreSQL / database ledger.
             </p>
           </div>
@@ -472,7 +619,7 @@ export default function AdminDashboard() {
           <div className="flex items-center gap-3">
             <Link
               to="/admin/activities"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-temple-cream text-temple-maroon border border-temple-gold/50 hover:bg-temple-maroon hover:text-temple-gold text-xs font-cinzel font-bold transition-all shadow-sm"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#0f0f0f] text-[#d4af37] border border-[#333333] hover:border-[#d4af37] text-xs font-cinzel font-bold transition-all shadow-sm"
             >
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Full Database Audit Ledger</span>
@@ -484,39 +631,39 @@ export default function AdminDashboard() {
         {/* Activity Feed Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {recentActivity.length === 0 ? (
-            <div className="col-span-4 p-8 text-center text-xs text-stone-400 font-outfit bg-temple-cream/30 rounded-2xl border border-stone-200">
+            <div className="col-span-4 p-8 text-center text-xs text-[#666666] font-outfit bg-[#0f0f0f] rounded-2xl border border-[#222222]">
               No recent activity logs recorded yet.
             </div>
           ) : (
             recentActivity.map((act) => (
               <div 
                 key={act.id} 
-                className="p-4 rounded-2xl bg-temple-cream/50 border border-amber-200/60 hover:border-temple-gold/80 hover:bg-white transition-all shadow-sm flex flex-col justify-between"
+                className="p-4 rounded-2xl bg-[#0f0f0f] border border-[#222222] hover:border-[#d4af37]/60 transition-all shadow-sm flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-center justify-between gap-1 mb-1.5">
-                    <span className="text-[10px] font-cinzel font-bold text-temple-gold uppercase px-2 py-0.5 rounded bg-white border border-temple-gold/30">
+                  <div className="flex items-center justify-between gap-1 mb-2">
+                    <span className="text-[10px] font-cinzel font-bold text-[#d4af37] uppercase px-2 py-0.5 rounded bg-[#161616] border border-[#333333]">
                       {act.type}
                     </span>
-                    <span className="text-[10px] text-stone-400 font-outfit">
+                    <span className="text-[10px] text-[#777777] font-outfit">
                       {act.time}
                     </span>
                   </div>
 
-                  <h4 className="font-cinzel font-bold text-xs text-stone-800 leading-snug">
+                  <h4 className="font-cinzel font-bold text-xs text-white leading-snug">
                     {act.title}
                   </h4>
-                  <p className="text-[11px] text-stone-600 mt-1.5 leading-relaxed line-clamp-3">
+                  <p className="text-[11px] text-[#aaaaaa] mt-1.5 leading-relaxed line-clamp-3">
                     {act.detail}
                   </p>
                 </div>
 
-                <div className="mt-3 pt-2 border-t border-amber-200/40 flex items-center justify-between text-[10px] text-stone-400 font-outfit">
-                  <span className="text-stone-600 font-medium truncate max-w-[150px]">
+                <div className="mt-3 pt-2.5 border-t border-[#222222] flex items-center justify-between text-[10px] text-[#777777] font-outfit">
+                  <span className="text-[#888888] font-medium truncate max-w-[150px]">
                     👤 {act.admin_name || 'Administrator'}
                   </span>
                   {act.action && (
-                    <span className="font-mono uppercase text-[9px] text-stone-400">
+                    <span className="font-mono uppercase text-[9px] text-[#888888]">
                       {act.action}
                     </span>
                   )}
@@ -530,4 +677,3 @@ export default function AdminDashboard() {
     </div>
   );
 }
-

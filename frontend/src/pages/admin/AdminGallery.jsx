@@ -143,20 +143,20 @@ export default function AdminGallery() {
   ];
 
   return (
-    <div className="space-y-8 font-outfit">
+    <div className="space-y-6 font-outfit text-white">
       
       {/* Header with Title & Quick Public View Link */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-temple-maroon">
-              Photo Gallery &amp; Media Studio
+            <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-white">
+              Photo Gallery &amp; <span className="text-[#d4af37]">Media Studio</span>
             </h1>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-cinzel font-bold bg-temple-gold/20 text-temple-maroon border border-temple-gold/40">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-cinzel font-bold bg-[#0f0f0f] text-[#d4af37] border border-[#333333]">
               Admin Upload Studio
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-stone-500 mt-1">
+          <p className="text-xs sm:text-sm text-[#bdbdbd] mt-1">
             Upload and curate performance photography, Arangetram debuts, and Salangai Poojas displayed on the public gallery.
           </p>
         </div>
@@ -165,7 +165,7 @@ export default function AdminGallery() {
           <Link
             to="/gallery"
             target="_blank"
-            className="px-3.5 py-2 rounded-xl bg-white border border-stone-200 text-stone-700 hover:text-temple-maroon hover:border-temple-gold text-xs font-cinzel font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
+            className="secondary-btn text-xs flex items-center gap-1.5"
           >
             <span>View Public Gallery</span>
             <ExternalLink className="w-3.5 h-3.5" />
@@ -173,7 +173,7 @@ export default function AdminGallery() {
 
           <button
             onClick={handleOpenCreate}
-            className="px-4 py-2.5 rounded-xl bg-temple-maroon text-temple-gold text-xs font-cinzel font-bold shadow-md flex items-center gap-2 hover:bg-temple-maroon-dark transition-all transform hover:-translate-y-0.5"
+            className="primary-btn text-xs flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             <span>Upload New Image</span>
@@ -182,15 +182,15 @@ export default function AdminGallery() {
       </div>
 
       {/* Category Filter Pills */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-stone-200 pb-3">
+      <div className="flex flex-wrap items-center gap-2 border-b border-[#222222] pb-3">
         {categories.map((c) => (
           <button
             key={c.id}
             onClick={() => setActiveCategory(c.id)}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-cinzel font-semibold transition-all ${
               activeCategory === c.id
-                ? 'bg-temple-maroon text-temple-gold shadow'
-                : 'bg-white text-stone-600 border border-stone-200 hover:border-temple-gold hover:text-temple-maroon'
+                ? 'bg-[#d4af37] text-[#111111] shadow'
+                : 'bg-[#111111] text-[#bdbdbd] border border-[#333333] hover:border-[#d4af37] hover:text-[#d4af37]'
             }`}
           >
             {c.name}
@@ -203,18 +203,18 @@ export default function AdminGallery() {
         {items.map((item) => (
           <div
             key={item.id}
-            className="rounded-3xl bg-white border-2 border-temple-gold/40 shadow-temple overflow-hidden flex flex-col justify-between group hover:border-temple-gold transition-all"
+            className="rounded-3xl bg-[#111111] border border-[#333333] shadow-xl overflow-hidden flex flex-col justify-between group hover:border-[#d4af37]/60 transition-all"
           >
-            <div className="h-60 bg-temple-maroon relative overflow-hidden">
+            <div className="h-60 bg-[#0f0f0f] relative overflow-hidden">
               <img
                 src={item.media_url}
                 alt={item.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
 
               {/* Category Badge */}
-              <span className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg bg-temple-maroon-dark/90 text-temple-gold border border-temple-gold/40 text-[10px] font-cinzel uppercase font-bold shadow">
+              <span className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg bg-[#0f0f0f]/90 text-[#d4af37] border border-[#333333] text-[10px] font-cinzel uppercase font-bold shadow">
                 {item.category?.replace('-', ' ')}
               </span>
 
@@ -222,14 +222,14 @@ export default function AdminGallery() {
               <div className="absolute top-3 right-3 flex items-center gap-1.5">
                 <button
                   onClick={() => handleOpenEdit(item)}
-                  className="p-2 rounded-xl bg-white/90 text-temple-maroon hover:bg-temple-gold hover:text-temple-maroon-deep transition-all shadow-md backdrop-blur-xs"
+                  className="p-2 rounded-xl bg-[#0f0f0f]/90 text-[#d4af37] hover:bg-[#d4af37] hover:text-[#111111] border border-[#333333] transition-all shadow-md"
                   title="Edit Photo"
                 >
                   <Edit2 className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => handleDelete(item.id, item.title)}
-                  className="p-2 rounded-xl bg-red-600/90 text-white hover:bg-red-700 transition-all shadow-md backdrop-blur-xs"
+                  className="p-2 rounded-xl bg-red-950/80 text-red-300 hover:bg-red-900 border border-red-900/40 transition-all shadow-md"
                   title="Delete Photo"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -237,19 +237,19 @@ export default function AdminGallery() {
               </div>
             </div>
 
-            <div className="p-4 bg-white flex items-center justify-between">
+            <div className="p-4 bg-[#111111] flex items-center justify-between border-t border-[#222222]">
               <div className="overflow-hidden">
-                <h3 className="font-cinzel font-bold text-sm text-temple-maroon truncate">
+                <h3 className="font-cinzel font-bold text-sm text-white truncate">
                   {item.title}
                 </h3>
-                <span className="text-[10px] text-stone-400 font-outfit mt-0.5 block truncate">
+                <span className="text-[10px] text-[#888888] font-outfit mt-0.5 block truncate">
                   Uploaded to {item.category}
                 </span>
               </div>
 
               <button
                 onClick={() => handleOpenEdit(item)}
-                className="text-xs font-cinzel font-bold text-temple-maroon hover:text-amber-700 flex items-center gap-1 flex-shrink-0"
+                className="text-xs font-cinzel font-bold text-[#d4af37] hover:underline flex items-center gap-1 flex-shrink-0"
               >
                 <Edit2 className="w-3 h-3" />
                 <span>Edit</span>
@@ -259,35 +259,35 @@ export default function AdminGallery() {
         ))}
 
         {items.length === 0 && !loading && (
-          <div className="col-span-full p-12 bg-white rounded-3xl border-2 border-dashed border-stone-300 text-center space-y-3">
-            <ImageIcon className="w-12 h-12 text-stone-300 mx-auto" />
-            <h3 className="font-cinzel font-bold text-lg text-stone-700">No Gallery Photos in this Category</h3>
-            <p className="text-xs text-stone-500">Click "Upload New Image" above to upload photos from your device.</p>
+          <div className="col-span-full p-12 bg-[#111111] rounded-3xl border border-dashed border-[#333333] text-center space-y-3">
+            <ImageIcon className="w-12 h-12 text-[#666666] mx-auto" />
+            <h3 className="font-cinzel font-bold text-lg text-white">No Gallery Photos in this Category</h3>
+            <p className="text-xs text-[#888888]">Click "Upload New Image" above to upload photos from your device.</p>
           </div>
         )}
       </div>
 
       {/* Upload / Edit Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl border-2 border-temple-gold max-w-md w-full p-6 sm:p-8 shadow-2xl relative my-8">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-[#111111] rounded-3xl border border-[#d4af37] max-w-md w-full p-6 sm:p-8 shadow-2xl relative my-8 text-white">
             <button
               onClick={() => setModalOpen(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-stone-100 text-stone-500"
+              className="absolute top-4 right-4 p-2 rounded-full hover:bg-[#222222] text-[#888888] hover:text-white transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="font-cinzel font-bold text-xl text-temple-maroon mb-1">
+            <h3 className="font-cinzel font-bold text-xl text-[#d4af37] mb-1">
               {editingItem ? 'Edit Gallery Photo' : 'Upload Gallery Photo'}
             </h3>
-            <p className="text-xs text-stone-500 font-outfit mb-5">
+            <p className="text-xs text-[#bdbdbd] font-outfit mb-5">
               Upload classical Bharatanatyam photos to publish instantly onto the public gallery.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4 font-outfit">
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                <label className="block text-xs font-semibold text-[#bdbdbd] mb-1 font-cinzel">
                   Photo Caption / Title *
                 </label>
                 <input
@@ -296,18 +296,18 @@ export default function AdminGallery() {
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
                   placeholder="e.g. Navarasa Abhinaya in Varnam Solo"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#333333] text-xs sm:text-sm focus:outline-none focus:border-[#d4af37] bg-[#0f0f0f] text-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                <label className="block text-xs font-semibold text-[#bdbdbd] mb-1 font-cinzel">
                   Category *
                 </label>
                 <select
                   value={form.category}
                   onChange={(e) => setForm({ ...form, category: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold text-stone-700"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#333333] text-xs sm:text-sm focus:outline-none focus:border-[#d4af37] bg-[#0f0f0f] text-white"
                 >
                   <option value="performances">Stage Performances &amp; Utsavs</option>
                   <option value="arangetram">Arangetram Solo Debuts</option>
@@ -317,7 +317,7 @@ export default function AdminGallery() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                <label className="block text-xs font-semibold text-[#bdbdbd] mb-1 font-cinzel">
                   Upload Image from Device or Enter URL *
                 </label>
                 
@@ -331,10 +331,10 @@ export default function AdminGallery() {
                         setImagePreview(e.target.value);
                       }}
                       placeholder="Paste image URL or pick file"
-                      className="flex-grow px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs focus:outline-none focus:border-temple-gold"
+                      className="flex-grow px-3.5 py-2.5 rounded-xl border border-[#333333] text-xs focus:outline-none focus:border-[#d4af37] bg-[#0f0f0f] text-white"
                     />
 
-                    <label className="cursor-pointer px-3.5 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-temple-maroon text-xs font-semibold flex items-center gap-1.5 flex-shrink-0">
+                    <label className="cursor-pointer px-3.5 py-2.5 rounded-xl bg-[#0f0f0f] hover:bg-[#1a1a1a] border border-[#333333] text-[#d4af37] text-xs font-semibold flex items-center gap-1.5 flex-shrink-0 transition-colors">
                       <Upload className="w-3.5 h-3.5" />
                       <span>Choose File</span>
                       <input
@@ -348,14 +348,14 @@ export default function AdminGallery() {
 
                   {/* Brand Presets */}
                   <div className="flex gap-1.5 flex-wrap">
-                    <span className="text-[10px] text-stone-500 self-center">Brand Presets:</span>
+                    <span className="text-[10px] text-[#777777] self-center">Brand Presets:</span>
                     <button
                       type="button"
                       onClick={() => {
                         setForm({ ...form, media_url: '/BG1.png' });
                         setImagePreview('/BG1.png');
                       }}
-                      className="px-2 py-0.5 rounded text-[10px] bg-stone-100 hover:bg-stone-200 text-stone-700"
+                      className="px-2 py-0.5 rounded text-[10px] bg-[#0f0f0f] border border-[#333333] text-[#bdbdbd] hover:border-[#d4af37]"
                     >
                       Nataraja BG1
                     </button>
@@ -365,7 +365,7 @@ export default function AdminGallery() {
                         setForm({ ...form, media_url: '/BG.2.png' });
                         setImagePreview('/BG.2.png');
                       }}
-                      className="px-2 py-0.5 rounded text-[10px] bg-stone-100 hover:bg-stone-200 text-stone-700"
+                      className="px-2 py-0.5 rounded text-[10px] bg-[#0f0f0f] border border-[#333333] text-[#bdbdbd] hover:border-[#d4af37]"
                     >
                       Salangai BG2
                     </button>
@@ -375,7 +375,7 @@ export default function AdminGallery() {
                         setForm({ ...form, media_url: '/logo.png' });
                         setImagePreview('/logo.png');
                       }}
-                      className="px-2 py-0.5 rounded text-[10px] bg-stone-100 hover:bg-stone-200 text-stone-700"
+                      className="px-2 py-0.5 rounded text-[10px] bg-[#0f0f0f] border border-[#333333] text-[#bdbdbd] hover:border-[#d4af37]"
                     >
                       Logo Emblem
                     </button>
@@ -383,7 +383,7 @@ export default function AdminGallery() {
 
                   {/* Live Preview Box */}
                   {imagePreview && (
-                    <div className="h-36 w-full rounded-xl overflow-hidden border-2 border-temple-gold/40 bg-stone-50 relative mt-2">
+                    <div className="h-36 w-full rounded-xl overflow-hidden border border-[#d4af37]/40 bg-[#0a0a0a] relative mt-2">
                       <img
                         src={imagePreview}
                         alt="Preview"
@@ -397,17 +397,17 @@ export default function AdminGallery() {
                 </div>
               </div>
 
-              <div className="pt-3 flex justify-end gap-2.5">
+              <div className="pt-3 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl border border-stone-300 text-xs font-medium text-stone-600 hover:bg-stone-50"
+                  className="secondary-btn text-xs py-2 px-4"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-temple-maroon text-temple-gold text-xs font-cinzel font-bold shadow hover:bg-temple-maroon-dark transition-all"
+                  className="primary-btn text-xs py-2 px-5"
                 >
                   {editingItem ? 'Save Changes' : 'Upload to Gallery'}
                 </button>

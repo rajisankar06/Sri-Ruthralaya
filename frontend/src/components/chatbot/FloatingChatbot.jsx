@@ -123,19 +123,19 @@ export default function FloatingChatbot() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="relative group p-2.5 rounded-full bg-white text-temple-gold shadow-temple-lg border-2 border-temple-gold hover:scale-105 active:scale-95 transition-all flex items-center justify-center w-14 h-14"
+          className="relative group p-2.5 rounded-full bg-[#111111] text-[#d4af37] shadow-[0_0_20px_rgba(212,175,55,0.3)] border-2 border-[#d4af37] hover:scale-105 active:scale-95 transition-all flex items-center justify-center w-14 h-14"
           aria-label="Open Academy AI Chatbot"
         >
-          <div className="absolute -inset-1 rounded-full bg-temple-gold/30 blur-sm group-hover:bg-temple-gold/50 transition-all animate-pulse"></div>
+          <div className="absolute -inset-1 rounded-full bg-[#d4af37]/20 blur-sm group-hover:bg-[#d4af37]/40 transition-all animate-pulse"></div>
           <img src="/logo.png" alt="Sri Ruthralaya AI" className="w-9 h-9 object-contain relative z-10" />
           
           <span className="absolute -top-1 -right-1 flex h-4 w-4">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-amber-500 border border-white"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ffd700] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-[#d4af37] border border-[#111111]"></span>
           </span>
 
           {/* Tooltip */}
-          <span className="absolute right-16 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-temple-maroon-dark text-temple-gold-light border border-temple-gold text-xs font-cinzel whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-lg pointer-events-none">
+          <span className="absolute right-16 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-[#0f0f0f] text-[#d4af37] border border-[#333333] text-xs font-cinzel whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-lg pointer-events-none">
             Ask Sri Ruthralaya AI
           </span>
         </button>
@@ -143,22 +143,22 @@ export default function FloatingChatbot() {
 
       {/* Chat Window Modal */}
       {isOpen && (
-        <div className="w-[360px] sm:w-[420px] h-[550px] max-h-[85vh] bg-temple-cream rounded-2xl shadow-2xl border-2 border-temple-gold/70 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="w-[360px] sm:w-[420px] h-[550px] max-h-[85vh] bg-[#0f0f0f] rounded-2xl shadow-2xl border border-[#333333] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
           
           {/* Header */}
-          <div className="bg-gradient-to-r from-temple-maroon to-temple-maroon-dark px-4 py-3.5 text-white border-b-2 border-temple-gold/40 flex items-center justify-between">
+          <div className="bg-[#111111] px-4 py-3.5 text-white border-b border-[#333333] flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full border border-temple-gold bg-white flex items-center justify-center p-1 shadow-gold-glow overflow-hidden">
+              <div className="w-9 h-9 rounded-full border border-[#d4af37] bg-[#080808] flex items-center justify-center p-1 shadow-[0_0_10px_rgba(212,175,55,0.3)] overflow-hidden">
                 <img src="/logo.png" alt="Sri Ruthralaya Logo" className="w-full h-full object-contain" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <h3 className="font-cinzel font-bold text-sm text-temple-gold-light tracking-wide">
+                  <h3 className="font-cinzel font-bold text-sm text-[#d4af37] tracking-wide">
                     Sri Ruthralaya AI
                   </h3>
                   <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                 </div>
-                <p className="text-[10px] text-amber-200/80 font-cormorant tracking-wider">
+                <p className="text-[10px] text-[#aaaaaa] font-cormorant tracking-wider">
                   {isAuthenticated && user?.role === 'student'
                     ? `Disciple Mode: ${user.name}`
                     : 'Academy Guide & FAQ Assistant'}
@@ -168,7 +168,7 @@ export default function FloatingChatbot() {
 
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1.5 rounded-full hover:bg-white/10 text-amber-200/80 hover:text-white transition-colors"
+              className="p-1.5 rounded-full hover:bg-white/10 text-[#aaaaaa] hover:text-white transition-colors"
               aria-label="Close Chat"
             >
               <X className="w-5 h-5" />
@@ -176,14 +176,14 @@ export default function FloatingChatbot() {
           </div>
 
           {/* Chat Messages Body */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3.5 bg-temple-cream/90">
+          <div className="flex-1 p-4 overflow-y-auto space-y-3.5 bg-[#0f0f0f]">
             {messages.map((msg) => (
               <div
                 key={msg.id}
                 className={`flex gap-2.5 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {msg.sender === 'bot' && (
-                  <div className="w-7 h-7 rounded-full bg-temple-maroon text-temple-gold border border-temple-gold/50 flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
+                  <div className="w-7 h-7 rounded-full bg-[#111111] text-[#d4af37] border border-[#333333] flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
                     <Sparkles className="w-3.5 h-3.5" />
                   </div>
                 )}
@@ -191,14 +191,14 @@ export default function FloatingChatbot() {
                 <div
                   className={`max-w-[82%] px-4 py-2.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm ${
                     msg.sender === 'user'
-                      ? 'bg-temple-maroon text-white rounded-br-none border border-temple-maroon-dark'
-                      : 'bg-white text-stone-800 rounded-bl-none border border-amber-200/60'
+                      ? 'bg-[#d4af37] text-[#111111] font-medium rounded-br-none'
+                      : 'bg-[#161616] text-[#eeeeee] rounded-bl-none border border-[#333333]'
                   }`}
                 >
                   <div>{renderFormattedText(msg.text)}</div>
                   <div
                     className={`text-[9px] mt-1.5 text-right ${
-                      msg.sender === 'user' ? 'text-amber-200/60' : 'text-stone-400'
+                      msg.sender === 'user' ? 'text-[#111111]/70' : 'text-[#777777]'
                     }`}
                   >
                     {new Date(msg.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -206,7 +206,7 @@ export default function FloatingChatbot() {
                 </div>
 
                 {msg.sender === 'user' && (
-                  <div className="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center flex-shrink-0 mt-1 shadow-sm text-xs font-semibold">
+                  <div className="w-7 h-7 rounded-full bg-[#d4af37] text-[#111111] flex items-center justify-center flex-shrink-0 mt-1 shadow-sm text-xs font-bold">
                     <User className="w-3.5 h-3.5" />
                   </div>
                 )}
@@ -215,8 +215,8 @@ export default function FloatingChatbot() {
 
             {/* Typing Loader */}
             {loading && (
-              <div className="flex gap-2 items-center text-xs text-temple-maroon font-cinzel">
-                <div className="w-6 h-6 rounded-full bg-temple-maroon text-temple-gold flex items-center justify-center animate-spin">
+              <div className="flex gap-2 items-center text-xs text-[#d4af37] font-cinzel">
+                <div className="w-6 h-6 rounded-full bg-[#111111] text-[#d4af37] border border-[#333333] flex items-center justify-center animate-spin">
                   <MudraIcon name="alapadma" className="w-3.5 h-3.5" />
                 </div>
                 <span>Consulting Natyashastra...</span>
@@ -227,13 +227,13 @@ export default function FloatingChatbot() {
           </div>
 
           {/* Quick Prompts Bar */}
-          <div className="p-2 bg-temple-cream-alt border-t border-amber-200/70 overflow-x-auto whitespace-nowrap flex gap-1.5 scrollbar-none">
+          <div className="p-2 bg-[#111111] border-t border-[#222222] overflow-x-auto whitespace-nowrap flex gap-1.5 scrollbar-none">
             {suggestions.map((s, idx) => (
               <button
                 key={idx}
                 onClick={() => handleSend(s)}
                 disabled={loading}
-                className="px-2.5 py-1 rounded-full text-[11px] bg-white border border-temple-gold/40 text-temple-maroon hover:bg-temple-gold hover:text-white transition-all shadow-xs flex-shrink-0"
+                className="px-2.5 py-1 rounded-full text-[11px] bg-[#1a1a1a] border border-[#333333] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#111111] transition-all shadow-xs flex-shrink-0"
               >
                 {s}
               </button>
@@ -246,20 +246,20 @@ export default function FloatingChatbot() {
               e.preventDefault();
               handleSend();
             }}
-            className="p-3 bg-white border-t border-amber-200/60 flex items-center gap-2"
+            className="p-3 bg-[#111111] border-t border-[#333333] flex items-center gap-2"
           >
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={isAuthenticated && user?.role === 'student' ? 'Ask about your attendance, fees, next class...' : 'Ask about classes, Guru, timings, fees...'}
-              className="flex-1 px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-stone-300 focus:outline-none focus:border-temple-gold focus:ring-1 focus:ring-temple-gold bg-temple-cream/30 text-stone-800"
+              className="flex-1 px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-[#333333] focus:outline-none focus:border-[#d4af37] bg-[#0f0f0f] text-white placeholder-[#666666]"
               disabled={loading}
             />
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="p-2.5 rounded-xl bg-temple-maroon text-temple-gold hover:bg-temple-maroon-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+              className="p-2.5 rounded-xl bg-[#d4af37] text-[#111111] hover:bg-[#ffd700] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
               aria-label="Send Message"
             >
               <Send className="w-4 h-4" />

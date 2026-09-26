@@ -173,15 +173,20 @@ export default function AdminEventsNotices() {
   };
 
   return (
-    <div className="space-y-8 font-outfit">
+    <div className="space-y-6 font-outfit text-white">
       
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Header with Title & Action */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl">
         <div>
-          <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-temple-maroon">
-            Events &amp; Broadcast Notice Board
-          </h1>
-          <p className="text-xs sm:text-sm text-stone-500 mt-1">
+          <div className="flex items-center gap-2">
+            <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-white">
+              Stage Events &amp; <span className="text-[#d4af37]">Broadcast Notices</span>
+            </h1>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-cinzel font-bold bg-[#0f0f0f] text-[#d4af37] border border-[#333333]">
+              Academy Bulletin
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-[#bdbdbd] mt-1">
             Create, edit, and schedule stage events (Natyanjalis, Salangai Poojas, Arangetrams) and broadcast student circulars.
           </p>
         </div>
@@ -190,7 +195,7 @@ export default function AdminEventsNotices() {
           {activeTab === 'events' ? (
             <button
               onClick={handleOpenCreateEvent}
-              className="px-4 py-2.5 rounded-xl bg-temple-maroon text-temple-gold text-xs font-cinzel font-bold shadow-md flex items-center gap-2 hover:bg-temple-maroon-dark transition-all transform hover:-translate-y-0.5"
+              className="px-4 py-2.5 rounded-xl bg-[#d4af37] text-[#111111] text-xs font-cinzel font-bold shadow-md flex items-center gap-2 hover:bg-[#c29d2f] transition-all transform hover:-translate-y-0.5"
             >
               <Plus className="w-4 h-4" />
               <span>Create New Event</span>
@@ -198,7 +203,7 @@ export default function AdminEventsNotices() {
           ) : (
             <button
               onClick={() => setNoticeModalOpen(true)}
-              className="px-4 py-2.5 rounded-xl bg-temple-maroon text-temple-gold text-xs font-cinzel font-bold shadow-md flex items-center gap-2 hover:bg-temple-maroon-dark transition-all"
+              className="px-4 py-2.5 rounded-xl bg-[#d4af37] text-[#111111] text-xs font-cinzel font-bold shadow-md flex items-center gap-2 hover:bg-[#c29d2f] transition-all"
             >
               <Plus className="w-4 h-4" />
               <span>Publish Notice</span>
@@ -208,13 +213,13 @@ export default function AdminEventsNotices() {
       </div>
 
       {/* Tab Switcher */}
-      <div className="flex gap-2 border-b border-stone-200">
+      <div className="flex gap-3 border-b border-[#222222] pb-1">
         <button
           onClick={() => setActiveTab('events')}
           className={`pb-3 px-4 text-xs sm:text-sm font-cinzel font-bold border-b-2 transition-all flex items-center gap-2 ${
             activeTab === 'events'
-              ? 'border-temple-maroon text-temple-maroon'
-              : 'border-transparent text-stone-400 hover:text-stone-700'
+              ? 'border-[#d4af37] text-[#d4af37]'
+              : 'border-transparent text-[#888888] hover:text-[#bdbdbd]'
           }`}
         >
           <Calendar className="w-4 h-4" />
@@ -225,8 +230,8 @@ export default function AdminEventsNotices() {
           onClick={() => setActiveTab('notices')}
           className={`pb-3 px-4 text-xs sm:text-sm font-cinzel font-bold border-b-2 transition-all flex items-center gap-2 ${
             activeTab === 'notices'
-              ? 'border-temple-maroon text-temple-maroon'
-              : 'border-transparent text-stone-400 hover:text-stone-700'
+              ? 'border-[#d4af37] text-[#d4af37]'
+              : 'border-transparent text-[#888888] hover:text-[#bdbdbd]'
           }`}
         >
           <Bell className="w-4 h-4" />
@@ -240,59 +245,59 @@ export default function AdminEventsNotices() {
           {events.map((ev) => (
             <div
               key={ev.id}
-              className="bg-white rounded-3xl border-2 border-temple-gold/40 shadow-temple overflow-hidden flex flex-col justify-between group hover:border-temple-gold transition-all"
+              className="bg-[#111111] rounded-3xl border border-[#333333] shadow-xl overflow-hidden flex flex-col justify-between group hover:border-[#d4af37]/60 transition-all"
             >
               <div>
-                <div className="h-48 bg-temple-maroon relative overflow-hidden">
+                <div className="h-48 bg-[#0f0f0f] relative overflow-hidden">
                   <img
                     src={ev.image_url || '/BG1.png'}
                     alt={ev.title}
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
 
                   {/* Top Action Buttons (Edit + Delete) */}
                   <div className="absolute top-3 right-3 flex items-center gap-1.5">
                     <button
                       onClick={() => handleOpenEditEvent(ev)}
-                      className="p-2 rounded-xl bg-white/90 text-temple-maroon hover:bg-temple-gold hover:text-temple-maroon-deep transition-all shadow-md backdrop-blur-xs"
+                      className="p-2 rounded-xl bg-[#0f0f0f]/90 text-[#d4af37] hover:bg-[#d4af37] hover:text-[#111111] border border-[#333333] transition-all shadow-md backdrop-blur-xs"
                       title="Edit Event"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => handleDeleteEvent(ev.id, ev.title)}
-                      className="p-2 rounded-xl bg-red-600/90 text-white hover:bg-red-700 transition-all shadow-md backdrop-blur-xs"
+                      className="p-2 rounded-xl bg-red-950/80 text-red-300 hover:bg-red-900 border border-red-900/40 transition-all shadow-md backdrop-blur-xs"
                       title="Delete Event"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
 
-                  <span className="absolute bottom-3 left-3 px-3 py-1 rounded-lg bg-temple-maroon-dark/90 text-temple-gold border border-temple-gold/40 text-xs font-cinzel font-bold shadow">
+                  <span className="absolute bottom-3 left-3 px-3 py-1 rounded-lg bg-[#0f0f0f]/90 text-[#d4af37] border border-[#333333] text-xs font-cinzel font-bold shadow">
                     {new Date(ev.date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </span>
                 </div>
 
                 <div className="p-6">
-                  <h3 className="font-cinzel font-bold text-base text-temple-maroon leading-snug">
+                  <h3 className="font-cinzel font-bold text-base text-white leading-snug group-hover:text-[#d4af37] transition-colors">
                     {ev.title}
                   </h3>
-                  <p className="text-xs text-stone-600 mt-2 font-outfit line-clamp-3 leading-relaxed">
+                  <p className="text-xs text-[#bdbdbd] mt-2 font-outfit line-clamp-3 leading-relaxed">
                     {ev.description}
                   </p>
                 </div>
               </div>
 
-              <div className="p-6 pt-0 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500 font-outfit mt-4">
-                <span className="flex items-center gap-1 text-stone-700 font-medium truncate max-w-[200px]">
-                  <MapPin className="w-3.5 h-3.5 text-temple-gold flex-shrink-0" />
+              <div className="p-6 pt-0 border-t border-[#222222] flex items-center justify-between text-xs text-[#888888] font-outfit mt-4">
+                <span className="flex items-center gap-1.5 text-[#bdbdbd] font-medium truncate max-w-[200px]">
+                  <MapPin className="w-3.5 h-3.5 text-[#d4af37] flex-shrink-0" />
                   <span className="truncate">{ev.location}</span>
                 </span>
                 
                 <button
                   onClick={() => handleOpenEditEvent(ev)}
-                  className="text-xs font-cinzel font-bold text-temple-maroon hover:text-amber-700 flex items-center gap-1"
+                  className="text-xs font-cinzel font-bold text-[#d4af37] hover:text-[#c29d2f] flex items-center gap-1"
                 >
                   <Edit2 className="w-3 h-3" />
                   <span>Edit</span>
@@ -302,10 +307,10 @@ export default function AdminEventsNotices() {
           ))}
 
           {events.length === 0 && !loading && (
-            <div className="col-span-full p-12 bg-white rounded-3xl border-2 border-dashed border-stone-300 text-center space-y-3">
-              <Calendar className="w-12 h-12 text-stone-300 mx-auto" />
-              <h3 className="font-cinzel font-bold text-lg text-stone-700">No Stage Events Published</h3>
-              <p className="text-xs text-stone-500">Click "Create New Event" above to schedule your first classical performance.</p>
+            <div className="col-span-full p-12 bg-[#111111] rounded-3xl border border-dashed border-[#333333] text-center space-y-3">
+              <Calendar className="w-12 h-12 text-[#444444] mx-auto" />
+              <h3 className="font-cinzel font-bold text-lg text-white">No Stage Events Published</h3>
+              <p className="text-xs text-[#bdbdbd]">Click "Create New Event" above to schedule your first classical performance.</p>
             </div>
           )}
         </div>
@@ -317,25 +322,25 @@ export default function AdminEventsNotices() {
           {notices.map((n) => (
             <div
               key={n.id}
-              className="p-6 bg-white rounded-3xl border-2 border-temple-gold/40 shadow-temple flex items-start justify-between gap-4"
+              className="p-6 bg-[#111111] rounded-3xl border border-[#333333] shadow-xl flex items-start justify-between gap-4 hover:border-[#d4af37]/40 transition-all"
             >
               <div className="flex items-start gap-4">
-                <div className="p-3 rounded-2xl bg-amber-50 text-temple-maroon border border-temple-gold/30 flex-shrink-0 mt-1">
-                  <Bell className="w-5 h-5 text-temple-maroon" />
+                <div className="p-3 rounded-2xl bg-[#0f0f0f] text-[#d4af37] border border-[#333333] flex-shrink-0 mt-1">
+                  <Bell className="w-5 h-5 text-[#d4af37]" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="font-cinzel font-bold text-base text-temple-maroon">
+                    <h3 className="font-cinzel font-bold text-base text-white">
                       {n.title}
                     </h3>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-cinzel uppercase bg-amber-100 text-amber-800 font-bold">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-cinzel uppercase bg-[#0f0f0f] text-[#d4af37] border border-[#333333] font-bold">
                       Target: {n.target}
                     </span>
                   </div>
-                  <p className="text-xs text-stone-600 mt-1 leading-relaxed max-w-3xl">
+                  <p className="text-xs text-[#bdbdbd] mt-1.5 leading-relaxed max-w-3xl">
                     {n.message}
                   </p>
-                  <span className="text-[10px] text-stone-400 mt-2 block font-outfit">
+                  <span className="text-[10px] text-[#777777] mt-2 block font-outfit">
                     Published on {new Date(n.created_at).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </span>
                 </div>
@@ -343,31 +348,39 @@ export default function AdminEventsNotices() {
 
               <button
                 onClick={() => handleDeleteNotice(n.id)}
-                className="p-2 rounded-lg text-stone-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                className="p-2 rounded-lg text-[#888888] hover:text-red-400 hover:bg-red-950/40 transition-colors"
                 title="Delete Notice"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
           ))}
+
+          {notices.length === 0 && !loading && (
+            <div className="p-12 bg-[#111111] rounded-3xl border border-dashed border-[#333333] text-center space-y-3">
+              <Bell className="w-12 h-12 text-[#444444] mx-auto" />
+              <h3 className="font-cinzel font-bold text-lg text-white">No Notices Published</h3>
+              <p className="text-xs text-[#bdbdbd]">Broadcast notices to all students or specific batches with the button above.</p>
+            </div>
+          )}
         </div>
       )}
 
       {/* Create / Edit Event Modal */}
       {eventModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl border-2 border-temple-gold max-w-lg w-full p-6 sm:p-8 shadow-2xl relative my-8">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-[#111111] rounded-3xl border border-[#333333] max-w-lg w-full p-6 sm:p-8 shadow-2xl relative my-8 text-white">
             <button
               onClick={() => setEventModalOpen(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-stone-100 text-stone-500"
+              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-[#222222] text-[#888888] hover:text-white"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="font-cinzel font-bold text-xl text-temple-maroon mb-1">
+            <h3 className="font-cinzel font-bold text-xl text-white mb-1">
               {editingEvent ? 'Edit Academy Event' : 'Create New Academy Event'}
             </h3>
-            <p className="text-xs text-stone-500 font-outfit mb-5">
+            <p className="text-xs text-[#bdbdbd] font-outfit mb-5">
               {editingEvent 
                 ? 'Update event details, timing, venue, and poster photography.' 
                 : 'Publish upcoming Natyanjali performances, Salangai Poojas, and solo Arangetrams.'}
@@ -375,7 +388,7 @@ export default function AdminEventsNotices() {
 
             <form onSubmit={handleSubmitEvent} className="space-y-4 font-outfit">
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                <label className="block text-xs font-semibold text-[#d4af37] mb-1 font-cinzel">
                   Event Title *
                 </label>
                 <input
@@ -384,13 +397,13 @@ export default function AdminEventsNotices() {
                   value={eventForm.title}
                   onChange={(e) => setEventForm({ ...eventForm, title: e.target.value })}
                   placeholder="e.g. Mahashivratri Natyanjali Utsav 2026"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                  <label className="block text-xs font-semibold text-[#d4af37] mb-1 font-cinzel">
                     Event Date *
                   </label>
                   <input
@@ -398,12 +411,12 @@ export default function AdminEventsNotices() {
                     required
                     value={eventForm.date}
                     onChange={(e) => setEventForm({ ...eventForm, date: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                  <label className="block text-xs font-semibold text-[#d4af37] mb-1 font-cinzel">
                     Venue / Location *
                   </label>
                   <input
@@ -412,13 +425,13 @@ export default function AdminEventsNotices() {
                     value={eventForm.location}
                     onChange={(e) => setEventForm({ ...eventForm, location: e.target.value })}
                     placeholder="Sivakasi Town Hall Auditorium"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                <label className="block text-xs font-semibold text-[#d4af37] mb-1 font-cinzel">
                   Event Poster / Image URL or Device Upload
                 </label>
                 
@@ -433,10 +446,10 @@ export default function AdminEventsNotices() {
                         setImagePreview(e.target.value);
                       }}
                       placeholder="https://... or choose file below"
-                      className="flex-grow px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs focus:outline-none focus:border-temple-gold"
+                      className="flex-grow px-3.5 py-2.5 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs focus:outline-none focus:border-[#d4af37]"
                     />
 
-                    <label className="cursor-pointer px-3.5 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-temple-maroon text-xs font-semibold flex items-center gap-1.5 flex-shrink-0">
+                    <label className="cursor-pointer px-3.5 py-2.5 rounded-xl bg-[#0f0f0f] hover:bg-[#1a1a1a] border border-[#333333] text-[#d4af37] text-xs font-semibold flex items-center gap-1.5 flex-shrink-0">
                       <Upload className="w-3.5 h-3.5" />
                       <span>Upload</span>
                       <input
@@ -450,14 +463,14 @@ export default function AdminEventsNotices() {
 
                   {/* Preset quick buttons */}
                   <div className="flex gap-1.5 flex-wrap">
-                    <span className="text-[10px] text-stone-500 self-center">Brand Presets:</span>
+                    <span className="text-[10px] text-[#888888] self-center">Brand Presets:</span>
                     <button
                       type="button"
                       onClick={() => {
                         setEventForm({ ...eventForm, image_url: '/BG1.png' });
                         setImagePreview('/BG1.png');
                       }}
-                      className="px-2 py-0.5 rounded text-[10px] bg-stone-100 hover:bg-stone-200 text-stone-700"
+                      className="px-2 py-0.5 rounded text-[10px] bg-[#0f0f0f] hover:bg-[#222222] text-[#bdbdbd] border border-[#333333]"
                     >
                       Nataraja BG1
                     </button>
@@ -467,7 +480,7 @@ export default function AdminEventsNotices() {
                         setEventForm({ ...eventForm, image_url: '/BG.2.png' });
                         setImagePreview('/BG.2.png');
                       }}
-                      className="px-2 py-0.5 rounded text-[10px] bg-stone-100 hover:bg-stone-200 text-stone-700"
+                      className="px-2 py-0.5 rounded text-[10px] bg-[#0f0f0f] hover:bg-[#222222] text-[#bdbdbd] border border-[#333333]"
                     >
                       Salangai BG2
                     </button>
@@ -475,7 +488,7 @@ export default function AdminEventsNotices() {
 
                   {/* Thumbnail Preview */}
                   {imagePreview && (
-                    <div className="h-24 w-full rounded-xl overflow-hidden border border-stone-200 bg-stone-50 relative mt-2">
+                    <div className="h-24 w-full rounded-xl overflow-hidden border border-[#333333] bg-[#0f0f0f] relative mt-2">
                       <img
                         src={imagePreview}
                         alt="Preview"
@@ -490,7 +503,7 @@ export default function AdminEventsNotices() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                <label className="block text-xs font-semibold text-[#d4af37] mb-1 font-cinzel">
                   Event Description &amp; Margam Agenda *
                 </label>
                 <textarea
@@ -499,7 +512,7 @@ export default function AdminEventsNotices() {
                   value={eventForm.description}
                   onChange={(e) => setEventForm({ ...eventForm, description: e.target.value })}
                   placeholder="Detail the varnams, live orchestra accompaniments, chief guests, and ticket admission..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                 ></textarea>
               </div>
 
@@ -507,13 +520,13 @@ export default function AdminEventsNotices() {
                 <button
                   type="button"
                   onClick={() => setEventModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl border border-stone-300 text-xs font-medium text-stone-600 hover:bg-stone-50"
+                  className="px-4 py-2.5 rounded-xl border border-[#333333] text-xs font-medium text-[#bdbdbd] hover:bg-[#222222] hover:text-white"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-temple-maroon text-temple-gold text-xs font-cinzel font-bold shadow hover:bg-temple-maroon-dark transition-all"
+                  className="px-6 py-2.5 rounded-xl bg-[#d4af37] text-[#111111] text-xs font-cinzel font-bold shadow hover:bg-[#c29d2f] transition-all"
                 >
                   {editingEvent ? 'Save Changes' : 'Publish Event'}
                 </button>
@@ -525,20 +538,20 @@ export default function AdminEventsNotices() {
 
       {/* Broadcast Notice Modal */}
       {noticeModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-2 border-temple-gold max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#111111] rounded-3xl border border-[#333333] max-w-md w-full p-6 sm:p-8 shadow-2xl relative text-white">
             <button
               onClick={() => setNoticeModalOpen(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-stone-100 text-stone-500"
+              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-[#222222] text-[#888888] hover:text-white"
             >
               <X className="w-5 h-5" />
             </button>
-            <h3 className="font-cinzel font-bold text-xl text-temple-maroon mb-4">
+            <h3 className="font-cinzel font-bold text-xl text-white mb-4">
               Broadcast New Notice
             </h3>
             <form onSubmit={handleCreateNotice} className="space-y-4 font-outfit">
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                <label className="block text-xs font-semibold text-[#d4af37] mb-1 font-cinzel">
                   Notice Title *
                 </label>
                 <input
@@ -547,18 +560,18 @@ export default function AdminEventsNotices() {
                   value={noticeForm.title}
                   onChange={(e) => setNoticeForm({ ...noticeForm, title: e.target.value })}
                   placeholder="e.g. Navaratri Rehearsal Schedule"
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                <label className="block text-xs font-semibold text-[#d4af37] mb-1 font-cinzel">
                   Target Recipient *
                 </label>
                 <select
                   value={noticeForm.target}
                   onChange={(e) => setNoticeForm({ ...noticeForm, target: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold text-stone-700"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                 >
                   <option value="all">All Academy Students &amp; Parents</option>
                   <option value="batch">Specific Training Batch</option>
@@ -567,13 +580,13 @@ export default function AdminEventsNotices() {
 
               {noticeForm.target === 'batch' && (
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                  <label className="block text-xs font-semibold text-[#d4af37] mb-1 font-cinzel">
                     Select Batch
                   </label>
                   <select
                     value={noticeForm.batch_id}
                     onChange={(e) => setNoticeForm({ ...noticeForm, batch_id: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold text-stone-700"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                   >
                     <option value="">Choose a Batch...</option>
                     {batches.map((b) => (
@@ -586,7 +599,7 @@ export default function AdminEventsNotices() {
               )}
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
+                <label className="block text-xs font-semibold text-[#d4af37] mb-1 font-cinzel">
                   Notice Announcement Message *
                 </label>
                 <textarea
@@ -595,7 +608,7 @@ export default function AdminEventsNotices() {
                   value={noticeForm.message}
                   onChange={(e) => setNoticeForm({ ...noticeForm, message: e.target.value })}
                   placeholder="Detailed announcement text..."
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                 ></textarea>
               </div>
 
@@ -603,13 +616,13 @@ export default function AdminEventsNotices() {
                 <button
                   type="button"
                   onClick={() => setNoticeModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border text-xs text-stone-600"
+                  className="px-4 py-2 rounded-xl border border-[#333333] text-xs text-[#bdbdbd] hover:bg-[#222222] hover:text-white"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-temple-maroon text-temple-gold text-xs font-cinzel font-bold"
+                  className="px-5 py-2 rounded-xl bg-[#d4af37] text-[#111111] text-xs font-cinzel font-bold hover:bg-[#c29d2f]"
                 >
                   Publish Notice
                 </button>
@@ -622,3 +635,4 @@ export default function AdminEventsNotices() {
     </div>
   );
 }
+

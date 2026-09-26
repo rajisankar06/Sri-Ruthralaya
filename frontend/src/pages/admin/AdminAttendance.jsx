@@ -120,39 +120,39 @@ export default function AdminAttendance() {
   };
 
   return (
-    <div className="space-y-8 font-outfit">
+    <div className="space-y-6 font-outfit text-white">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl">
         <div>
-          <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-temple-maroon">
-            Attendance Register &amp; CSV Bulk Upload
+          <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-white">
+            Attendance Register &amp; <span className="text-[#d4af37]">Bulk Operations</span>
           </h1>
-          <p className="text-xs sm:text-sm text-stone-500 mt-1">
+          <p className="text-xs sm:text-sm text-[#bdbdbd] mt-1">
             Mark daily presence for batches, manage excused leaves, and import bulk logs via spreadsheet CSV.
           </p>
         </div>
 
         <button
           onClick={() => setCsvModalOpen(true)}
-          className="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-white border border-temple-gold text-temple-maroon hover:bg-temple-maroon hover:text-white text-xs font-cinzel font-bold shadow flex items-center gap-2 transition-all"
+          className="secondary-btn self-start sm:self-auto flex items-center gap-2 text-xs"
         >
-          <FileSpreadsheet className="w-4 h-4" />
+          <FileSpreadsheet className="w-4 h-4 text-[#d4af37]" />
           <span>Bulk Upload via CSV</span>
         </button>
       </div>
 
       {/* Control Bar: Batch and Date selector */}
-      <div className="p-6 rounded-3xl bg-white border-2 border-temple-gold/40 shadow-temple flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
           <div>
-            <label className="block text-[11px] font-cinzel font-bold text-stone-600 mb-1">
+            <label className="block text-[11px] font-cinzel font-bold text-[#bdbdbd] mb-1">
               Select Batch:
             </label>
             <select
               value={selectedBatchId}
               onChange={(e) => setSelectedBatchId(e.target.value)}
-              className="px-3.5 py-2 rounded-xl border border-stone-200 text-xs sm:text-sm focus:outline-none focus:border-temple-gold bg-stone-50 text-stone-800 font-cinzel font-medium"
+              className="px-3.5 py-2 rounded-xl border border-[#333333] text-xs sm:text-sm focus:outline-none focus:border-[#d4af37] bg-[#0f0f0f] text-white font-cinzel font-medium"
             >
               {batches.map((b) => (
                 <option key={b.id} value={b.id}>
@@ -163,14 +163,14 @@ export default function AdminAttendance() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-cinzel font-bold text-stone-600 mb-1">
+            <label className="block text-[11px] font-cinzel font-bold text-[#bdbdbd] mb-1">
               Session Date:
             </label>
             <input
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="px-3.5 py-2 rounded-xl border border-stone-200 text-xs sm:text-sm focus:outline-none focus:border-temple-gold bg-stone-50 text-stone-800 font-outfit"
+              className="px-3.5 py-2 rounded-xl border border-[#333333] text-xs sm:text-sm focus:outline-none focus:border-[#d4af37] bg-[#0f0f0f] text-white font-outfit"
             />
           </div>
         </div>
@@ -178,13 +178,13 @@ export default function AdminAttendance() {
         <div className="flex items-center gap-2 w-full md:w-auto justify-end">
           <button
             onClick={() => markAll('present')}
-            className="px-3.5 py-2 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-800 text-xs font-cinzel font-bold hover:bg-emerald-100 transition-colors"
+            className="px-3.5 py-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 text-xs font-cinzel font-bold hover:bg-emerald-500/20 transition-colors"
           >
             Mark All Present
           </button>
           <button
             onClick={() => markAll('absent')}
-            className="px-3.5 py-2 rounded-xl border border-rose-300 bg-rose-50 text-rose-800 text-xs font-cinzel font-bold hover:bg-rose-100 transition-colors"
+            className="px-3.5 py-2 rounded-xl border border-rose-500/40 bg-rose-500/10 text-rose-400 text-xs font-cinzel font-bold hover:bg-rose-500/20 transition-colors"
           >
             Mark All Absent
           </button>
@@ -192,66 +192,66 @@ export default function AdminAttendance() {
       </div>
 
       {savedSuccess && (
-        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+        <div className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-xs text-emerald-300 flex items-center gap-2">
+          <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
           <span>Attendance records saved successfully for {selectedDate}!</span>
         </div>
       )}
 
       {/* Roster Table */}
-      <div className="bg-white rounded-3xl border-2 border-temple-gold/40 shadow-temple overflow-hidden">
-        <div className="p-6 border-b border-stone-100 flex items-center justify-between">
-          <h2 className="font-cinzel font-bold text-base text-temple-maroon">
+      <div className="bg-[#111111] rounded-3xl border border-[#333333] shadow-xl overflow-hidden">
+        <div className="p-6 border-b border-[#222222] flex items-center justify-between">
+          <h2 className="font-cinzel font-bold text-base text-white">
             Roster ({students.length} Registered Disciples)
           </h2>
-          <span className="text-xs text-stone-500 font-outfit">
+          <span className="text-xs text-[#888888] font-outfit">
             Date: {new Date(selectedDate).toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
           </span>
         </div>
 
         {students.length === 0 ? (
-          <div className="p-12 text-center text-xs text-stone-400">
+          <div className="p-12 text-center text-xs text-[#777777]">
             No students currently enrolled in this batch.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs sm:text-sm">
               <thead>
-                <tr className="bg-temple-cream border-b border-amber-200 font-cinzel font-bold text-stone-700">
+                <tr className="bg-[#0a0a0a] border-b border-[#333333] font-cinzel font-bold text-[#d4af37]">
                   <th className="p-4">Disciple Name</th>
                   <th className="p-4 text-center">Status (Present / Absent / Late)</th>
                   <th className="p-4">Remarks / Leave Reason</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-stone-100">
+              <tbody className="divide-y divide-[#222222]">
                 {students.map((student) => {
                   const currentStatus = attendanceMap[student.id] || 'present';
 
                   return (
-                    <tr key={student.id} className="hover:bg-amber-50/40 transition-colors">
+                    <tr key={student.id} className="hover:bg-[#161616] transition-colors">
                       <td className="p-4">
                         <div className="flex items-center gap-3">
                           <img
                             src={student.profile_photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'}
                             alt={student.name}
-                            className="w-9 h-9 rounded-full object-cover border border-temple-gold flex-shrink-0"
+                            className="w-9 h-9 rounded-full object-cover border border-[#d4af37] flex-shrink-0"
                           />
                           <div>
-                            <span className="font-bold text-stone-800 font-cinzel block">{student.name}</span>
-                            <span className="text-[11px] text-stone-400">{student.email}</span>
+                            <span className="font-bold text-white font-cinzel block">{student.name}</span>
+                            <span className="text-[11px] text-[#888888]">{student.email}</span>
                           </div>
                         </div>
                       </td>
 
                       <td className="p-4 text-center">
-                        <div className="inline-flex rounded-xl p-1 bg-stone-100 border border-stone-200 gap-1">
+                        <div className="inline-flex rounded-xl p-1 bg-[#0f0f0f] border border-[#333333] gap-1">
                           <button
                             type="button"
                             onClick={() => setAttendanceMap({ ...attendanceMap, [student.id]: 'present' })}
                             className={`px-3 py-1 rounded-lg text-xs font-cinzel font-semibold transition-all ${
                               currentStatus === 'present'
                                 ? 'bg-emerald-600 text-white shadow'
-                                : 'text-stone-600 hover:text-emerald-700'
+                                : 'text-[#888888] hover:text-emerald-400'
                             }`}
                           >
                             Present
@@ -263,7 +263,7 @@ export default function AdminAttendance() {
                             className={`px-3 py-1 rounded-lg text-xs font-cinzel font-semibold transition-all ${
                               currentStatus === 'absent'
                                 ? 'bg-rose-600 text-white shadow'
-                                : 'text-stone-600 hover:text-rose-700'
+                                : 'text-[#888888] hover:text-rose-400'
                             }`}
                           >
                             Absent
@@ -275,7 +275,7 @@ export default function AdminAttendance() {
                             className={`px-3 py-1 rounded-lg text-xs font-cinzel font-semibold transition-all ${
                               currentStatus === 'late'
                                 ? 'bg-amber-500 text-white shadow'
-                                : 'text-stone-600 hover:text-amber-700'
+                                : 'text-[#888888] hover:text-amber-400'
                             }`}
                           >
                             Late
@@ -289,7 +289,7 @@ export default function AdminAttendance() {
                           value={remarksMap[student.id] || ''}
                           onChange={(e) => setRemarksMap({ ...remarksMap, [student.id]: e.target.value })}
                           placeholder="e.g. In Aramandi speed 2, school exam leave..."
-                          className="w-full px-3 py-1.5 rounded-lg border border-stone-200 text-xs focus:outline-none focus:border-temple-gold bg-stone-50/50"
+                          className="w-full px-3 py-1.5 rounded-lg border border-[#333333] text-xs focus:outline-none focus:border-[#d4af37] bg-[#0f0f0f] text-white placeholder-[#555555]"
                         />
                       </td>
                     </tr>
@@ -300,10 +300,10 @@ export default function AdminAttendance() {
           </div>
         )}
 
-        <div className="p-4 bg-temple-cream/50 border-t border-amber-200/50 flex justify-end">
+        <div className="p-4 bg-[#0a0a0a] border-t border-[#222222] flex justify-end">
           <button
             onClick={handleSaveAttendance}
-            className="px-6 py-2.5 rounded-xl bg-temple-maroon text-temple-gold hover:bg-temple-maroon-dark text-xs font-cinzel font-bold shadow flex items-center gap-2 transition-all"
+            className="primary-btn text-xs flex items-center gap-2"
           >
             <Save className="w-4 h-4" />
             <span>Save Batch Attendance</span>
@@ -313,14 +313,14 @@ export default function AdminAttendance() {
 
       {/* CSV Bulk Upload Modal */}
       {csvModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-2 border-temple-gold max-w-xl w-full p-6 sm:p-8 shadow-2xl relative">
-            <h3 className="font-cinzel font-bold text-xl text-temple-maroon mb-2">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-[#111111] rounded-3xl border border-[#d4af37] max-w-xl w-full p-6 sm:p-8 shadow-2xl relative text-white">
+            <h3 className="font-cinzel font-bold text-xl text-[#d4af37] mb-2">
               Bulk Attendance CSV Upload
             </h3>
-            <p className="text-xs text-stone-500 mb-4">
+            <p className="text-xs text-[#bdbdbd] mb-4">
               Paste attendance rows or CSV content formatted with columns: <br />
-              <code className="bg-stone-100 px-1 py-0.5 rounded text-temple-maroon font-bold">
+              <code className="bg-[#0f0f0f] border border-[#333333] px-1.5 py-0.5 rounded text-[#d4af37] font-mono text-[11px]">
                 student_email,date,status,remarks
               </code>
             </p>
@@ -330,11 +330,11 @@ export default function AdminAttendance() {
               value={csvText}
               onChange={(e) => setCsvText(e.target.value)}
               placeholder="student_email,date,status,remarks&#10;ananya.r@gmail.com,2026-10-02,present,Punctual&#10;diya.s@gmail.com,2026-10-02,present,Varnam cleared"
-              className="w-full p-3 font-mono text-xs rounded-xl border border-stone-300 focus:outline-none focus:border-temple-gold bg-stone-50 mb-3"
+              className="w-full p-3 font-mono text-xs rounded-xl border border-[#333333] focus:outline-none focus:border-[#d4af37] bg-[#0f0f0f] text-white mb-3"
             ></textarea>
 
             {csvResult && (
-              <p className="text-xs font-semibold text-temple-maroon mb-3">
+              <p className="text-xs font-semibold text-[#d4af37] mb-3">
                 {csvResult}
               </p>
             )}
@@ -345,23 +345,23 @@ export default function AdminAttendance() {
                 onClick={() => {
                   setCsvText("student_email,date,status,remarks\nananya.r@gmail.com,2026-10-02,present,Aramandi practice\nkavya.k@gmail.com,2026-10-02,present,Tatta Adavu cleared");
                 }}
-                className="text-xs text-temple-maroon hover:underline font-cinzel"
+                className="text-xs text-[#d4af37] hover:underline font-cinzel"
               >
                 Insert Sample Data
               </button>
 
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <button
                   type="button"
                   onClick={() => setCsvModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-stone-200 text-xs text-stone-600 hover:bg-stone-50"
+                  className="secondary-btn text-xs py-2 px-4"
                 >
                   Close
                 </button>
                 <button
                   type="button"
                   onClick={handleCsvUpload}
-                  className="px-5 py-2 rounded-xl bg-temple-maroon text-temple-gold text-xs font-cinzel font-bold shadow hover:bg-temple-maroon-dark"
+                  className="primary-btn text-xs py-2 px-5"
                 >
                   Import Attendance
                 </button>

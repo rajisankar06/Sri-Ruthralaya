@@ -6,7 +6,7 @@ import FloatingChatbot from '../chatbot/FloatingChatbot';
 
 export default function PublicLayout() {
   return (
-    <div className="min-h-screen flex flex-col bg-temple-cream selection:bg-temple-gold/30 selection:text-temple-maroon">
+    <div className="min-h-screen flex flex-col bg-[#0f0f0f] text-white selection:bg-[#d4af37]/30 selection:text-white">
       <Navbar />
       <main className="flex-grow">
         <Outlet />

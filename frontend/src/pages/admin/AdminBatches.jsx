@@ -92,22 +92,22 @@ export default function AdminBatches() {
   };
 
   return (
-    <div className="space-y-8 font-outfit">
+    <div className="space-y-6 font-outfit text-white">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl">
         <div>
-          <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-temple-maroon">
-            Course &amp; Batch Management
+          <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-white">
+            Course &amp; <span className="text-[#d4af37]">Batch Management</span>
           </h1>
-          <p className="text-xs sm:text-sm text-stone-500 mt-1">
+          <p className="text-xs sm:text-sm text-[#bdbdbd] mt-1">
             Configure training levels, class schedules, assigned instructors, and tuition fee tariffs.
           </p>
         </div>
 
         <button
           onClick={handleOpenAdd}
-          className="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-temple-maroon text-temple-gold hover:bg-temple-maroon-dark text-xs font-cinzel font-bold shadow flex items-center gap-2 transition-all"
+          className="primary-btn self-start sm:self-auto flex items-center gap-2 text-xs"
         >
           <Plus className="w-4 h-4" />
           <span>Create New Batch</span>
@@ -119,25 +119,25 @@ export default function AdminBatches() {
         {batches.map((batch) => (
           <div
             key={batch.id}
-            className="p-6 rounded-3xl bg-white border-2 border-temple-gold/40 shadow-temple flex flex-col justify-between hover:border-temple-gold transition-colors"
+            className="p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl flex flex-col justify-between hover:border-[#d4af37]/60 transition-colors"
           >
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="px-3 py-1 rounded-full text-xs font-cinzel font-semibold bg-temple-maroon text-temple-gold">
+                <span className="px-3 py-1 rounded-full text-xs font-cinzel font-semibold bg-[#d4af37] text-[#111111]">
                   {batch.level}
                 </span>
 
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleOpenEdit(batch)}
-                    className="p-1.5 rounded-lg border border-stone-200 hover:bg-stone-50 text-stone-600"
+                    className="p-2 rounded-lg border border-[#333333] hover:border-[#d4af37] bg-[#0f0f0f] text-[#bdbdbd] hover:text-[#d4af37] transition-all"
                     title="Edit Batch"
                   >
                     <Edit2 className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={() => handleDelete(batch.id)}
-                    className="p-1.5 rounded-lg border border-red-200 hover:bg-red-50 text-red-600"
+                    className="p-2 rounded-lg border border-red-900/40 hover:border-red-500 bg-red-950/20 text-red-300 transition-all"
                     title="Delete Batch"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -145,38 +145,40 @@ export default function AdminBatches() {
                 </div>
               </div>
 
-              <h3 className="font-cinzel font-bold text-lg text-temple-maroon">
+              <h3 className="font-cinzel font-bold text-lg text-white">
                 {batch.name}
               </h3>
-              <p className="text-xs text-stone-600 mt-1">
-                Instructor: <strong>{batch.instructor_name}</strong>
+              <p className="text-xs text-[#888888] mt-1">
+                Instructor: <strong className="text-[#bdbdbd]">{batch.instructor_name}</strong>
               </p>
 
-              <div className="mt-4 pt-4 border-t border-stone-100 space-y-2 text-xs text-stone-600">
+              <div className="mt-4 pt-4 border-t border-[#222222] space-y-2 text-xs text-[#bdbdbd]">
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-3.5 h-3.5 text-temple-gold" />
+                  <Calendar className="w-3.5 h-3.5 text-[#d4af37]" />
                   <span>Days: {batch.schedule_days}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5 text-temple-gold" />
+                  <Clock className="w-3.5 h-3.5 text-[#d4af37]" />
                   <span>Time: {batch.schedule_time}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Users className="w-3.5 h-3.5 text-temple-gold" />
+                  <Users className="w-3.5 h-3.5 text-[#d4af37]" />
                   <span>{batch.studentCount || 0} Enrolled Disciples</span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-amber-200/50 flex items-center justify-between">
+            <div className="mt-6 pt-4 border-t border-[#222222] flex items-center justify-between">
               <div>
-                <span className="text-[10px] text-stone-400 font-cinzel uppercase block">Monthly Fee</span>
-                <span className="font-cinzel font-bold text-xl text-temple-maroon">
+                <span className="text-[10px] text-[#777777] font-cinzel uppercase block">Monthly Fee</span>
+                <span className="font-cinzel font-bold text-xl text-[#d4af37]">
                   ₹{Number(batch.fee_amount).toLocaleString('en-IN')}
                 </span>
               </div>
 
-              <span className="text-xs text-stone-400 font-outfit">Active Status</span>
+              <span className="text-xs text-emerald-400 font-outfit px-2.5 py-1 rounded bg-[#0f0f0f] border border-emerald-500/30">
+                Active Tier
+              </span>
             </div>
           </div>
         ))}
@@ -184,39 +186,39 @@ export default function AdminBatches() {
 
       {/* Create / Edit Batch Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-2 border-temple-gold max-w-lg w-full p-6 sm:p-8 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-[#111111] rounded-3xl border border-[#d4af37] max-w-lg w-full p-6 sm:p-8 shadow-2xl relative text-white">
             <button
               onClick={() => setModalOpen(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-stone-100 text-stone-500"
+              className="absolute top-4 right-4 p-2 rounded-full hover:bg-[#222222] text-[#888888] hover:text-white transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="font-cinzel font-bold text-xl text-temple-maroon mb-4">
+            <h3 className="font-cinzel font-bold text-xl text-[#d4af37] mb-4">
               {editingBatch ? 'Edit Batch Configuration' : 'Create New Training Batch'}
             </h3>
 
             <form onSubmit={handleSubmit} className="space-y-4 font-outfit">
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">Batch Name *</label>
+                <label className="block text-xs font-semibold text-[#bdbdbd] mb-1 font-cinzel">Batch Name *</label>
                 <input
                   type="text"
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="e.g. Bala Natya (Beginner Adavus)"
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">Level *</label>
+                  <label className="block text-xs font-semibold text-[#bdbdbd] mb-1 font-cinzel">Level *</label>
                   <select
                     value={formData.level}
                     onChange={(e) => setFormData({ ...formData, level: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold text-stone-700"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                   >
                     <option value="Beginner">Beginner</option>
                     <option value="Intermediate">Intermediate</option>
@@ -226,65 +228,65 @@ export default function AdminBatches() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">Monthly Fee (₹) *</label>
+                  <label className="block text-xs font-semibold text-[#bdbdbd] mb-1 font-cinzel">Monthly Fee (₹) *</label>
                   <input
                     type="number"
                     required
                     value={formData.fee_amount}
                     onChange={(e) => setFormData({ ...formData, fee_amount: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">Instructor Name *</label>
+                <label className="block text-xs font-semibold text-[#bdbdbd] mb-1 font-cinzel">Instructor Name *</label>
                 <input
                   type="text"
                   required
                   value={formData.instructor_name}
                   onChange={(e) => setFormData({ ...formData, instructor_name: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">Schedule Days *</label>
+                  <label className="block text-xs font-semibold text-[#bdbdbd] mb-1 font-cinzel">Schedule Days *</label>
                   <input
                     type="text"
                     required
                     value={formData.schedule_days}
                     onChange={(e) => setFormData({ ...formData, schedule_days: e.target.value })}
                     placeholder="Mon, Wed, Fri"
-                    className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">Schedule Time *</label>
+                  <label className="block text-xs font-semibold text-[#bdbdbd] mb-1 font-cinzel">Schedule Time *</label>
                   <input
                     type="text"
                     required
                     value={formData.schedule_time}
                     onChange={(e) => setFormData({ ...formData, schedule_time: e.target.value })}
                     placeholder="04:30 PM - 05:30 PM"
-                    className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                   />
                 </div>
               </div>
 
-              <div className="pt-2 flex justify-end gap-2">
+              <div className="pt-2 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-stone-200 text-xs text-stone-600 hover:bg-stone-50"
+                  className="secondary-btn text-xs py-2 px-4"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-temple-maroon text-temple-gold text-xs font-cinzel font-bold shadow hover:bg-temple-maroon-dark"
+                  className="primary-btn text-xs py-2 px-5"
                 >
                   {editingBatch ? 'Update Batch' : 'Save Batch'}
                 </button>

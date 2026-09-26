@@ -71,22 +71,22 @@ export default function AdminFees() {
   };
 
   return (
-    <div className="space-y-8 font-outfit">
+    <div className="space-y-6 font-outfit text-white">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl">
         <div>
-          <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-temple-maroon">
-            Fee Ledger &amp; Invoice Invoicing
+          <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-white">
+            Fee Ledger &amp; <span className="text-[#d4af37]">Invoice Management</span>
           </h1>
-          <p className="text-xs sm:text-sm text-stone-500 mt-1">
+          <p className="text-xs sm:text-sm text-[#bdbdbd] mt-1">
             Track student tuition collections, record direct cash/UPI payments, and issue official receipts.
           </p>
         </div>
 
         <button
           onClick={() => setModalOpen(true)}
-          className="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-temple-maroon text-temple-gold hover:bg-temple-maroon-dark text-xs font-cinzel font-bold shadow flex items-center gap-2 transition-all"
+          className="primary-btn self-start sm:self-auto flex items-center gap-2 text-xs"
         >
           <Plus className="w-4 h-4" />
           <span>Record New Fee Invoice</span>
@@ -94,13 +94,13 @@ export default function AdminFees() {
       </div>
 
       {/* Filter Bar */}
-      <div className="p-4 rounded-2xl bg-white border border-temple-gold/40 shadow-sm flex items-center justify-between gap-4">
+      <div className="p-4 rounded-2xl bg-[#111111] border border-[#333333] shadow-md flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <span className="text-xs font-cinzel font-bold text-stone-600">Filter By Status:</span>
+          <span className="text-xs font-cinzel font-bold text-[#bdbdbd]">Filter By Status:</span>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-1.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-temple-gold bg-stone-50 text-stone-700 font-cinzel"
+            className="px-3 py-1.5 rounded-xl border border-[#333333] text-xs focus:outline-none focus:border-[#d4af37] bg-[#0f0f0f] text-[#bdbdbd] font-cinzel"
           >
             <option value="">All Fee Entries</option>
             <option value="paid">Paid</option>
@@ -109,17 +109,17 @@ export default function AdminFees() {
           </select>
         </div>
 
-        <span className="text-xs text-stone-400">
-          Total Records: {fees.length}
+        <span className="text-xs text-[#888888]">
+          Total Records: <strong className="text-white">{fees.length}</strong>
         </span>
       </div>
 
       {/* Fee Table */}
-      <div className="bg-white rounded-3xl border-2 border-temple-gold/40 shadow-temple overflow-hidden">
+      <div className="bg-[#111111] rounded-3xl border border-[#333333] shadow-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs sm:text-sm">
             <thead>
-              <tr className="bg-temple-cream border-b border-amber-200 font-cinzel font-bold text-stone-700">
+              <tr className="bg-[#0a0a0a] border-b border-[#333333] font-cinzel font-bold text-[#d4af37]">
                 <th className="p-4">Disciple Details</th>
                 <th className="p-4">Billing Month</th>
                 <th className="p-4">Fee Amount</th>
@@ -129,48 +129,48 @@ export default function AdminFees() {
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-stone-100">
+            <tbody className="divide-y divide-[#222222]">
               {fees.map((fee) => (
-                <tr key={fee.id} className="hover:bg-amber-50/40 transition-colors">
-                  <td className="p-4 font-semibold text-stone-800">
-                    <span className="font-cinzel block text-sm">{fee.student?.name || 'Disciple'}</span>
-                    <span className="text-[11px] text-stone-400 font-normal">{fee.student?.email}</span>
+                <tr key={fee.id} className="hover:bg-[#161616] transition-colors">
+                  <td className="p-4 font-semibold text-white">
+                    <span className="font-cinzel block text-sm text-white">{fee.student?.name || 'Disciple'}</span>
+                    <span className="text-[11px] text-[#888888] font-normal">{fee.student?.email}</span>
                   </td>
 
-                  <td className="p-4 font-outfit text-stone-700">
+                  <td className="p-4 font-outfit text-[#bdbdbd]">
                     {fee.month || 'Current Term'}
                   </td>
 
-                  <td className="p-4 font-cinzel font-bold text-temple-maroon">
+                  <td className="p-4 font-cinzel font-bold text-[#d4af37]">
                     ₹{Number(fee.amount).toLocaleString('en-IN')}
                   </td>
 
-                  <td className="p-4 text-stone-500">
+                  <td className="p-4 text-[#888888]">
                     {new Date(fee.due_date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </td>
 
                   <td className="p-4">
                     {fee.status === 'paid' && (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
                         <CheckCircle className="w-3 h-3" />
                         Paid
                       </span>
                     )}
                     {fee.status === 'pending' && (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-400 border border-amber-500/40">
                         <Clock className="w-3 h-3" />
                         Pending
                       </span>
                     )}
                     {fee.status === 'overdue' && (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-800">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-400 border border-rose-500/40">
                         <AlertTriangle className="w-3 h-3" />
                         Overdue
                       </span>
                     )}
                   </td>
 
-                  <td className="p-4 font-mono text-xs text-stone-500">
+                  <td className="p-4 font-mono text-xs text-[#888888]">
                     {fee.payment_ref || '—'}
                   </td>
 
@@ -180,7 +180,7 @@ export default function AdminFees() {
                         href={`/api/v1/fees/receipt/${fee.id}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-temple-maroon text-temple-gold hover:bg-temple-maroon-dark text-xs font-cinzel font-bold shadow transition-all"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#0f0f0f] border border-[#333333] hover:border-[#d4af37] text-[#d4af37] text-xs font-cinzel font-bold transition-all"
                       >
                         <Download className="w-3 h-3" />
                         <span>PDF</span>
@@ -188,7 +188,7 @@ export default function AdminFees() {
                     ) : (
                       <button
                         onClick={() => handleMarkPaid(fee.id)}
-                        className="px-3 py-1.5 rounded-lg bg-emerald-700 text-white hover:bg-emerald-800 text-xs font-cinzel font-bold shadow"
+                        className="px-3 py-1.5 rounded-lg bg-[#d4af37] text-[#111111] hover:brightness-110 text-xs font-cinzel font-bold shadow transition-all"
                       >
                         Mark Paid
                       </button>
@@ -203,27 +203,27 @@ export default function AdminFees() {
 
       {/* Record Fee Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-2 border-temple-gold max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-[#111111] rounded-3xl border border-[#d4af37] max-w-md w-full p-6 sm:p-8 shadow-2xl relative text-white">
             <button
               onClick={() => setModalOpen(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-stone-100 text-stone-500"
+              className="absolute top-4 right-4 p-2 rounded-full hover:bg-[#222222] text-[#888888] hover:text-white transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="font-cinzel font-bold text-xl text-temple-maroon mb-4">
+            <h3 className="font-cinzel font-bold text-xl text-[#d4af37] mb-4">
               Record New Fee Entry
             </h3>
 
             <form onSubmit={handleCreateFee} className="space-y-4 font-outfit">
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">Select Disciple *</label>
+                <label className="block text-xs font-semibold text-[#bdbdbd] mb-1 font-cinzel">Select Disciple *</label>
                 <select
                   required
                   value={newFee.student_id}
                   onChange={(e) => setNewFee({ ...newFee, student_id: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold text-stone-700"
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                 >
                   {students.map((s) => (
                     <option key={s.id} value={s.id}>{s.name} ({s.email})</option>
@@ -232,52 +232,52 @@ export default function AdminFees() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">Billing Term / Month *</label>
+                <label className="block text-xs font-semibold text-[#bdbdbd] mb-1 font-cinzel">Billing Term / Month *</label>
                 <input
                   type="text"
                   required
                   value={newFee.month}
                   onChange={(e) => setNewFee({ ...newFee, month: e.target.value })}
                   placeholder="e.g. November 2026"
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                  className="w-full px-3.5 py-2 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">Amount (₹) *</label>
+                  <label className="block text-xs font-semibold text-[#bdbdbd] mb-1 font-cinzel">Amount (₹) *</label>
                   <input
                     type="number"
                     required
                     value={newFee.amount}
                     onChange={(e) => setNewFee({ ...newFee, amount: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">Due Date *</label>
+                  <label className="block text-xs font-semibold text-[#bdbdbd] mb-1 font-cinzel">Due Date *</label>
                   <input
                     type="date"
                     required
                     value={newFee.due_date}
                     onChange={(e) => setNewFee({ ...newFee, due_date: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#0f0f0f] border border-[#333333] text-white text-xs sm:text-sm focus:outline-none focus:border-[#d4af37]"
                   />
                 </div>
               </div>
 
-              <div className="pt-2 flex justify-end gap-2">
+              <div className="pt-2 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-stone-200 text-xs text-stone-600 hover:bg-stone-50"
+                  className="secondary-btn text-xs py-2 px-4"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-temple-maroon text-temple-gold text-xs font-cinzel font-bold shadow hover:bg-temple-maroon-dark"
+                  className="primary-btn text-xs py-2 px-5"
                 >
                   Save Fee Entry
                 </button>
