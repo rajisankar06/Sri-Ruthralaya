@@ -320,18 +320,18 @@ export default function AdminDashboard() {
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={charts.monthlyEnrollmentTrend} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0ede6" />
-                <XAxis dataKey="month" stroke="#78716c" fontSize={11} />
-                <YAxis stroke="#78716c" fontSize={11} domain={[30, 120]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E8DCCC" />
+                <XAxis dataKey="month" stroke="#665A54" fontSize={11} />
+                <YAxis stroke="#665A54" fontSize={11} domain={[30, 120]} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#FAF5EE', borderColor: '#D4AF37', borderRadius: '12px', fontSize: '12px' }}
+                  contentStyle={{ backgroundColor: '#FAF6EE', borderColor: '#B78A4A', borderRadius: '12px', fontSize: '12px' }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
                 <Line
                   type="monotone"
                   dataKey="students"
                   name="Enrolled Disciples"
-                  stroke="#7B1E1E"
+                  stroke="#9B3D2E"
                   strokeWidth={3}
                   activeDot={{ r: 6 }}
                   connectNulls={false}
@@ -340,7 +340,7 @@ export default function AdminDashboard() {
                   type="monotone"
                   dataKey="forecast"
                   name="Linear Regression Forecast (Dotted)"
-                  stroke="#D4AF37"
+                  stroke="#B78A4A"
                   strokeWidth={3}
                   strokeDasharray="5 5"
                   activeDot={{ r: 6 }}
@@ -366,15 +366,15 @@ export default function AdminDashboard() {
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={charts.batchAttendanceTrend} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0ede6" />
-                <XAxis dataKey="batch" stroke="#78716c" fontSize={11} />
-                <YAxis stroke="#78716c" fontSize={11} domain={[70, 100]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E8DCCC" />
+                <XAxis dataKey="batch" stroke="#665A54" fontSize={11} />
+                <YAxis stroke="#665A54" fontSize={11} domain={[70, 100]} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#FAF5EE', borderColor: '#D4AF37', borderRadius: '12px', fontSize: '12px' }}
+                  contentStyle={{ backgroundColor: '#FAF6EE', borderColor: '#B78A4A', borderRadius: '12px', fontSize: '12px' }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Bar dataKey="attendancePct" name="Attendance %" fill="#7B1E1E" radius={[6, 6, 0, 0]} />
-                <Line type="monotone" dataKey="target" name="Exam Target (85%)" stroke="#D4AF37" strokeWidth={2} />
+                <Bar dataKey="attendancePct" name="Attendance %" fill="#9B3D2E" radius={[6, 6, 0, 0]} />
+                <Line type="monotone" dataKey="target" name="Exam Target (85%)" stroke="#B78A4A" strokeWidth={2} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -396,16 +396,16 @@ export default function AdminDashboard() {
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={charts.revenueVsDues} margin={{ top: 10, right: 20, left: -5, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0ede6" />
-                <XAxis dataKey="month" stroke="#78716c" fontSize={11} />
-                <YAxis stroke="#78716c" fontSize={11} tickFormatter={(v) => `₹${v/1000}k`} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E8DCCC" />
+                <XAxis dataKey="month" stroke="#665A54" fontSize={11} />
+                <YAxis stroke="#665A54" fontSize={11} tickFormatter={(v) => `₹${v/1000}k`} />
                 <Tooltip
                   formatter={(v) => `₹${v.toLocaleString('en-IN')}`}
-                  contentStyle={{ backgroundColor: '#FAF5EE', borderColor: '#D4AF37', borderRadius: '12px', fontSize: '12px' }}
+                  contentStyle={{ backgroundColor: '#FAF6EE', borderColor: '#B78A4A', borderRadius: '12px', fontSize: '12px' }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Bar dataKey="collected" name="Tuition Collected (₹)" stackId="a" fill="#047857" radius={[0, 0, 0, 0]} />
-                <Bar dataKey="pending" name="Pending Dues (₹)" stackId="a" fill="#F59E0B" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="collected" name="Tuition Collected (₹)" stackId="a" fill="#637A61" radius={[0, 0, 0, 0]} />
+                <Bar dataKey="pending" name="Pending Dues (₹)" stackId="a" fill="#B27A32" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -430,19 +430,19 @@ export default function AdminDashboard() {
               <AreaChart data={charts.retentionTrend} margin={{ top: 10, right: 20, left: -10, bottom: 0 }}>
                 <defs>
                   <linearGradient id="retentionGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#7B1E1E" stopOpacity={0.1}/>
+                    <stop offset="5%" stopColor="#B78A4A" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#9B3D2E" stopOpacity={0.1}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0ede6" />
-                <XAxis dataKey="term" stroke="#78716c" fontSize={10} />
-                <YAxis stroke="#78716c" fontSize={11} domain={[90, 100]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E8DCCC" />
+                <XAxis dataKey="term" stroke="#665A54" fontSize={10} />
+                <YAxis stroke="#665A54" fontSize={11} domain={[90, 100]} />
                 <Tooltip
                   formatter={(v) => `${v}%`}
-                  contentStyle={{ backgroundColor: '#FAF5EE', borderColor: '#D4AF37', borderRadius: '12px', fontSize: '12px' }}
+                  contentStyle={{ backgroundColor: '#FAF6EE', borderColor: '#B78A4A', borderRadius: '12px', fontSize: '12px' }}
                 />
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                <Area type="monotone" dataKey="retentionRate" name="Retention %" stroke="#7B1E1E" strokeWidth={2} fillOpacity={1} fill="url(#retentionGrad)" />
+                <Area type="monotone" dataKey="retentionRate" name="Retention %" stroke="#9B3D2E" strokeWidth={2} fillOpacity={1} fill="url(#retentionGrad)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>

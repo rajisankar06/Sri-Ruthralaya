@@ -41,7 +41,7 @@ export default function StudentFees() {
           particleCount: 100,
           spread: 70,
           origin: { y: 0.6 },
-          colors: ['#7B1E1E', '#D4AF37', '#FFD700', '#F3E5AB'],
+          colors: ['#9B3D2E', '#B78A4A', '#B27A32', '#F0E5D2'],
         });
 
         await loadFees();

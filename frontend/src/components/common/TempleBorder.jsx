@@ -11,7 +11,7 @@ export default function TempleBorder({ className = '' }) {
           <path d="M12 2L9 8H15L12 2Z" />
           <path d="M8 9H16L17 14H7L8 9Z" />
           <path d="M6 15H18L19 21H5L6 15Z" />
-          <circle cx="12" cy="1" r="1" fill="#FFD700" />
+          <circle cx="12" cy="1" r="1" fill="#B78A4A" />
         </svg>
         <span className="text-xs uppercase tracking-[0.25em] font-cinzel font-semibold text-temple-maroon">
           ॐ
@@ -20,7 +20,7 @@ export default function TempleBorder({ className = '' }) {
           <path d="M12 2L9 8H15L12 2Z" />
           <path d="M8 9H16L17 14H7L8 9Z" />
           <path d="M6 15H18L19 21H5L6 15Z" />
-          <circle cx="12" cy="1" r="1" fill="#FFD700" />
+          <circle cx="12" cy="1" r="1" fill="#B78A4A" />
         </svg>
       </div>
 

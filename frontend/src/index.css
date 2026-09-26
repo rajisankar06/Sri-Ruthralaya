@@ -4,42 +4,46 @@
 
 @layer base {
   body {
-    background-color: #FDFBF7;
-    color: #2D2424;
+    background-color: #FAF6EE;
+    color: #665A54;
     overflow-x: hidden;
   }
 
-  /* Custom scrollbars with temple maroon and gold accent */
+  h1, h2, h3, h4, h5, h6 {
+    color: #30221E;
+  }
+
+  /* Custom scrollbars with Muted Gold and Terracotta accent */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #FAF5EE;
+    background: #F0E5D2;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #D4AF37;
+    background: #B78A4A;
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #7B1E1E;
+    background: #9B3D2E;
   }
 }
 
 /* Kolam geometric background motif */
 .bg-kolam-pattern {
-  background-color: #FDFBF7;
-  background-image: radial-gradient(#D4AF37 0.75px, transparent 0.75px), radial-gradient(#7B1E1E 0.75px, #FDFBF7 0.75px);
+  background-color: #FAF6EE;
+  background-image: radial-gradient(#B78A4A 0.75px, transparent 0.75px), radial-gradient(#9B3D2E 0.75px, #FAF6EE 0.75px);
   background-size: 30px 30px;
   background-position: 0 0, 15px 15px;
   background-opacity: 0.05;
 }
 
 .bg-temple-gold-radial {
-  background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.15) 0%, rgba(253, 251, 247, 0) 70%);
+  background: radial-gradient(circle at 50% 50%, rgba(183, 138, 74, 0.15) 0%, rgba(250, 246, 238, 0) 70%);
 }
 
 /* Traditional temple arch clip path */
@@ -50,7 +54,7 @@
 
 /* Golden shimmer text */
 .text-gold-gradient {
-  background: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #F59E0B 100%);
+  background: linear-gradient(135deg, #B78A4A 0%, #D8B681 50%, #B27A32 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

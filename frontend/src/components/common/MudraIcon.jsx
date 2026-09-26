@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function MudraIcon({ name = 'nataraja', className = 'w-6 h-6', color = '#D4AF37' }) {
+export default function MudraIcon({ name = 'nataraja', className = 'w-6 h-6', color = '#B78A4A' }) {
   if (name === 'pataka') {
     // Pataka Hand Mudra
     return (
