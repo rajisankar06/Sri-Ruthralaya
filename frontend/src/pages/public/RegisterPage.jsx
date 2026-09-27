@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { User, Mail, Lock, Phone, BookOpen, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
+import { User, Mail, Lock, Phone, BookOpen, CheckCircle, AlertCircle, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import MudraIcon from '../../components/common/MudraIcon';
@@ -27,6 +27,7 @@ export default function RegisterPage() {
   const [batches, setBatches] = useState(DEFAULT_FALLBACK_BATCHES);
   const [loadingBatches, setLoadingBatches] = useState(true);
   const [successData, setSuccessData] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const { register: registerUser } = useAuth();
   const navigate = useNavigate();
@@ -203,11 +204,19 @@ export default function RegisterPage() {
                 <div className="relative">
                   <Lock className="w-4 h-4 text-[#666666] absolute left-3.5 top-3" />
                   <input
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     {...register('password')}
                     placeholder="At least 6 characters"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-md border border-[#333333] text-xs sm:text-sm focus:outline-none focus:border-[#d4af37] bg-[#0f0f0f] text-white placeholder-[#555555]"
+                    className="w-full pl-10 pr-11 py-2.5 rounded-lg border border-[#333333] text-xs sm:text-sm focus:outline-none focus:border-[#d4af37] focus:ring-2 focus:ring-[#d4af37]/20 bg-[#0f0f0f] text-white placeholder-[#555555] transition-all"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-3 text-[#666666] hover:text-[#d4af37] transition-colors"
+                    title={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
                 {errors.password && <p className="text-[11px] text-red-400 mt-1">{errors.password.message}</p>}
               </div>

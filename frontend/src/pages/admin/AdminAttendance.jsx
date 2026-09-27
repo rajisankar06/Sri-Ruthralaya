@@ -329,7 +329,7 @@ export default function AdminAttendance() {
               rows={6}
               value={csvText}
               onChange={(e) => setCsvText(e.target.value)}
-              placeholder="student_email,date,status,remarks&#10;ananya.r@gmail.com,2026-10-02,present,Punctual&#10;diya.s@gmail.com,2026-10-02,present,Varnam cleared"
+              placeholder="student_email,date,status,remarks&#10;student1@academy.com,2026-10-02,present,Punctual&#10;student2@academy.com,2026-10-02,present,Varnam cleared"
               className="w-full p-3 font-mono text-xs rounded-xl border border-[#333333] focus:outline-none focus:border-[#d4af37] bg-[#0f0f0f] text-white mb-3"
             ></textarea>
 
@@ -343,11 +343,11 @@ export default function AdminAttendance() {
               <button
                 type="button"
                 onClick={() => {
-                  setCsvText("student_email,date,status,remarks\nananya.r@gmail.com,2026-10-02,present,Aramandi practice\nkavya.k@gmail.com,2026-10-02,present,Tatta Adavu cleared");
+                  setCsvText("student_email,date,status,remarks\nstudent1@academy.com,2026-10-02,present,Aramandi practice\nstudent2@academy.com,2026-10-02,present,Tatta Adavu cleared");
                 }}
                 className="text-xs text-[#d4af37] hover:underline font-cinzel"
               >
-                Insert Sample Data
+                Insert Sample Format
               </button>
 
               <div className="flex gap-3">

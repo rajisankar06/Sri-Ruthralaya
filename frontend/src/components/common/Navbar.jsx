@@ -111,7 +111,15 @@ export default function Navbar() {
           {/* Desktop Auth / Action Buttons with User CSS specifications */}
           <div className="nav-buttons hidden md:flex items-center gap-3 flex-shrink-0">
             {isAuthenticated ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-[#181818] border border-[#333333]">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#d4af37] to-[#e6c762] text-[#111111] font-bold text-xs flex items-center justify-center font-cinzel shadow">
+                    {user?.name ? user.name[0].toUpperCase() : 'U'}
+                  </div>
+                  <span className="text-xs font-medium text-stone-200 max-w-[110px] truncate hidden xl:inline">
+                    {user?.name?.split(' ')[0] || 'User'}
+                  </span>
+                </div>
                 {isAdmin && (
                   <Link
                     to="/admin/dashboard"
@@ -132,7 +140,7 @@ export default function Navbar() {
                 )}
                 <button
                   onClick={logout}
-                  className="p-2 rounded-lg text-[#999999] hover:text-white hover:bg-[#0f0f0f] transition-colors border border-transparent hover:border-[#333333]"
+                  className="p-2 rounded-lg text-[#999999] hover:text-red-400 hover:bg-[#1a1111] transition-colors border border-transparent hover:border-red-900/30"
                   title="Logout"
                 >
                   <LogOut className="w-4 h-4" />

@@ -193,12 +193,12 @@ export default function StudentFees() {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-amber-50 border border-amber-300 text-center mb-6">
-              <p className="text-xs font-semibold text-amber-900 font-cinzel">
-                Demo Payment Simulator Active
+            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-center mb-6">
+              <p className="text-xs font-semibold text-amber-400 font-cinzel">
+                Online Academy Fee Settlement
               </p>
-              <p className="text-[11px] text-amber-800 mt-1">
-                Clicking confirm will simulate instant UPI clearing and auto-generate your certified PDF receipt.
+              <p className="text-[11px] text-stone-300 mt-1">
+                Clicking confirm will record your tuition payment and auto-generate your certified official academy PDF receipt.
               </p>
             </div>
 

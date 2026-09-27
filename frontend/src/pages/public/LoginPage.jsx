@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Shield, User, Lock, Mail, ArrowRight, Sparkles, AlertCircle } from 'lucide-react';
+import { Shield, User, Lock, Mail, ArrowRight, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import MudraIcon from '../../components/common/MudraIcon';
 
@@ -14,6 +14,7 @@ const loginSchema = z.object({
 
 export default function LoginPage() {
   const [activeTab, setActiveTab] = useState('student'); // 'student' or 'admin'
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -22,7 +23,6 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(loginSchema),
@@ -50,24 +50,6 @@ export default function LoginPage() {
       } else {
         setErrorMessage(err.response?.data?.message || err.message || 'Login failed. Please check your credentials or server connection.');
       }
-    }
-  };
-
-  // Quick 1-click Demo Fill
-  const fillDemo = (role) => {
-    setErrorMessage('');
-    if (role === 'admin') {
-      setActiveTab('admin');
-      setValue('email', 'admin@sriruthralaya.com');
-      setValue('password', 'Admin@123');
-    } else if (role === 'student') {
-      setActiveTab('student');
-      setValue('email', 'ananya.r@gmail.com');
-      setValue('password', 'Student@123');
-    } else if (role === 'staff') {
-      setActiveTab('admin');
-      setValue('email', 'instructor@sriruthralaya.com');
-      setValue('password', 'Staff@123');
     }
   };
 
@@ -145,7 +127,7 @@ export default function LoginPage() {
                 type="email"
                 {...register('email')}
                 placeholder={activeTab === 'admin' ? 'admin@sriruthralaya.com' : 'student@example.com'}
-                className="w-full pl-10 pr-4 py-2.5 rounded-md border border-[#333333] text-xs sm:text-sm focus:outline-none focus:border-[#d4af37] bg-[#0f0f0f] text-white placeholder-[#555555]"
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[#333333] text-xs sm:text-sm focus:outline-none focus:border-[#d4af37] focus:ring-2 focus:ring-[#d4af37]/20 bg-[#0f0f0f] text-white placeholder-[#555555] transition-all"
               />
             </div>
             {errors.email && <p className="text-[11px] text-red-400 mt-1">{errors.email.message}</p>}
@@ -166,11 +148,19 @@ export default function LoginPage() {
             <div className="relative">
               <Lock className="w-4 h-4 text-[#666666] absolute left-3.5 top-3.5" />
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 {...register('password')}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-2.5 rounded-md border border-[#333333] text-xs sm:text-sm focus:outline-none focus:border-[#d4af37] bg-[#0f0f0f] text-white placeholder-[#555555]"
+                className="w-full pl-10 pr-11 py-2.5 rounded-lg border border-[#333333] text-xs sm:text-sm focus:outline-none focus:border-[#d4af37] focus:ring-2 focus:ring-[#d4af37]/20 bg-[#0f0f0f] text-white placeholder-[#555555] transition-all"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-3 text-[#666666] hover:text-[#d4af37] transition-colors"
+                title={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
             {errors.password && <p className="text-[11px] text-red-400 mt-1">{errors.password.message}</p>}
           </div>
@@ -178,7 +168,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3 rounded-md bg-[#d4af37] text-[#111111] hover:bg-transparent hover:text-[#d4af37] border border-[#d4af37] text-xs sm:text-sm font-cinzel font-bold shadow-md flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+            className="w-full py-3 rounded-lg bg-gradient-to-r from-[#d4af37] to-[#e6c762] text-[#111111] hover:brightness-110 active:scale-[0.99] border border-[#d4af37] text-xs sm:text-sm font-cinzel font-bold shadow-lg shadow-[#d4af37]/10 flex items-center justify-center gap-2 transition-all disabled:opacity-50"
           >
             <span>{isSubmitting ? 'Authenticating...' : `Enter ${activeTab === 'admin' ? 'Admin Portal' : 'Student Dashboard'}`}</span>
             <ArrowRight className="w-4 h-4" />
