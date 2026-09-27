@@ -13,7 +13,7 @@ const markAttendanceSchema = z.object({
     })
   ),
 });
-zx
+
 /**
  * Mark attendance for an entire batch on a specific date
  */
