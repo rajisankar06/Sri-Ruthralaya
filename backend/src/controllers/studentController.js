@@ -1,9 +1,8 @@
 const bcrypt = require('bcryptjs');
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
+const { db, fallbackStore, getIsDbConnected, isProduction, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
 const studentCreateSchema = z.object({
-
   name: z.string().min(2),
   email: z.string().email(),
   phone: z.string().optional(),
@@ -18,51 +17,50 @@ const studentCreateSchema = z.object({
 async function getAllStudents(req, res, next) {
   try {
     const { status, batch_id, search } = req.query;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
 
-    if (isDb && prisma) {
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
       const where = {
         role: 'student',
       };
       if (status) where.status = status;
       if (search) {
         where.OR = [
-          { name: { contains: search, mode: 'insensitive' } },
-          { email: { contains: search, mode: 'insensitive' } },
-          { phone: { contains: search, mode: 'insensitive' } },
+          { name: { contains: search } },
+          { email: { contains: search } },
+          { phone: { contains: search } },
         ];
       }
 
-      let students = await prisma.user.findMany({
+      let students = await db.user.findMany({
         where,
         include: {
-          enrollments: {
-            include: {
-              batch: true,
-            },
-          },
-          fees: {
-            orderBy: { due_date: 'desc' },
-            take: 2,
-          },
-          attendances: {
-            take: 30,
-          },
+          enrollments: true,
+          fees: true,
+          attendances: true,
         },
-        orderBy: { created_at: 'desc' },
       });
 
       if (batch_id) {
-        students = students.filter(s => s.enrollments.some(e => e.batch_id === batch_id));
+        students = students.filter(s => s.enrollments && s.enrollments.some(e => e.batch_id === batch_id));
       }
 
       // Format with attendance % and fee status
       const formatted = students.map(s => {
-        const totalAtt = s.attendances.length;
-        const presentAtt = s.attendances.filter(a => a.status === 'present').length;
+        const attendances = s.attendances || [];
+        const totalAtt = attendances.length;
+        const presentAtt = attendances.filter(a => a.status === 'present').length;
         const attendancePct = totalAtt > 0 ? Math.round((presentAtt / totalAtt) * 100) : 100;
-        const activeBatch = s.enrollments[0]?.batch || null;
-        const latestFee = s.fees[0] || null;
+        const activeBatch = (s.enrollments && s.enrollments[0]?.batch) || null;
+        const latestFee = (s.fees && s.fees[0]) || null;
 
         return {
           id: s.id,
@@ -84,7 +82,7 @@ async function getAllStudents(req, res, next) {
         message: 'Students list fetched successfully.',
       });
     } else {
-      // Fallback
+      // Development fallback
       let list = fallbackStore.users.filter(u => u.role === 'student');
       if (status) list = list.filter(u => u.status === status);
       if (search) {
@@ -140,7 +138,15 @@ async function getAllStudents(req, res, next) {
 async function getStudentById(req, res, next) {
   try {
     const { id } = req.params;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
+
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
 
     // Security check: Student can only view their own profile, unless admin/staff
     if (req.user.role === 'student' && req.user.id !== id) {
@@ -151,13 +157,13 @@ async function getStudentById(req, res, next) {
       });
     }
 
-    if (isDb && prisma) {
-      const student = await prisma.user.findUnique({
+    if (isDb) {
+      const student = await db.user.findUnique({
         where: { id },
         include: {
-          enrollments: { include: { batch: true } },
-          attendances: { orderBy: { date: 'desc' }, take: 40 },
-          fees: { orderBy: { due_date: 'desc' } },
+          enrollments: true,
+          attendances: true,
+          fees: true,
         },
       });
 
@@ -165,8 +171,9 @@ async function getStudentById(req, res, next) {
         return res.status(404).json({ success: false, data: null, message: 'Student not found.' });
       }
 
-      const totalAtt = student.attendances.length;
-      const presentCount = student.attendances.filter(a => a.status === 'present').length;
+      const attendances = student.attendances || [];
+      const totalAtt = attendances.length;
+      const presentCount = attendances.filter(a => a.status === 'present').length;
       const attendancePct = totalAtt > 0 ? Math.round((presentCount / totalAtt) * 100) : 100;
 
       const { password_hash, ...safeData } = student;
@@ -177,7 +184,7 @@ async function getStudentById(req, res, next) {
           attendancePct,
           totalClasses: totalAtt,
           presentClasses: presentCount,
-          activeBatch: student.enrollments[0]?.batch || null,
+          activeBatch: (student.enrollments && student.enrollments[0]?.batch) || null,
         },
         message: 'Student details retrieved.',
       });
@@ -232,10 +239,18 @@ async function createStudent(req, res, next) {
     const validated = studentCreateSchema.parse(req.body);
     const salt = await bcrypt.genSalt(12);
     const password_hash = await bcrypt.hash('Student@123', salt);
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
 
-    if (isDb && prisma) {
-      const student = await prisma.user.create({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
+      const student = await db.user.create({
         data: {
           name: validated.name,
           email: validated.email.toLowerCase(),
@@ -248,7 +263,7 @@ async function createStudent(req, res, next) {
       });
 
       if (validated.batch_id) {
-        await prisma.enrollment.create({
+        await db.enrollment.create({
           data: {
             student_id: student.id,
             batch_id: validated.batch_id,
@@ -322,21 +337,27 @@ async function approveStudent(req, res, next) {
   try {
     const { id } = req.params;
     const { batch_id } = req.body;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
 
-    if (isDb && prisma) {
-      const student = await prisma.user.update({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
+      const student = await db.user.update({
         where: { id },
         data: { status: 'active' },
       });
 
       if (batch_id) {
-        await prisma.enrollment.upsert({
-          where: {
-            student_id_batch_id: { student_id: id, batch_id },
-          },
-          update: { status: 'active' },
+        await db.enrollment.upsert({
+          where: { student_id: id },
+          update: { batch_id, status: 'active' },
           create: {
             student_id: id,
             batch_id,
@@ -409,11 +430,19 @@ async function updateStudent(req, res, next) {
   try {
     const { id } = req.params;
     const { name, phone, status, profile_photo_url, batch_id } = req.body;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
 
-    if (isDb && prisma) {
-      const updated = await prisma.user.update({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
+      const updated = await db.user.update({
         where: { id },
         data: {
           ...(name && { name }),
@@ -424,15 +453,14 @@ async function updateStudent(req, res, next) {
       });
 
       if (batch_id) {
-        // Find existing enrollment
-        const existing = await prisma.enrollment.findFirst({ where: { student_id: id } });
+        const existing = await db.enrollment.findFirst({ where: { student_id: id } });
         if (existing) {
-          await prisma.enrollment.update({
+          await db.enrollment.update({
             where: { id: existing.id },
             data: { batch_id },
           });
         } else {
-          await prisma.enrollment.create({
+          await db.enrollment.create({
             data: { student_id: id, batch_id, status: 'active' },
           });
         }
@@ -501,15 +529,23 @@ async function updateStudent(req, res, next) {
 async function toggleStudentStatus(req, res, next) {
   try {
     const { id } = req.params;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
 
-    if (isDb && prisma) {
-      const student = await prisma.user.findUnique({ where: { id } });
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
+      const student = await db.user.findUnique({ where: { id } });
       if (!student) return res.status(404).json({ success: false, data: null, message: 'Student not found.' });
 
       const newStatus = student.status === 'active' ? 'inactive' : 'active';
-      const updated = await prisma.user.update({
+      const updated = await db.user.update({
         where: { id },
         data: { status: newStatus },
       });
@@ -553,7 +589,6 @@ async function toggleStudentStatus(req, res, next) {
     next(error);
   }
 }
-
 
 module.exports = {
   getAllStudents,

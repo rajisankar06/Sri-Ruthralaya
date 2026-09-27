@@ -1,8 +1,8 @@
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
+const { db, fallbackStore, getIsDbConnected, isProduction, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require('../utils/token');
-
 
 // Zod validation schemas
 const registerSchema = z.object({
@@ -18,6 +18,10 @@ const loginSchema = z.object({
   password: z.string().min(1, 'Password is required'),
 });
 
+const forgotPasswordSchema = z.object({
+  email: z.string().email('Invalid email address'),
+});
+
 const resetPasswordSchema = z.object({
   email: z.string().email('Invalid email address'),
   otp: z.string().min(4, 'OTP must be provided'),
@@ -30,10 +34,18 @@ const resetPasswordSchema = z.object({
 async function register(req, res, next) {
   try {
     const validated = registerSchema.parse(req.body);
-    const isDbConnected = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
 
-    if (isDbConnected && prisma) {
-      const existingUser = await prisma.user.findUnique({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
+      const existingUser = await db.user.findUnique({
         where: { email: validated.email.toLowerCase() },
       });
 
@@ -48,7 +60,7 @@ async function register(req, res, next) {
       const salt = await bcrypt.genSalt(12);
       const password_hash = await bcrypt.hash(validated.password, salt);
 
-      const newUser = await prisma.user.create({
+      const newUser = await db.user.create({
         data: {
           name: validated.name,
           email: validated.email.toLowerCase(),
@@ -60,7 +72,7 @@ async function register(req, res, next) {
       });
 
       if (validated.batch_id) {
-        await prisma.enrollment.create({
+        await db.enrollment.create({
           data: {
             student_id: newUser.id,
             batch_id: validated.batch_id,
@@ -81,7 +93,7 @@ async function register(req, res, next) {
         message: 'Registration submitted successfully! Your account is pending admin approval. You will receive access once verified.',
       });
     } else {
-      // Fallback in-memory
+      // Local development fallback
       const existingUser = fallbackStore.users.find(u => u.email.toLowerCase() === validated.email.toLowerCase());
       if (existingUser) {
         return res.status(400).json({
@@ -139,11 +151,19 @@ async function register(req, res, next) {
 async function login(req, res, next) {
   try {
     const { email, password } = loginSchema.parse(req.body);
-    const isDbConnected = getIsPrismaConnected();
-    let user;
+    const isDb = getIsDbConnected();
 
-    if (isDbConnected && prisma) {
-      user = await prisma.user.findUnique({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    let user;
+    if (isDb) {
+      user = await db.user.findUnique({
         where: { email: email.toLowerCase() },
       });
     } else {
@@ -251,11 +271,19 @@ async function refreshToken(req, res, next) {
     }
 
     const decoded = verifyRefreshToken(token);
-    const isDbConnected = getIsPrismaConnected();
-    let user;
+    const isDb = getIsDbConnected();
 
-    if (isDbConnected && prisma) {
-      user = await prisma.user.findUnique({ where: { id: decoded.id } });
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    let user;
+    if (isDb) {
+      user = await db.user.findUnique({ where: { id: decoded.id } });
     } else {
       user = fallbackStore.users.find(u => u.id === decoded.id);
     }
@@ -309,19 +337,21 @@ async function logout(req, res) {
 async function getMe(req, res, next) {
   try {
     const userId = req.user.id;
-    const isDbConnected = getIsPrismaConnected();
-    let user;
+    const isDb = getIsDbConnected();
 
-    if (isDbConnected && prisma) {
-      user = await prisma.user.findUnique({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable.',
+      });
+    }
+
+    let user;
+    if (isDb) {
+      user = await db.user.findUnique({
         where: { id: userId },
-        include: {
-          enrollments: {
-            include: {
-              batch: true,
-            },
-          },
-        },
+        include: { enrollments: true },
       });
     } else {
       const u = fallbackStore.users.find(usr => usr.id === userId);
@@ -358,26 +388,54 @@ async function getMe(req, res, next) {
 
 /**
  * Forgot password - request reset OTP
+ * Generates secure random single-use OTP, hashes it, stores expiry,
+ * and does not reveal whether the account exists.
  */
 async function forgotPassword(req, res, next) {
   try {
-    const { email } = req.body;
-    if (!email) {
-      return res.status(400).json({
+    const { email } = forgotPasswordSchema.parse(req.body);
+    const normalizedEmail = email.toLowerCase().trim();
+    const isDb = getIsDbConnected();
+
+    if (isProduction && !isDb) {
+      return res.status(503).json({
         success: false,
         data: null,
-        message: 'Please provide an email address.',
+        message: 'Database service is currently unavailable. Please try again shortly.',
       });
     }
 
-    // In production, send real email OTP. For demonstration, we issue a simulated OTP "8899"
+    // Check if account exists without leaking information to caller
+    let user;
+    if (isDb) {
+      user = await db.user.findUnique({ where: { email: normalizedEmail } });
+    } else {
+      user = fallbackStore.users.find(u => u.email.toLowerCase() === normalizedEmail);
+    }
+
+    if (user) {
+      // Generate secure 6-digit random OTP
+      const otp = crypto.randomInt(100000, 999999).toString();
+      const otpHash = await bcrypt.hash(otp, 10);
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes validity
+
+      // Store hashed OTP in database
+      await db.passwordReset.createReset({
+        email: normalizedEmail,
+        otpHash,
+        expiresAt,
+      });
+
+      // In production with email service configured, send via email.
+      // Log to secure server console for deployment audit and testing.
+      console.log(`[AUTH] 📧 Password reset verification code generated for ${normalizedEmail}: ${otp} (expires in 10 minutes)`);
+    }
+
+    // Generic safe response to prevent user enumeration
     return res.status(200).json({
       success: true,
-      data: {
-        email,
-        demoOtp: '8899', // Provided for seamless tester experience
-      },
-      message: `A verification code has been dispatched to ${email}. (Demo OTP: 8899)`,
+      data: null,
+      message: 'If an account exists for this email, a password reset code has been sent.',
     });
   } catch (error) {
     next(error);
@@ -385,35 +443,60 @@ async function forgotPassword(req, res, next) {
 }
 
 /**
- * Reset password with OTP
+ * Reset password with verified OTP
  */
 async function resetPassword(req, res, next) {
   try {
     const { email, otp, newPassword } = resetPasswordSchema.parse(req.body);
+    const normalizedEmail = email.toLowerCase().trim();
+    const isDb = getIsDbConnected();
 
-    if (otp !== '8899' && otp !== '123456') {
-      return res.status(400).json({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
         success: false,
         data: null,
-        message: 'Invalid verification OTP code.',
+        message: 'Database service is currently unavailable. Please try again shortly.',
       });
     }
 
+    // Look up active password reset record
+    const resetRecord = await db.passwordReset.findValid({ email: normalizedEmail });
+    if (!resetRecord) {
+      return res.status(400).json({
+        success: false,
+        data: null,
+        message: 'Invalid or expired verification code. Please request a new code.',
+      });
+    }
+
+    // Verify OTP against stored hash
+    const isMatch = await bcrypt.compare(otp, resetRecord.otp_hash);
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        data: null,
+        message: 'Invalid verification code. Please check and try again.',
+      });
+    }
+
+    // Hash new password
     const salt = await bcrypt.genSalt(12);
     const password_hash = await bcrypt.hash(newPassword, salt);
-    const isDbConnected = getIsPrismaConnected();
 
-    if (isDbConnected && prisma) {
-      await prisma.user.update({
-        where: { email: email.toLowerCase() },
+    if (isDb) {
+      await db.user.update({
+        where: { email: normalizedEmail },
         data: { password_hash },
       });
     } else {
-      const idx = fallbackStore.users.findIndex(u => u.email.toLowerCase() === email.toLowerCase());
+      const idx = fallbackStore.users.findIndex(u => u.email.toLowerCase() === normalizedEmail);
       if (idx !== -1) {
         fallbackStore.users[idx].password_hash = password_hash;
       }
     }
+
+    // Invalidate the reset token (single-use)
+    await db.passwordReset.invalidate({ id: resetRecord.id });
 
     return res.status(200).json({
       success: true,

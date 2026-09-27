@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
-
-const JWT_SECRET = process.env.JWT_SECRET || 'sri_ruthralaya_jwt_access_secret_key_super_secure_2026';
+const { JWT_SECRET } = require('../utils/token');
 
 /**
  * Authenticates request using JWT Bearer token

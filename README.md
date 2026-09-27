@@ -20,10 +20,11 @@
 
 ## 🛠️ Technology Stack
 - **Frontend**: React 18, Vite, Tailwind CSS, Lucide Icons, Recharts, React Router DOM v6, Axios, React Hook Form, Zod, Canvas Confetti
-- **Backend**: Node.js, Express.js, JWT (Access + Refresh tokens with httpOnly cookies), Bcryptjs (12 salt rounds), Helmet, CORS, Express-Rate-Limit, PDFKit
-- **Database & ORM**: PostgreSQL (hosted on Neon DB) + Prisma ORM (with in-memory fallback for local dev & testing)
+- **Backend**: Node.js, Express.js, native `pg` PostgreSQL driver (Connection Pooling with SSL), JWT (Access + Refresh tokens with httpOnly cookies), Bcryptjs (12 salt rounds), Helmet, CORS, Express-Rate-Limit, PDFKit
+- **Database**: PostgreSQL (hosted on Neon DB serverless PostgreSQL)
+- **Database Driver**: Native `pg` (no ORM overhead, direct SQL queries)
 - **AI Engine**: OpenAI API / Anthropic Claude API (with high-fidelity Natyashastra classical fallback engine)
-- **Deployment**: Netlify (Frontend SPA) + Render (Backend Web Service) + Neon (PostgreSQL Database)
+- **Deployment**: Netlify / Vercel (Frontend SPA) + Render (Backend Web Service) + Neon (PostgreSQL Database)
 
 ---
 
@@ -32,22 +33,19 @@
 ```
 Sri Ruthralaya/
 ├── backend/
-│   ├── prisma/
-│   │   ├── schema.prisma        # Prisma Database Models (User, Batch, Attendance, Fee, etc.)
-│   │   └── seed.js              # Database Seeder (Admin, Staff, Batches, Students, Fees, Events)
 │   ├── src/
 │   │   ├── config/
-│   │   │   └── db.js            # Prisma Client singleton with resilient fallback store
+│   │   │   └── db.js            # Native PostgreSQL connection pool & data models
 │   │   ├── controllers/
 │   │   │   ├── aiInsightsController.js # AI trends, risk & recommendation generator
 │   │   │   ├── analyticsController.js  # KPIs, Recharts data & Linear Regression forecast
 │   │   │   ├── attendanceController.js # Attendance marking & CSV bulk upload
-│   │   │   ├── authController.js       # Register, Login, Refresh, Logout, Forgot Password
+│   │   │   ├── authController.js       # Register, Login, Refresh, Logout, Secure OTP Forgot Password
 │   │   │   ├── batchController.js      # Batch & curriculum CRUD
 │   │   │   ├── chatbotController.js    # Public FAQ + Student authenticated query resolver
 │   │   │   ├── eventController.js      # Events management
 │   │   │   ├── feeController.js        # Fee ledger & PDF receipt generator (PDFKit)
-│   │   │   ├── galleryController.js    # Performance photos & video URLs
+│   │   │   ├── galleryController.js    # Performance photos & cloud/file media storage
 │   │   │   ├── noticeController.js     # Audience-targeted notice broadcasts
 │   │   │   └── studentController.js    # Student CRUD & approvals
 │   │   ├── middleware/
@@ -57,7 +55,7 @@ Sri Ruthralaya/
 │   │   ├── routes/              # Versioned API routes (/api/v1/...)
 │   │   ├── utils/
 │   │   │   └── token.js         # JWT access & refresh token utilities
-│   │   └── server.js            # Express server entrypoint
+│   │   └── server.js            # Express server entrypoint & static uploads
 │   ├── .env.example
 │   └── package.json
 │
@@ -84,7 +82,7 @@ Sri Ruthralaya/
 │   │   │   └── StudentLayout.jsx# Disciple portal sidebar layout
 │   │   ├── pages/
 │   │   │   ├── admin/           # Dashboard, Students, Batches, Attendance, Fees, Events, Gallery, Logs
-│   │   │   ├── public/          # Home, About, Courses, Gallery, Events, Testimonials, Contact, Login, Register
+│   │   │   ├── public/          # Home, About, Courses, Gallery, Events, Testimonials, Contact, Login, Register, Forgot Password
 │   │   │   └── student/         # Dashboard, Profile, Attendance, Schedule, Fees, Progress, Notices, Materials
 │   │   ├── services/
 │   │   │   └── api.js           # Axios client with automatic Bearer tokens & 401 refresh
@@ -92,6 +90,7 @@ Sri Ruthralaya/
 │   │   ├── index.css            # Temple theme, Kolam backgrounds, custom scrollbars
 │   │   └── main.jsx
 │   ├── .env.example
+│   ├── .env.development
 │   ├── tailwind.config.js       # Temple color palette & typography tokens
 │   ├── vite.config.js
 │   └── package.json
@@ -101,7 +100,7 @@ Sri Ruthralaya/
 
 ---
 
-## 👥 Seed User Credentials (Demo Access)
+## 👥 User Credentials
 
 | Role | Email | Password | Access Rights |
 | :--- | :--- | :--- | :--- |
@@ -119,10 +118,10 @@ Sri Ruthralaya/
 cd backend
 npm install
 
-# (Optional) If you have a Neon DB connection string:
-# copy .env.example .env and edit DATABASE_URL
-# npx prisma migrate dev
-# npm run seed
+# Configure environment variables in backend/.env:
+# DATABASE_URL=postgresql://<user>:<password>@<neon-host>/neondb?sslmode=require
+# JWT_SECRET=your_jwt_secret
+# JWT_REFRESH_SECRET=your_jwt_refresh_secret
 
 # Run Backend API server (runs on http://localhost:5000)
 npm start
@@ -146,12 +145,7 @@ Visit **http://localhost:5173** to view the application.
 ### Step 1: PostgreSQL on Neon DB
 1. Sign up / log in to [Neon DB](https://neon.tech).
 2. Create a new project (e.g., `sri-ruthralaya-db`).
-3. In the Dashboard, copy the **Pooled connection string** (Format: `postgresql://neondb_owner:***@ep-***-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require`).
-4. In your terminal inside `/backend`:
-   ```bash
-   npx prisma migrate deploy
-   npm run seed
-   ```
+3. In the Dashboard, copy the **Pooled connection string** (Format: `postgresql://neondb_owner:***@ep-***-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require`).
 
 ### Step 2: Backend API on Render
 1. Sign up / log in to [Render](https://render.com).
@@ -160,7 +154,7 @@ Visit **http://localhost:5173** to view the application.
 4. Set the following configuration:
    - **Root Directory**: `backend`
    - **Environment**: `Node`
-   - **Build Command**: `npm install && npx prisma generate`
+   - **Build Command**: `npm install`
    - **Start Command**: `node src/server.js`
 5. Under **Environment Variables**, add:
    - `NODE_ENV`: `production`
@@ -173,8 +167,8 @@ Visit **http://localhost:5173** to view the application.
    - `FRONTEND_URL`: `https://sriruthralaya.netlify.app,https://your-custom-domain.com`
 6. Click **Deploy Web Service** and copy your backend URL (e.g., `https://sri-ruthralaya-api.onrender.com`).
 
-### Step 3: Frontend on Netlify
-1. Sign up / log in to [Netlify](https://netlify.com).
+### Step 3: Frontend on Netlify / Vercel
+1. Sign up / log in to [Netlify](https://netlify.com) or [Vercel](https://vercel.com).
 2. Click **Add new site** → **Import an existing project**.
 3. Select your repository.
 4. Set the build configuration:
@@ -219,3 +213,4 @@ Visit **http://localhost:5173** to view the application.
 - **CSV Attendance Bulk Import**: One-click upload or direct attendance matrix marking.
 - **Curriculum & Batch CRUD**: Modify schedules, fees, and instructors.
 - **Event & Notice Broadcasts**: Push urgent notifications to student dashboards.
+- **Gallery Management**: Upload performance and ceremony media with automatic cloud/local object storage.

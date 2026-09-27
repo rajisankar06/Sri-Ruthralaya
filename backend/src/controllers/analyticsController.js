@@ -1,4 +1,4 @@
-const { prisma, fallbackStore, getIsPrismaConnected, getAdminActivities } = require('../config/db');
+const { db, fallbackStore, getIsDbConnected, isProduction, getAdminActivities } = require('../config/db');
 
 function formatRelativeTime(date) {
   if (!date) return 'Recently';
@@ -20,8 +20,6 @@ function formatRelativeTime(date) {
  * returns next predicted points
  */
 function calculateLinearRegression(dataPoints) {
-
-  // dataPoints: array of numbers [y0, y1, y2, ...]
   const n = dataPoints.length;
   if (n < 2) return dataPoints[0] || 0;
 
@@ -51,7 +49,15 @@ function calculateLinearRegression(dataPoints) {
  */
 async function getAdminAnalytics(req, res, next) {
   try {
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
+
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
 
     let totalStudents = 0;
     let pendingRegistrations = 0;
@@ -111,15 +117,15 @@ async function getAdminAnalytics(req, res, next) {
       { term: 'Term 1 (2026)', enrolled: 102, retained: 99, retentionRate: 97.1 },
     ];
 
-    if (isDb && prisma) {
-      const students = await prisma.user.findMany({ where: { role: 'student' } });
+    if (isDb) {
+      const students = await db.user.findMany({ where: { role: 'student' } });
       totalStudents = students.filter(s => s.status === 'active').length;
       pendingRegistrations = students.filter(s => s.status === 'pending').length;
 
-      const batches = await prisma.batch.findMany();
+      const batches = await db.batch.findMany();
       activeBatches = batches.length;
 
-      const fees = await prisma.fee.findMany();
+      const fees = await db.fee.findMany();
       monthlyRevenue = fees
         .filter(f => f.status === 'paid')
         .reduce((sum, f) => sum + Number(f.amount), 0);
@@ -127,15 +133,13 @@ async function getAdminAnalytics(req, res, next) {
         .filter(f => f.status !== 'paid')
         .reduce((sum, f) => sum + Number(f.amount), 0);
 
-      const attendances = await prisma.attendance.findMany();
+      const attendances = await db.attendance.findMany();
       if (attendances.length > 0) {
         const present = attendances.filter(a => a.status === 'present').length;
         averageAttendance = Math.round((present / attendances.length) * 100);
       }
 
-      const events = await prisma.event.findMany({
-        where: { date: { gte: new Date() } },
-      });
+      const events = await db.event.findMany();
       upcomingEventsCount = events.length;
     } else {
       const students = fallbackStore.users.filter(u => u.role === 'student');
@@ -170,7 +174,6 @@ async function getAdminAnalytics(req, res, next) {
       admin_name: act.admin_name,
       created_at: act.created_at,
     }));
-
 
     return res.status(200).json({
       success: true,

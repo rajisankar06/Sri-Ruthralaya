@@ -9,7 +9,7 @@ This guide details the complete production deployment workflow for the **Sri Rut
 | Component | Recommended Host | Free Tier Available? | Build / Output Settings |
 | :--- | :--- | :--- | :--- |
 | **PostgreSQL Database** | [Neon.tech](https://neon.tech) or [Supabase](https://supabase.com) | ✅ Yes | Direct connection pooler with SSL |
-| **Node.js Express Backend** | [Render.com](https://render.com) or [Railway](https://railway.app) | ✅ Yes | Root: `backend`, Build: `npm install && npm run build`, Start: `npm start` |
+| **Node.js Express Backend** | [Render.com](https://render.com) or [Railway](https://railway.app) | ✅ Yes | Root: `backend`, Build: `npm install`, Start: `npm start` |
 | **React + Vite Frontend** | [Vercel](https://vercel.com) or [Netlify](https://netlify.com) | ✅ Yes | Root: `frontend`, Build: `npm run build`, Output: `dist` |
 
 ---
@@ -114,8 +114,8 @@ Once you have your frontend URL (e.g., `https://sri-ruthralaya.vercel.app`):
 3. Test login:
    - Navigate to `/login`
    - Login with default administrator credentials:
-     - **Email**: `admin@srillaya.edu`
-     - **Password**: `Password123!`
+     - **Email**: `admin@sriruthralaya.com`
+     - **Password**: `Admin@123`
 4. Open the Executive Control Center at `/admin/dashboard`:
    - Verify that the top executive bar indicates `🟢 PostgreSQL Engine Online`.
    - Test adding a student, logging attendance, or publishing an announcement.

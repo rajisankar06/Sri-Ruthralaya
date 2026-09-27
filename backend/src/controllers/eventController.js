@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
+const { db, fallbackStore, getIsDbConnected, isProduction, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
 const eventSchema = z.object({
   title: z.string().min(3),
@@ -14,10 +14,18 @@ const eventSchema = z.object({
  */
 async function getAllEvents(req, res, next) {
   try {
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
 
-    if (isDb && prisma) {
-      const events = await prisma.event.findMany({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
+      const events = await db.event.findMany({
         orderBy: { date: 'asc' },
       });
       return res.status(200).json({ success: true, data: events, message: 'Events retrieved.' });
@@ -36,13 +44,21 @@ async function getAllEvents(req, res, next) {
 async function createEvent(req, res, next) {
   try {
     const validated = eventSchema.parse(req.body);
-    const userId = req.user?.id || 'usr-admin-01';
-    const isDb = getIsPrismaConnected();
+    const userId = req.user?.id || '374a6ea5-21cb-4f19-a436-aa8195e52d74';
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
-    let createdItem;
 
-    if (isDb && prisma) {
-      createdItem = await prisma.event.create({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    let createdItem;
+    if (isDb) {
+      createdItem = await db.event.create({
         data: {
           title: validated.title,
           description: validated.description,
@@ -89,12 +105,20 @@ async function updateEvent(req, res, next) {
   try {
     const { id } = req.params;
     const validated = eventSchema.partial().parse(req.body);
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
-    let updatedItem;
 
-    if (isDb && prisma) {
-      updatedItem = await prisma.event.update({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    let updatedItem;
+    if (isDb) {
+      updatedItem = await db.event.update({
         where: { id },
         data: {
           ...(validated.title && { title: validated.title }),
@@ -110,6 +134,10 @@ async function updateEvent(req, res, next) {
 
       fallbackStore.events[idx] = { ...fallbackStore.events[idx], ...validated };
       updatedItem = fallbackStore.events[idx];
+    }
+
+    if (!updatedItem) {
+      return res.status(404).json({ success: false, data: null, message: 'Event not found.' });
     }
 
     // Record Admin Activity in DB
@@ -134,14 +162,22 @@ async function updateEvent(req, res, next) {
 async function deleteEvent(req, res, next) {
   try {
     const { id } = req.params;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
-    let deletedTitle = id;
 
-    if (isDb && prisma) {
-      const ev = await prisma.event.findUnique({ where: { id } });
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    let deletedTitle = id;
+    if (isDb) {
+      const ev = await db.event.findUnique({ where: { id } });
       if (ev) deletedTitle = ev.title;
-      await prisma.event.delete({ where: { id } });
+      await db.event.delete({ where: { id } });
     } else {
       const idx = fallbackStore.events.findIndex(e => e.id === id);
       if (idx === -1) return res.status(404).json({ success: false, data: null, message: 'Event not found.' });
@@ -171,4 +207,3 @@ module.exports = {
   updateEvent,
   deleteEvent,
 };
-

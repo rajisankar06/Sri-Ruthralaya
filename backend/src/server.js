@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const path = require('path');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 
@@ -12,6 +13,10 @@ const { apiLimiter } = require('./middleware/rateLimiter');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Serve public uploads directory
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Security Middleware
 app.use(helmet({

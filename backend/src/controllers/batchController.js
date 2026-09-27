@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
+const { db, fallbackStore, getIsDbConnected, isProduction, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
 const batchSchema = z.object({
   name: z.string().min(2, 'Batch name required'),
@@ -15,21 +15,21 @@ const batchSchema = z.object({
  */
 async function getAllBatches(req, res, next) {
   try {
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
 
-    if (isDb && prisma) {
-      const batches = await prisma.batch.findMany({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
+      const batches = await db.batch.findMany({
         include: {
-          enrollments: {
-            where: { status: 'active' },
-            include: {
-              student: {
-                select: { id: true, name: true, email: true, phone: true, profile_photo_url: true },
-              },
-            },
-          },
+          enrollments: true,
         },
-        orderBy: { name: 'asc' },
       });
 
       const formatted = batches.map(b => ({
@@ -40,8 +40,8 @@ async function getAllBatches(req, res, next) {
         schedule_days: b.schedule_days,
         schedule_time: b.schedule_time,
         fee_amount: Number(b.fee_amount),
-        studentCount: b.enrollments.length,
-        students: b.enrollments.map(e => e.student),
+        studentCount: (b.enrollments || []).length,
+        students: (b.enrollments || []).map(e => e.student).filter(Boolean),
       }));
 
       return res.status(200).json({
@@ -87,15 +87,21 @@ async function getAllBatches(req, res, next) {
 async function getBatchById(req, res, next) {
   try {
     const { id } = req.params;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
 
-    if (isDb && prisma) {
-      const batch = await prisma.batch.findUnique({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
+      const batch = await db.batch.findUnique({
         where: { id },
         include: {
-          enrollments: {
-            include: { student: true },
-          },
+          enrollments: true,
         },
       });
 
@@ -106,7 +112,7 @@ async function getBatchById(req, res, next) {
         data: {
           ...batch,
           fee_amount: Number(batch.fee_amount),
-          students: batch.enrollments.map(e => e.student),
+          students: (batch.enrollments || []).map(e => e.student).filter(Boolean),
         },
         message: 'Batch retrieved.',
       });
@@ -137,12 +143,20 @@ async function getBatchById(req, res, next) {
 async function createBatch(req, res, next) {
   try {
     const validated = batchSchema.parse(req.body);
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
-    let createdBatch;
 
-    if (isDb && prisma) {
-      createdBatch = await prisma.batch.create({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    let createdBatch;
+    if (isDb) {
+      createdBatch = await db.batch.create({
         data: validated,
       });
     } else {
@@ -180,12 +194,20 @@ async function updateBatch(req, res, next) {
   try {
     const { id } = req.params;
     const validated = batchSchema.partial().parse(req.body);
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
-    let updatedBatch;
 
-    if (isDb && prisma) {
-      updatedBatch = await prisma.batch.update({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    let updatedBatch;
+    if (isDb) {
+      updatedBatch = await db.batch.update({
         where: { id },
         data: validated,
       });
@@ -195,6 +217,10 @@ async function updateBatch(req, res, next) {
 
       fallbackStore.batches[idx] = { ...fallbackStore.batches[idx], ...validated };
       updatedBatch = fallbackStore.batches[idx];
+    }
+
+    if (!updatedBatch) {
+      return res.status(404).json({ success: false, data: null, message: 'Batch not found.' });
     }
 
     await recordAdminActivity({
@@ -222,14 +248,22 @@ async function updateBatch(req, res, next) {
 async function deleteBatch(req, res, next) {
   try {
     const { id } = req.params;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
-    let deletedName = id;
 
-    if (isDb && prisma) {
-      const b = await prisma.batch.findUnique({ where: { id } });
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    let deletedName = id;
+    if (isDb) {
+      const b = await db.batch.findUnique({ where: { id } });
       if (b) deletedName = b.name;
-      await prisma.batch.delete({ where: { id } });
+      await db.batch.delete({ where: { id } });
     } else {
       const idx = fallbackStore.batches.findIndex(b => b.id === id);
       if (idx === -1) return res.status(404).json({ success: false, data: null, message: 'Batch not found.' });
@@ -259,4 +293,3 @@ module.exports = {
   updateBatch,
   deleteBatch,
 };
-

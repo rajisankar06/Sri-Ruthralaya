@@ -7,10 +7,12 @@ const { authenticateToken, requireRole } = require('../middleware/auth');
 router.get('/', authenticateToken, requireRole(['admin', 'staff']), studentController.getAllStudents);
 router.post('/', authenticateToken, requireRole(['admin']), studentController.createStudent);
 router.put('/:id/approve', authenticateToken, requireRole(['admin']), studentController.approveStudent);
+router.patch('/:id/approve', authenticateToken, requireRole(['admin']), studentController.approveStudent);
 router.patch('/:id/status', authenticateToken, requireRole(['admin']), studentController.toggleStudentStatus);
 
 // Student or Admin route
 router.get('/:id', authenticateToken, studentController.getStudentById);
 router.put('/:id', authenticateToken, studentController.updateStudent);
+router.patch('/:id', authenticateToken, studentController.updateStudent);
 
 module.exports = router;

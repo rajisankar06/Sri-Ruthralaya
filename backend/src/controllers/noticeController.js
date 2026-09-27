@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
+const { db, fallbackStore, getIsDbConnected, isProduction, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
 const noticeSchema = z.object({
   title: z.string().min(3),
@@ -16,35 +16,39 @@ const noticeSchema = z.object({
  */
 async function getNotices(req, res, next) {
   try {
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const user = req.user; // from auth or null
 
-    if (isDb && prisma) {
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
       let where = {};
 
       if (user && user.role === 'student') {
-        // Find student's active enrollment
-        const enr = await prisma.enrollment.findFirst({ where: { student_id: user.id } });
+        const enr = await db.enrollment.findFirst({ where: { student_id: user.id } });
         const studentBatchId = enr?.batch_id;
 
-        where = {
-          OR: [
-            { target: 'all' },
-            ...(studentBatchId ? [{ target: 'batch', batch_id: studentBatchId }] : []),
-            { target: 'student', student_id: user.id },
-          ],
-        };
+        const allNotices = await db.notice.findMany();
+        const filtered = allNotices.filter(n => {
+          if (n.target === 'all') return true;
+          if (n.target === 'batch' && studentBatchId && n.batch_id === studentBatchId) return true;
+          if (n.target === 'student' && n.student_id === user.id) return true;
+          return false;
+        });
+
+        return res.status(200).json({ success: true, data: filtered, message: 'Notices retrieved.' });
       } else if (!user) {
-        // Public sees only 'all' target notices
         where = { target: 'all' };
       }
 
-      const notices = await prisma.notice.findMany({
+      const notices = await db.notice.findMany({
         where,
-        include: {
-          batch: { select: { id: true, name: true } },
-          student: { select: { id: true, name: true, email: true } },
-        },
         orderBy: { created_at: 'desc' },
       });
 
@@ -85,12 +89,20 @@ async function getNotices(req, res, next) {
 async function createNotice(req, res, next) {
   try {
     const validated = noticeSchema.parse(req.body);
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
-    let createdNotice;
 
-    if (isDb && prisma) {
-      createdNotice = await prisma.notice.create({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    let createdNotice;
+    if (isDb) {
+      createdNotice = await db.notice.create({
         data: {
           title: validated.title,
           message: validated.message,
@@ -129,14 +141,22 @@ async function createNotice(req, res, next) {
 async function deleteNotice(req, res, next) {
   try {
     const { id } = req.params;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
-    let deletedTitle = id;
 
-    if (isDb && prisma) {
-      const n = await prisma.notice.findUnique({ where: { id } });
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    let deletedTitle = id;
+    if (isDb) {
+      const n = await db.notice.findUnique({ where: { id } });
       if (n) deletedTitle = n.title;
-      await prisma.notice.delete({ where: { id } });
+      await db.notice.delete({ where: { id } });
     } else {
       const idx = fallbackStore.notices.findIndex(n => n.id === id);
       if (idx === -1) return res.status(404).json({ success: false, data: null, message: 'Notice not found.' });
@@ -164,4 +184,3 @@ module.exports = {
   createNotice,
   deleteNotice,
 };
-

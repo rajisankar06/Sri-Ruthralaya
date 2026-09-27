@@ -1,5 +1,5 @@
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
+const { db, queryPg, fallbackStore, getIsDbConnected, isProduction, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
 const markAttendanceSchema = z.object({
   batch_id: z.string(),
@@ -20,19 +20,25 @@ async function markBatchAttendance(req, res, next) {
   try {
     const { batch_id, date, records } = markAttendanceSchema.parse(req.body);
     const dateObj = new Date(date);
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
 
-    if (isDb && prisma) {
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
       const results = [];
       for (const rec of records) {
-        const item = await prisma.attendance.upsert({
+        const item = await db.attendance.upsert({
           where: {
-            student_id_batch_id_date: {
-              student_id: rec.student_id,
-              batch_id,
-              date: dateObj,
-            },
+            student_id: rec.student_id,
+            batch_id,
+            date: dateObj,
           },
           update: {
             status: rec.status,
@@ -111,10 +117,8 @@ async function markBatchAttendance(req, res, next) {
   }
 }
 
-
 /**
  * Bulk upload attendance via CSV data
- * Accepts JSON array parsed from CSV or raw CSV lines: student_email, batch_id, date, status, remarks
  */
 async function bulkUploadCSV(req, res, next) {
   try {
@@ -122,7 +126,6 @@ async function bulkUploadCSV(req, res, next) {
     let parsedRows = rows;
 
     if (!parsedRows && csvData) {
-      // Parse plain CSV text
       const lines = csvData.trim().split(/\r?\n/);
       const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
       parsedRows = lines.slice(1).map(line => {
@@ -143,7 +146,17 @@ async function bulkUploadCSV(req, res, next) {
       });
     }
 
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
+    const adminInfo = getAdminInfoFromReq(req);
+
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
     let processed = 0;
 
     for (const row of parsedRows) {
@@ -156,29 +169,27 @@ async function bulkUploadCSV(req, res, next) {
         : 'present';
       const remarks = row.remarks || 'CSV import';
 
-      if (isDb && prisma) {
+      if (isDb) {
         let student;
         if (studentId) {
-          student = await prisma.user.findUnique({ where: { id: studentId } });
+          student = await db.user.findUnique({ where: { id: studentId } });
         } else if (email) {
-          student = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
+          student = await db.user.findUnique({ where: { email: email.toLowerCase() } });
         }
         if (!student) continue;
 
         let bId = batchId;
         if (!bId) {
-          const enr = await prisma.enrollment.findFirst({ where: { student_id: student.id } });
+          const enr = await db.enrollment.findFirst({ where: { student_id: student.id } });
           bId = enr?.batch_id;
         }
         if (!bId) continue;
 
-        await prisma.attendance.upsert({
+        await db.attendance.upsert({
           where: {
-            student_id_batch_id_date: {
-              student_id: student.id,
-              batch_id: bId,
-              date: new Date(dateStr),
-            },
+            student_id: student.id,
+            batch_id: bId,
+            date: new Date(dateStr),
           },
           update: { status, remarks },
           create: {
@@ -262,21 +273,40 @@ async function getBatchAttendanceByDate(req, res, next) {
       });
     }
 
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const dateStr = date.split('T')[0];
 
-    if (isDb && prisma) {
-      const records = await prisma.attendance.findMany({
-        where: {
-          batch_id,
-          date: new Date(dateStr),
-        },
-        include: {
-          student: {
-            select: { id: true, name: true, email: true, profile_photo_url: true },
-          },
-        },
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
       });
+    }
+
+    if (isDb) {
+      const resQuery = await queryPg(
+        `SELECT a.*, u.id as student_id, u.name as student_name, u.email as student_email, u.profile_photo_url 
+         FROM attendances a 
+         JOIN users u ON a.student_id = u.id 
+         WHERE a.batch_id = $1 AND a.date = $2`,
+        [batch_id, dateStr]
+      );
+
+      const records = resQuery.rows.map(r => ({
+        id: r.id,
+        batch_id: r.batch_id,
+        student_id: r.student_id,
+        date: r.date,
+        status: r.status,
+        remarks: r.remarks,
+        student: {
+          id: r.student_id,
+          name: r.student_name,
+          email: r.student_email,
+          profile_photo_url: r.profile_photo_url,
+        }
+      }));
 
       return res.status(200).json({
         success: true,
@@ -311,14 +341,35 @@ async function getBatchAttendanceByDate(req, res, next) {
 async function getStudentAttendance(req, res, next) {
   try {
     const student_id = req.params.student_id || req.user.id;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
 
-    if (isDb && prisma) {
-      const records = await prisma.attendance.findMany({
-        where: { student_id },
-        include: { batch: { select: { id: true, name: true } } },
-        orderBy: { date: 'desc' },
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
       });
+    }
+
+    if (isDb) {
+      const resQuery = await queryPg(
+        `SELECT a.*, b.name as batch_name 
+         FROM attendances a 
+         LEFT JOIN batches b ON a.batch_id = b.id 
+         WHERE a.student_id = $1 
+         ORDER BY a.date DESC`,
+        [student_id]
+      );
+
+      const records = resQuery.rows.map(r => ({
+        id: r.id,
+        batch_id: r.batch_id,
+        student_id: r.student_id,
+        date: r.date,
+        status: r.status,
+        remarks: r.remarks,
+        batch: { id: r.batch_id, name: r.batch_name },
+      }));
 
       const total = records.length;
       const present = records.filter(r => r.status === 'present').length;

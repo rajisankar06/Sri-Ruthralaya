@@ -1,7 +1,14 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'sri_ruthralaya_jwt_access_secret_key_super_secure_2026';
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'sri_ruthralaya_jwt_refresh_secret_key_super_secure_2026';
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (isProduction && (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET)) {
+  console.error('❌ FATAL: JWT_SECRET and JWT_REFRESH_SECRET environment variables must be defined in production!');
+  process.exit(1);
+}
+
+const JWT_SECRET = process.env.JWT_SECRET || 'dev_only_jwt_access_secret_sri_ruthralaya_2026';
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev_only_jwt_refresh_secret_sri_ruthralaya_2026';
 
 function generateAccessToken(user) {
   return jwt.sign(

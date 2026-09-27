@@ -1,5 +1,8 @@
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
+const { db, fallbackStore, getIsDbConnected, isProduction, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
 const gallerySchema = z.object({
   title: z.string().min(2),
@@ -9,19 +12,106 @@ const gallerySchema = z.object({
 });
 
 /**
+ * Helper to ensure media is saved to cloud or local object storage
+ * and NEVER stored as a huge Base64 string in PostgreSQL
+ */
+async function processMediaStorage(mediaUrl) {
+  if (!mediaUrl) return '/BG1.png';
+
+  // If already a clean relative or absolute URL, use it directly
+  if (!mediaUrl.startsWith('data:')) {
+    return mediaUrl;
+  }
+
+  // If Cloudinary URL is configured in environment
+  if (process.env.CLOUDINARY_URL) {
+    try {
+      const cloudinary = require('cloudinary').v2;
+      const uploadRes = await cloudinary.uploader.upload(mediaUrl, {
+        folder: 'sri_ruthralaya_gallery',
+        resource_type: 'auto',
+      });
+      return uploadRes.secure_url;
+    } catch (err) {
+      console.warn('ℹ️ Cloudinary upload deferred, falling back to local object storage:', err.message);
+    }
+  }
+
+  // Save to backend/public/uploads/gallery
+  try {
+    const matches = mediaUrl.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    if (!matches || matches.length !== 3) {
+      return mediaUrl;
+    }
+    const mimeType = matches[1];
+    const base64Data = matches[2];
+    const buffer = Buffer.from(base64Data, 'base64');
+
+    let ext = 'jpg';
+    if (mimeType.includes('png')) ext = 'png';
+    else if (mimeType.includes('webp')) ext = 'webp';
+    else if (mimeType.includes('mp4')) ext = 'mp4';
+    else if (mimeType.includes('jpeg')) ext = 'jpg';
+
+    const filename = `gal-${Date.now()}-${crypto.randomBytes(4).toString('hex')}.${ext}`;
+    const uploadDir = path.join(__dirname, '../../public/uploads/gallery');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    const filePath = path.join(uploadDir, filename);
+    fs.writeFileSync(filePath, buffer);
+
+    return `/uploads/gallery/${filename}`;
+  } catch (err) {
+    console.error('Failed to save media locally:', err.message);
+    return mediaUrl;
+  }
+}
+
+/**
+ * Dedicated Upload endpoint for media
+ * POST /api/v1/gallery/upload
+ */
+async function uploadMedia(req, res, next) {
+  try {
+    const { media } = req.body;
+    if (!media) {
+      return res.status(400).json({ success: false, data: null, message: 'No media data provided.' });
+    }
+
+    const secureUrl = await processMediaStorage(media);
+    return res.status(200).json({
+      success: true,
+      data: { url: secureUrl },
+      message: 'Media stored successfully.',
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
  * Get all gallery media
  */
 async function getGallery(req, res, next) {
   try {
     const { category, media_type } = req.query;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
 
-    if (isDb && prisma) {
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
       const where = {};
       if (category && category !== 'all') where.category = category;
       if (media_type && media_type !== 'all') where.media_type = media_type;
 
-      const items = await prisma.gallery.findMany({
+      const items = await db.gallery.findMany({
         where,
         orderBy: { uploaded_at: 'desc' },
       });
@@ -45,12 +135,23 @@ async function getGallery(req, res, next) {
 async function addGalleryItem(req, res, next) {
   try {
     const validated = gallerySchema.parse(req.body);
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
-    let createdItem;
 
-    if (isDb && prisma) {
-      createdItem = await prisma.gallery.create({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    // Process media URL to avoid storing massive Base64 strings in PostgreSQL
+    validated.media_url = await processMediaStorage(validated.media_url);
+
+    let createdItem;
+    if (isDb) {
+      createdItem = await db.gallery.create({
         data: validated,
       });
     } else {
@@ -58,6 +159,7 @@ async function addGalleryItem(req, res, next) {
         id: `gal-${Date.now()}`,
         ...validated,
         uploaded_at: new Date(),
+        created_at: new Date(),
       };
       fallbackStore.gallery.unshift(createdItem);
     }
@@ -84,14 +186,22 @@ async function addGalleryItem(req, res, next) {
 async function deleteGalleryItem(req, res, next) {
   try {
     const { id } = req.params;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
-    let deletedTitle = id;
 
-    if (isDb && prisma) {
-      const item = await prisma.gallery.findUnique({ where: { id } });
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    let deletedTitle = id;
+    if (isDb) {
+      const item = await db.gallery.findUnique({ where: { id } });
       if (item) deletedTitle = item.title;
-      await prisma.gallery.delete({ where: { id } });
+      await db.gallery.delete({ where: { id } });
     } else {
       const idx = fallbackStore.gallery.findIndex(g => g.id === id);
       if (idx === -1) return res.status(404).json({ success: false, data: null, message: 'Item not found.' });
@@ -122,12 +232,24 @@ async function updateGalleryItem(req, res, next) {
   try {
     const { id } = req.params;
     const validated = gallerySchema.partial().parse(req.body);
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
-    let updatedItem;
 
-    if (isDb && prisma) {
-      updatedItem = await prisma.gallery.update({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (validated.media_url) {
+      validated.media_url = await processMediaStorage(validated.media_url);
+    }
+
+    let updatedItem;
+    if (isDb) {
+      updatedItem = await db.gallery.update({
         where: { id },
         data: validated,
       });
@@ -136,6 +258,10 @@ async function updateGalleryItem(req, res, next) {
       if (idx === -1) return res.status(404).json({ success: false, data: null, message: 'Item not found.' });
       fallbackStore.gallery[idx] = { ...fallbackStore.gallery[idx], ...validated };
       updatedItem = fallbackStore.gallery[idx];
+    }
+
+    if (!updatedItem) {
+      return res.status(404).json({ success: false, data: null, message: 'Item not found.' });
     }
 
     // Record Admin Activity in DB
@@ -159,5 +285,5 @@ module.exports = {
   addGalleryItem,
   updateGalleryItem,
   deleteGalleryItem,
+  uploadMedia,
 };
-

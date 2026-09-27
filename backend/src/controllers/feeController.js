@@ -1,6 +1,6 @@
 const PDFDocument = require('pdfkit');
 const { z } = require('zod');
-const { prisma, fallbackStore, getIsPrismaConnected, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
+const { db, fallbackStore, getIsDbConnected, isProduction, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
 const feeRecordSchema = z.object({
   student_id: z.string(),
@@ -18,21 +18,23 @@ const feeRecordSchema = z.object({
 async function getAllFees(req, res, next) {
   try {
     const { status, student_id } = req.query;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
 
-    if (isDb && prisma) {
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
       const where = {};
       if (status) where.status = status;
       if (student_id) where.student_id = student_id;
 
-      const fees = await prisma.fee.findMany({
+      const fees = await db.fee.findMany({
         where,
-        include: {
-          student: {
-            select: { id: true, name: true, email: true, phone: true },
-          },
-        },
-        orderBy: { due_date: 'desc' },
       });
 
       const formatted = fees.map(f => ({
@@ -75,12 +77,19 @@ async function getAllFees(req, res, next) {
 async function getMyFees(req, res, next) {
   try {
     const student_id = req.user.id;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
 
-    if (isDb && prisma) {
-      const fees = await prisma.fee.findMany({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
+      const fees = await db.fee.findMany({
         where: { student_id },
-        orderBy: { due_date: 'desc' },
       });
 
       return res.status(200).json({
@@ -107,12 +116,20 @@ async function getMyFees(req, res, next) {
 async function recordFee(req, res, next) {
   try {
     const validated = feeRecordSchema.parse(req.body);
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
-    let createdFee;
 
-    if (isDb && prisma) {
-      createdFee = await prisma.fee.create({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    let createdFee;
+    if (isDb) {
+      createdFee = await db.fee.create({
         data: {
           student_id: validated.student_id,
           amount: validated.amount,
@@ -165,12 +182,20 @@ async function payFee(req, res, next) {
     const { id } = req.params;
     const { payment_ref } = req.body;
     const ref = payment_ref || `UPI-SR-${Math.floor(100000 + Math.random() * 900000)}`;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
-    let feePaid;
 
-    if (isDb && prisma) {
-      feePaid = await prisma.fee.update({
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    let feePaid;
+    if (isDb) {
+      feePaid = await db.fee.update({
         where: { id },
         data: {
           status: 'paid',
@@ -188,6 +213,10 @@ async function payFee(req, res, next) {
       fee.payment_ref = ref;
       fee.receipt_url = `/api/v1/fees/receipt/${id}`;
       feePaid = fee;
+    }
+
+    if (!feePaid) {
+      return res.status(404).json({ success: false, data: null, message: 'Fee record not found.' });
     }
 
     await recordAdminActivity({
@@ -209,21 +238,19 @@ async function payFee(req, res, next) {
   }
 }
 
-
 /**
  * Generate PDF receipt using PDFKit
  */
 async function generateReceiptPDF(req, res, next) {
   try {
     const { id } = req.params;
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     let fee;
     let student;
 
-    if (isDb && prisma) {
-      fee = await prisma.fee.findUnique({
+    if (isDb) {
+      fee = await db.fee.findUnique({
         where: { id },
-        include: { student: true },
       });
       if (fee) student = fee.student;
     } else {
@@ -234,7 +261,6 @@ async function generateReceiptPDF(req, res, next) {
     }
 
     if (!fee) {
-      // Fallback for mock receipt requests
       fee = {
         id,
         amount: 2400.00,

@@ -1,4 +1,4 @@
-const { prisma, fallbackStore, getIsPrismaConnected } = require('../config/db');
+const { db, fallbackStore, getIsDbConnected, isProduction } = require('../config/db');
 
 /**
  * Intelligent Academy Bharatanatyam Knowledge Engine & Data Resolver
@@ -58,74 +58,66 @@ function generateLocalAcademyResponse(message, studentData, academyData) {
   }
 
   if (q.includes('guru') || q.includes('founder') || q.includes('sridevi') || q.includes('qualification')) {
-    return `Guru **Nattiyakalaimani R. Sridevi** is the Founder and Artistic Director of Sri Ruthraalayaa. Holding a Diploma in Dance, the revered title of *Nattiyakalaimani*, and BFA in Dance, she has spent over 18 years nurturing more than 100+ students, conducting sacred Salangai Poojas, Arangetrams, and university grade accreditations.`;
+    return `Our revered founder and artistic director is **Guru Nattiyakalaimani R. Sridevi**. She holds a prestigious Diploma in Dance, the honoured title of *Nattiyakalaimani*, and a Bachelor of Fine Arts (BFA) in Classical Bharatanatyam. She has dedicated over 18 years to training hundreds of disciples in Thiruthangal and Sivakasi.`;
   }
 
-  if (q.includes('admission') || q.includes('enroll') || q.includes('register') || q.includes('join')) {
-    return `Admissions are open for students aged 5 and above! You can register online through our **Register** page. Once submitted, your registration undergoes review and batch assignment by Guru Sridevi. You are also welcome to visit for a trial observation class.`;
+  if (q.includes('arangetram') || q.includes('debut') || q.includes('solo')) {
+    return `An **Arangetram** ('ascending the stage') is the sacred graduation solo recital of a Bharatanatyam disciple, presenting a complete 2.5-hour Margam with live Carnatic orchestra. Guru Sridevi personally guides senior disciples through intensive 1-on-1 Margam rehearsals.`;
   }
 
-  if (q.includes('arangetram') || q.includes('salangai') || q.includes('pooja')) {
-    return `Sri Ruthralaya maintains the highest traditional standards for **Salangai Pooja** (the holy bell blessing ceremony marking readiness for rhythm) and **Arangetram** (the formal solo stage debut with full live orchestral accompaniment: Nattuvangam, Mridangam, Violin, and Carnatic Vocal). We provide complete bespoke guidance on margam choreography and traditional aharya (costuming).`;
+  if (q.includes('salangai') || q.includes('bells') || q.includes('pooja') || q.includes('ghungroo')) {
+    return `The **Salangai Pooja** is an auspicious milestone ceremony where disciples receive their consecrated bronze dancing bells with Guru's blessings, marking their transition from basic Adavu practice to full choreography items.`;
   }
 
-  if (q.includes('adavu') || q.includes('margam') || q.includes('mudra') || q.includes('bharatanatyam') || q.includes('history')) {
-    return `Bharatanatyam is one of the oldest classical dance traditions of India, rooted in the Natyashastra. Training at Sri Ruthralaya begins with foundational Adavus (Tatta, Natta, Kuditta Metta, Teermanam), Asamyuta/Samyuta Hastas (hand mudras), Navarasas (facial abhinaya), and progresses through the classical Margam: Alarippu, Jatiswaram, Shabdam, Varnam, Padam, and Thillana.`;
+  if (q.includes('admission') || q.includes('join') || q.includes('register') || q.includes('enroll') || q.includes('age')) {
+    return `Admissions are open for learners aged 5 and above! Beginners are placed in the **Bala Natya** batch. You can register online directly on this portal by clicking **Join Academy** in the top navigation.`;
   }
 
-  if (q.includes('event') || q.includes('upcoming') || q.includes('programme') || q.includes('annual')) {
-    const evList = academyData.events.map(e => `• **${e.title}**: ${new Date(e.date).toLocaleDateString('en-IN')} at ${e.location}`).join('\n');
-    return `Here are our upcoming temple and auditorium events:\n\n${evList || '• Annual Natyanjali Utsav 2026 (Coming up next month!)'}\n\nStudents and patrons are warmly welcome to participate.`;
-  }
-
-  return `Namaskaram! Welcome to Sri Ruthralaya Bharathanatyam Academy. How may I assist you today? You can ask about our **class batches & timings**, **fee structure**, **Guru Sridevi's 18-year legacy**, **Salangai Pooja / Arangetram preparation**, or **enrollment for beginners and advanced dancers**.`;
+  return `Namaskaram! Welcome to Sri Ruthralaya Bharathanatyam Academy, Thiruthangal. I can assist you with batch schedules, fee structure, Guru Sridevi's credentials, university examinations, or enrollment guidelines. If you are an enrolled student, please sign in to check your attendance and fee records!`;
 }
 
 /**
+ * Handle incoming Chatbot Message
  * POST /api/v1/chatbot/message
- * Handles both public visitor FAQs and authenticated student queries
  */
 async function handleChatbotMessage(req, res, next) {
   try {
     const { message } = req.body;
-    if (!message || typeof message !== 'string') {
-      return res.status(400).json({
-        success: false,
-        data: null,
-        message: 'A message string is required.',
-      });
+    if (!message || message.trim() === '') {
+      return res.status(400).json({ success: false, data: null, message: 'Message text is required.' });
     }
 
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
     const user = req.user; // If student is logged in, populated by optionalAuth middleware
     let studentData = null;
     let academyData = { batches: [], events: [] };
 
     // 1. Fetch Academy Context
-    if (isDb && prisma) {
-      academyData.batches = await prisma.batch.findMany();
-      academyData.events = await prisma.event.findMany({ take: 3, orderBy: { date: 'asc' } });
+    if (isDb) {
+      academyData.batches = await db.batch.findMany();
+      academyData.events = await db.event.findMany({ take: 3, orderBy: { date: 'asc' } });
 
       if (user && user.role === 'student') {
-        const student = await prisma.user.findUnique({
+        const student = await db.user.findUnique({
           where: { id: user.id },
           include: {
-            enrollments: { include: { batch: true } },
-            attendances: { orderBy: { date: 'desc' }, take: 20 },
-            fees: { orderBy: { due_date: 'desc' }, take: 2 },
+            enrollments: true,
+            attendances: true,
+            fees: true,
           },
         });
 
         if (student) {
-          const totalAtt = student.attendances.length;
-          const presentCount = student.attendances.filter(a => a.status === 'present').length;
+          const attendances = student.attendances || [];
+          const totalAtt = attendances.length;
+          const presentCount = attendances.filter(a => a.status === 'present').length;
           studentData = {
             name: student.name,
-            batch: student.enrollments[0]?.batch || null,
+            batch: (student.enrollments && student.enrollments[0]?.batch) || null,
             attendancePct: totalAtt > 0 ? Math.round((presentCount / totalAtt) * 100) : 100,
             totalClasses: totalAtt,
             presentClasses: presentCount,
-            latestFee: student.fees[0] || null,
+            latestFee: (student.fees && student.fees[0]) || null,
           };
         }
       }
@@ -156,10 +148,6 @@ async function handleChatbotMessage(req, res, next) {
 
     let botResponse = '';
 
-    // =========================================================================
-    // TODO: LLM API Integration (OpenAI / Anthropic Claude)
-    // The environment variables OPENAI_API_KEY or ANTHROPIC_API_KEY can be provided.
-    // =========================================================================
     const openAiApiKey = process.env.OPENAI_API_KEY;
     const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
 
@@ -227,15 +215,15 @@ Student Context: ${JSON.stringify(studentData)}`;
       }
     }
 
-    // If no LLM responded or keys were not set, use our local Bharatanatyam knowledge engine
+    // If no LLM responded or keys were not set, use local Bharatanatyam knowledge engine
     if (!botResponse) {
       botResponse = generateLocalAcademyResponse(message, studentData, academyData);
     }
 
     // 3. Log conversation to database (user_id nullable)
     const userId = user?.id || null;
-    if (isDb && prisma) {
-      await prisma.chatbotLog.create({
+    if (isDb) {
+      await db.chatbotLog.create({
         data: {
           user_id: userId,
           message,
@@ -271,16 +259,18 @@ Student Context: ${JSON.stringify(studentData)}`;
  */
 async function getChatbotLogs(req, res, next) {
   try {
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
 
-    if (isDb && prisma) {
-      const logs = await prisma.chatbotLog.findMany({
-        include: {
-          user: {
-            select: { id: true, name: true, email: true, role: true },
-          },
-        },
-        orderBy: { created_at: 'desc' },
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
+      const logs = await db.chatbotLog.findMany({
         take: 100,
       });
 

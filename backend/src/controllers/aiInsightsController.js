@@ -1,4 +1,4 @@
-const { prisma, fallbackStore, getIsPrismaConnected } = require('../config/db');
+const { db, fallbackStore, getIsDbConnected, isProduction } = require('../config/db');
 
 /**
  * POST /api/v1/admin/ai-insights
@@ -6,7 +6,15 @@ const { prisma, fallbackStore, getIsPrismaConnected } = require('../config/db');
  */
 async function generateAiInsights(req, res, next) {
   try {
-    const isDb = getIsPrismaConnected();
+    const isDb = getIsDbConnected();
+
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
 
     // 1. Compute aggregated metrics (strictly anonymized, no PII)
     let totalStudents = 95;
@@ -14,17 +22,17 @@ async function generateAiInsights(req, res, next) {
     let monthlyRevenue = 182000;
     let pendingDues = 22000;
 
-    if (isDb && prisma) {
-      const activeStudents = await prisma.user.count({ where: { role: 'student', status: 'active' } });
+    if (isDb) {
+      const activeStudents = await db.user.count({ where: { role: 'student', status: 'active' } });
       if (activeStudents > 0) totalStudents = activeStudents;
 
-      const attendances = await prisma.attendance.findMany();
+      const attendances = await db.attendance.findMany();
       if (attendances.length > 0) {
         const present = attendances.filter(a => a.status === 'present').length;
         avgAttendance = Math.round((present / attendances.length) * 100);
       }
 
-      const fees = await prisma.fee.findMany();
+      const fees = await db.fee.findMany();
       monthlyRevenue = fees.filter(f => f.status === 'paid').reduce((s, f) => s + Number(f.amount), 0);
       pendingDues = fees.filter(f => f.status !== 'paid').reduce((s, f) => s + Number(f.amount), 0);
     }
@@ -68,10 +76,6 @@ async function generateAiInsights(req, res, next) {
 
     let llmTextResponse = null;
 
-    // =========================================================================
-    // TODO: LLM API Integration (OpenAI or Claude)
-    // Set OPENAI_API_KEY or ANTHROPIC_API_KEY in your Render / .env environment.
-    // =========================================================================
     const openAiApiKey = process.env.OPENAI_API_KEY;
     const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
 

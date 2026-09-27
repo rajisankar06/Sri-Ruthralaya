@@ -9,7 +9,6 @@ export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [demoOtp, setDemoOtp] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,7 +23,6 @@ export default function ForgotPasswordPage() {
     try {
       const res = await api.post('/auth/forgot-password', { email });
       if (res.data.success) {
-        setDemoOtp(res.data.data?.demoOtp || '8899');
         setMessage(res.data.message);
         setStep(2);
       }
@@ -125,12 +123,6 @@ export default function ForgotPasswordPage() {
           </form>
         ) : (
           <form onSubmit={handleResetPassword} className="space-y-4 font-outfit">
-            {demoOtp && (
-              <div className="p-2.5 rounded-lg bg-amber-50 border border-amber-300 text-[11px] text-amber-800 font-cinzel text-center">
-                Demo Verification OTP: <strong>{demoOtp}</strong>
-              </div>
-            )}
-
             <div>
               <label className="block text-xs font-semibold text-stone-700 mb-1 font-cinzel">
                 Verification OTP Code
@@ -140,7 +132,8 @@ export default function ForgotPasswordPage() {
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
                 required
-                placeholder="Enter 4-digit OTP"
+                placeholder="Enter 6-digit OTP"
+                maxLength={6}
                 className="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-xs sm:text-sm focus:outline-none focus:border-temple-gold bg-temple-cream/30 text-center tracking-widest font-bold"
               />
             </div>
