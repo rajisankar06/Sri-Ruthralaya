@@ -1,122 +1,148 @@
 # Sri Ruthralaya Bharathanatyam Academy - Deployment Guide
 
-This guide details the complete production deployment workflow for the **Sri Ruthralaya Bharathanatyam Academy** web platform.
+This guide gives you exact, step-by-step instructions for deploying:
+- **Backend (Node.js Express + Native PostgreSQL)** on **[Render.com](https://render.com)**
+- **Frontend (React + Vite SPA)** on **[Netlify](https://netlify.com)**
+- **Database** on **[Neon.tech](https://neon.tech)**
 
 ---
 
 ## 🏗️ Architecture Overview
 
-| Component | Recommended Host | Free Tier Available? | Build / Output Settings |
-| :--- | :--- | :--- | :--- |
-| **PostgreSQL Database** | [Neon.tech](https://neon.tech) or [Supabase](https://supabase.com) | ✅ Yes | Direct connection pooler with SSL |
-| **Node.js Express Backend** | [Render.com](https://render.com) or [Railway](https://railway.app) | ✅ Yes | Root: `backend`, Build: `npm install`, Start: `npm start` |
-| **React + Vite Frontend** | [Vercel](https://vercel.com) or [Netlify](https://netlify.com) | ✅ Yes | Root: `frontend`, Build: `npm run build`, Output: `dist` |
+```
+[ Visitor / Admin / Student ]
+            │
+            ▼
+┌─────────────────────────┐          API Requests (CORS / Cookies)
+│   Netlify (Frontend)    │ ──────────────────────────────────────────► ┌─────────────────────────┐
+│ https://<site>.netlify.app│                                           │    Render (Backend)     │
+└─────────────────────────┘                                             │ https://<api>.onrender.com│
+                                                                        └───────────┬─────────────┘
+                                                                                    │ Native pg (SSL)
+                                                                                    ▼
+                                                                        ┌─────────────────────────┐
+                                                                        │    Neon PostgreSQL      │
+                                                                        │  (Cloud Serverless DB)  │
+                                                                        └─────────────────────────┘
+```
 
 ---
 
-## Step 1: Provision the PostgreSQL Database (Neon.tech)
+## Part 1: Deploy Backend to Render.com
 
-1. Sign up / Log in to [Neon Console](https://console.neon.tech).
-2. Create a new project:
-   - **Name**: `sri-ruthralaya-db`
-   - **Region**: Select closest to your audience (e.g. `ap-southeast-1` Singapore or `eu-central-1`).
-3. Under **Dashboard > Connection Details**, copy the **Pooled connection string**:
-   ```env
-   postgresql://<user>:<password>@<ep-pooler-domain>.neon.tech/neondb?sslmode=require
-   ```
-4. Keep this connection string ready for Step 2.
-
----
-
-## Step 2: Deploy Backend to Render.com
-
-1. Push your repository to **GitHub** or **GitLab**.
-2. Go to [Render Dashboard](https://dashboard.render.com) and click **New > Web Service**.
-3. Connect your GitHub repository: `rajisankar06/Sri-Ruthralaya`.
+### Step 1.1: Create Web Service on Render
+1. Log in to [Render Dashboard](https://dashboard.render.com).
+2. Click **New +** and select **Web Service**.
+3. Select **Build and deploy from a Git repository** and connect your repository: `rajisankar06/Sri-Ruthralaya`.
 4. Configure service settings:
-   - **Name**: `sri-ruthralaya-api`
-   - **Root Directory**: `backend`
-   - **Environment**: `Node`
-   - **Region**: Choose the same or closest region as your Neon database.
+   - **Name**: `sri-ruthralaya-backend` (or your preferred name)
+   - **Region**: Choose closest to India/Singapore (e.g. `Singapore` or `Frankfurt`)
    - **Branch**: `main`
+   - **Root Directory**: `backend`
+   - **Runtime**: `Node`
    - **Build Command**: `npm install`
    - **Start Command**: `node src/server.js`
-5. Configure **Environment Variables** under the **Environment** tab:
+   - **Instance Type**: `Free`
 
-   | Key | Value / Example | Note |
-   | :--- | :--- | :--- |
-   | `NODE_ENV` | `production` | Enables production security & logging |
-   | `PORT` | `5000` | (Or leave empty, Render assigns automatically) |
-   | `DATABASE_URL` | *Your Neon PostgreSQL connection string* | Must include `?sslmode=require` |
-   | `JWT_SECRET` | *Random 64+ char secret string* | e.g. run `openssl rand -hex 32` |
-   | `JWT_REFRESH_SECRET`| *Different random 64+ char secret* | e.g. run `openssl rand -hex 32` |
-   | `FRONTEND_URL` | `https://sriruthralaya.vercel.app` | *Update with your actual frontend URL* |
-   | `GEMINI_API_KEY` | *AIzaSy...* (optional) | Enables Google Gemini AI chatbot & dashboard insights |
-   | `OPENAI_API_KEY` | *sk-...* (optional) | Fallback AI engine |
+### Step 1.2: Set Backend Environment Variables
+Under the **Environment Variables** section on Render, add these exact keys:
 
-6. Click **Deploy Web Service**.
-   - Render will automatically install packages and launch the server.
-   - Native `pg` connects directly to your Neon database instantly with zero compile steps!
-7. Copy your live backend URL (e.g., `https://sri-ruthralaya-api.onrender.com`).
-   - Test it in your browser: `https://sri-ruthralaya-api.onrender.com/api/v1/health`
+| Key | Value | Description |
+| :--- | :--- | :--- |
+| `NODE_ENV` | `production` | Enables production security, CORS, and logging |
+| `PORT` | `5000` | Server port (Render will also automatically route traffic) |
+| `DATABASE_URL` | *Your Neon PostgreSQL connection string* | e.g. `postgresql://neondb_owner:password@ep-xxx.neon.tech/neondb?sslmode=require` |
+| `JWT_SECRET` | *Strong 64+ char random string* | Used to sign access tokens |
+| `JWT_REFRESH_SECRET` | *Strong 64+ char random string* | Used to sign refresh tokens |
+| `FRONTEND_URL` | `https://sri-ruthralaya.netlify.app` | *Update with your actual Netlify domain after Part 2* |
+| `GEMINI_API_KEY` | *Your Google Gemini API Key* | (Optional) Enables live Gemini AI chatbot & insights |
+| `OPENAI_API_KEY` | *(Optional)* | Fallback AI provider |
+| `ANTHROPIC_API_KEY` | *(Optional)* | Fallback AI provider |
+| `CLOUDINARY_URL` | *(Optional)* | Cloud media storage (defaults to local `/uploads` if not set) |
+
+> [!TIP]
+> The backend server has intelligent CORS matching that automatically supports `.netlify.app` subdomains and deploy preview URLs.
+
+### Step 1.3: Deploy and Copy Backend URL
+1. Click **Deploy Web Service**.
+2. Wait 1–2 minutes for the build to finish.
+3. Test your health check endpoint in the browser:
+   `https://<your-render-app-name>.onrender.com/api/v1/health`
+   You should see:
+   ```json
+   {
+     "success": true,
+     "data": {
+       "status": "healthy",
+       "database": "connected"
+     }
+   }
+   ```
+4. Copy your backend URL: `https://<your-render-app-name>.onrender.com`.
 
 ---
 
-## Step 3: Deploy Frontend to Vercel (or Netlify)
+## Part 2: Deploy Frontend to Netlify
 
-### Option A: Vercel (Recommended)
+The repository includes both root `netlify.toml`, `frontend/netlify.toml`, and `_redirects` for automatic SPA client-side routing.
 
-1. Go to [Vercel Dashboard](https://vercel.com) and click **Add New > Project**.
-2. Select your repository `Sri-Ruthralaya`.
-3. In **Project Configuration**:
-   - **Framework Preset**: `Vite`
-   - **Root Directory**: Click *Edit* and select `frontend`.
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
-4. Expand **Environment Variables** and add:
-   - `VITE_API_BASE_URL`: `https://sri-ruthralaya-api.onrender.com/api/v1`
-   - `VITE_APP_NAME`: `Sri Ruthralaya Bharathanatyam Academy`
-   - `VITE_ACADEMY_PHONE`: `+91 98421 23456`
-   - `VITE_ACADEMY_LOCATION`: `Thiruthangal near Sivakasi, Tamil Nadu`
-5. Click **Deploy**.
-6. When deployment finishes, copy the live URL (e.g., `https://sri-ruthralaya.vercel.app`).
-
-### Option B: Netlify
-
-1. Go to [Netlify Dashboard](https://app.netlify.com) and click **Add new site > Import an existing project**.
-2. Select your GitHub repository.
-3. Configuration:
+### Step 2.1: Create Site on Netlify
+1. Log in to [Netlify Dashboard](https://app.netlify.com).
+2. Click **Add new site** > **Import an existing project**.
+3. Select **GitHub** and authorize access to `rajisankar06/Sri-Ruthralaya`.
+4. Configure site build settings:
    - **Base directory**: `frontend`
    - **Build command**: `npm run build`
-   - **Publish directory**: `frontend/dist`
-4. Under **Site configuration > Environment variables**, add:
-   - `VITE_API_BASE_URL`: `https://sri-ruthralaya-api.onrender.com/api/v1`
-5. Click **Deploy Site**. The included `frontend/public/_redirects` ensures SPA client-side routing works smoothly.
+   - **Publish directory**: `dist` (or `frontend/dist`)
+   - **Production branch**: `main`
+
+### Step 2.2: Add Environment Variables in Netlify
+Before clicking Deploy, click **Add environment variables** (or configure them under **Site configuration > Environment variables**):
+
+| Key | Value |
+| :--- | :--- |
+| `VITE_API_BASE_URL` | `https://<your-render-app-name>.onrender.com/api/v1` |
+| `VITE_APP_NAME` | `Sri Ruthralaya Bharathanatyam Academy` |
+| `VITE_ACADEMY_PHONE` | `+91 98421 23456` |
+| `VITE_ACADEMY_LOCATION` | `Thiruthangal near Sivakasi, Tamil Nadu` |
+
+> [!IMPORTANT]
+> Make sure `VITE_API_BASE_URL` ends with `/api/v1` and points to your Render backend URL.
+
+### Step 2.3: Deploy Site
+1. Click **Deploy Site**.
+2. Netlify will build the Vite bundle (usually takes ~30 seconds).
+3. Once deployed, Netlify will provide your site URL: `https://<random-name>.netlify.app` (e.g., `https://sri-ruthralaya.netlify.app`).
+4. (Optional) Go to **Site configuration > Domain management** to change the site name to `sri-ruthralaya` or add a custom domain.
 
 ---
 
-## Step 4: Finalize CORS Configuration
+## Part 3: Connect Frontend & Backend (Final CORS Step)
 
-Once you have your frontend URL (e.g., `https://sri-ruthralaya.vercel.app`):
-1. Return to **Render > sri-ruthralaya-api > Environment**.
-2. Update `FRONTEND_URL`:
+1. Return to your **Render Dashboard** > **sri-ruthralaya-backend** > **Environment**.
+2. Update the `FRONTEND_URL` variable with your actual Netlify URL:
    ```env
-   FRONTEND_URL="https://sri-ruthralaya.vercel.app,http://localhost:5173"
+   FRONTEND_URL="https://your-site-name.netlify.app,http://localhost:5173"
    ```
-3. Click **Save Changes** (Render will automatically redeploy).
+3. Click **Save Changes**. Render will automatically redeploy the backend with the new configuration.
 
 ---
 
-## Step 5: Verification & Smoke Test
+## Part 4: Verification & Smoke Test
 
-1. Visit your live frontend URL.
-2. Verify public pages:
-   - Home, About Guru, Courses, Gallery, Contact.
-3. Test login:
-   - Navigate to `/login`
-   - Login with default administrator credentials:
-     - **Email**: `admin@sriruthralaya.com`
-     - **Password**: `Admin@123`
-4. Open the Executive Control Center at `/admin/dashboard`:
-   - Verify that the top executive bar indicates `🟢 PostgreSQL Engine Online`.
-   - Test adding a student, logging attendance, or publishing an announcement.
+1. Open your Netlify site URL in your browser.
+2. Check public pages:
+   - **Home**: Banner, batches, cultural philosophy, upcoming events.
+   - **About Guru**: Credentials of Guru Nattiyakalaimani R. Sridevi.
+   - **Courses / Batches**: Fee structure, schedules.
+   - **Gallery**: Photo & video showcase.
+   - **Chatbot**: Click the bottom-right floating icon and ask `"What are the class timings?"` or `"Tell me about Guru Sridevi"`.
+3. Test Administrator Login:
+   - Go to `/login`.
+   - Email: `admin@sriruthralaya.com`
+   - Password: `Admin@123`
+   - Go to `/admin/dashboard`.
+   - Verify that the status pill shows `🟢 PostgreSQL Engine Online`.
+   - Test approving a student or recording an attendance entry.
+4. Test Student Portal:
+   - Disciples can log in with their email to view personal attendance percentages, fee receipts, and batch timings.
