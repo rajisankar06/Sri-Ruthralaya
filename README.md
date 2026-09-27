@@ -162,6 +162,7 @@ Visit **http://localhost:5173** to view the application.
    - `DATABASE_URL`: `your_neon_pooled_connection_string`
    - `JWT_SECRET`: `your_secure_jwt_access_secret`
    - `JWT_REFRESH_SECRET`: `your_secure_jwt_refresh_secret`
+   - `GEMINI_API_KEY`: *(Optional - for live Google Gemini AI chatbot & insights)*
    - `OPENAI_API_KEY`: *(Optional - for live OpenAI GPT calls)*
    - `ANTHROPIC_API_KEY`: *(Optional - for live Claude calls)*
    - `FRONTEND_URL`: `https://sriruthralaya.netlify.app,https://your-custom-domain.com`

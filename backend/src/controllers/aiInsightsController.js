@@ -76,8 +76,7 @@ async function generateAiInsights(req, res, next) {
 
     let llmTextResponse = null;
 
-    const openAiApiKey = process.env.OPENAI_API_KEY;
-    const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+    const { generateGeminiContent } = require('../utils/gemini');
 
     const promptInstructions = `Analyze this academy's monthly data and summarize:
 1. 3 key positive trends (e.g. enrollment acceleration, high senior batch dedication, retention)
@@ -86,56 +85,81 @@ async function generateAiInsights(req, res, next) {
 
 Data: ${JSON.stringify(aggregatedStats)}`;
 
-    if (openAiApiKey && openAiApiKey.trim() !== '') {
-      try {
-        const resp = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${openAiApiKey}`,
-          },
-          body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            messages: [
-              {
-                role: 'system',
-                content: 'You are an expert executive arts management and traditional dance academy consultant.',
-              },
-              { role: 'user', content: promptInstructions },
-            ],
-            temperature: 0.6,
-          }),
-        });
-
-        if (resp.ok) {
-          const json = await resp.json();
-          llmTextResponse = json.choices?.[0]?.message?.content;
-        }
-      } catch (e) {
-        console.warn('OpenAI AI insights call error:', e.message);
+    // 1. Try Google Gemini API
+    try {
+      const geminiSummary = await generateGeminiContent({
+        systemPrompt: 'You are an expert executive arts management and traditional dance academy consultant.',
+        userMessage: promptInstructions,
+        maxTokens: 600,
+        temperature: 0.6,
+      });
+      if (geminiSummary) {
+        llmTextResponse = geminiSummary;
       }
-    } else if (anthropicApiKey && anthropicApiKey.trim() !== '') {
-      try {
-        const resp = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': anthropicApiKey,
-            'anthropic-version': '2023-06-01',
-          },
-          body: JSON.stringify({
-            model: 'claude-3-haiku-20240307',
-            max_tokens: 600,
-            messages: [{ role: 'user', content: promptInstructions }],
-          }),
-        });
+    } catch (e) {
+      console.warn('Gemini AI insights call error:', e.message);
+    }
 
-        if (resp.ok) {
-          const json = await resp.json();
-          llmTextResponse = json.content?.[0]?.text;
+    // 2. Try OpenAI if Gemini didn't return and key is present
+    if (!llmTextResponse) {
+      const openAiApiKey = process.env.OPENAI_API_KEY;
+      if (openAiApiKey && openAiApiKey.trim() !== '') {
+        try {
+          const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${openAiApiKey}`,
+            },
+            body: JSON.stringify({
+              model: 'gpt-4o-mini',
+              messages: [
+                {
+                  role: 'system',
+                  content: 'You are an expert executive arts management and traditional dance academy consultant.',
+                },
+                { role: 'user', content: promptInstructions },
+              ],
+              temperature: 0.6,
+            }),
+          });
+
+          if (resp.ok) {
+            const json = await resp.json();
+            llmTextResponse = json.choices?.[0]?.message?.content;
+          }
+        } catch (e) {
+          console.warn('OpenAI AI insights call error:', e.message);
         }
-      } catch (e) {
-        console.warn('Anthropic AI insights call error:', e.message);
+      }
+    }
+
+    // 3. Try Anthropic Claude
+    if (!llmTextResponse) {
+      const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+      if (anthropicApiKey && anthropicApiKey.trim() !== '') {
+        try {
+          const resp = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': anthropicApiKey,
+              'anthropic-version': '2023-06-01',
+            },
+            body: JSON.stringify({
+              model: 'claude-3-haiku-20240307',
+              max_tokens: 600,
+              messages: [{ role: 'user', content: promptInstructions }],
+            }),
+          });
+
+          if (resp.ok) {
+            const json = await resp.json();
+            llmTextResponse = json.content?.[0]?.text;
+          }
+        } catch (e) {
+          console.warn('Anthropic AI insights call error:', e.message);
+        }
       }
     }
 

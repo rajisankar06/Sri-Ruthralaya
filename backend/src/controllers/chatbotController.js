@@ -148,12 +148,9 @@ async function handleChatbotMessage(req, res, next) {
 
     let botResponse = '';
 
-    const openAiApiKey = process.env.OPENAI_API_KEY;
-    const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+    const { generateGeminiContent } = require('../utils/gemini');
 
-    if (openAiApiKey && openAiApiKey.trim() !== '') {
-      try {
-        const systemPrompt = `You are the knowledgeable, polite AI Assistant for "Sri Ruthralaya Bharathanatyam Academy" (Sri Ruthraalayaa) in Thiruthangal near Sivakasi, Tamil Nadu, founded by Guru Nattiyakalaimani R. Sridevi (Diploma in Dance, Title of Nattiyakalaimani, BFA in Dance).
+    const systemPrompt = `You are the knowledgeable, polite AI Assistant for "Sri Ruthralaya Bharathanatyam Academy" (Sri Ruthraalayaa) in Thiruthangal near Sivakasi, Tamil Nadu, founded by Guru Nattiyakalaimani R. Sridevi (Diploma in Dance, Title of Nattiyakalaimani, BFA in Dance).
 Academy Context:
 - Batches: ${JSON.stringify(academyData.batches)}
 - Upcoming Events: ${JSON.stringify(academyData.events)}
@@ -161,57 +158,80 @@ ${studentData ? `- Authenticated Student Information: Name: ${studentData.name},
 
 Answer questions with warmth, cultural reverence, and precision. If answering student questions about attendance or fees, use the exact numbers provided in their context. Keep replies concise and formatted in markdown.`;
 
-        const openAiRes = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${openAiApiKey}`,
-          },
-          body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: message },
-            ],
-            temperature: 0.7,
-            max_tokens: 300,
-          }),
-        });
-
-        if (openAiRes.ok) {
-          const aiJson = await openAiRes.json();
-          botResponse = aiJson.choices?.[0]?.message?.content || '';
-        }
-      } catch (err) {
-        console.warn('OpenAI API call failed, falling back to local engine:', err.message);
+    // 1. Try Google Gemini API (Primary)
+    try {
+      const geminiReply = await generateGeminiContent({
+        systemPrompt,
+        userMessage: message,
+        maxTokens: 350,
+        temperature: 0.7,
+      });
+      if (geminiReply) {
+        botResponse = geminiReply;
       }
-    } else if (anthropicApiKey && anthropicApiKey.trim() !== '') {
-      try {
-        const systemPrompt = `You are the AI Assistant for Sri Ruthralaya Bharathanatyam Academy in Thiruthangal, Tamil Nadu, led by Guru Nattiyakalaimani R. Sridevi.
-Academy Context: ${JSON.stringify(academyData)}
-Student Context: ${JSON.stringify(studentData)}`;
+    } catch (err) {
+      console.warn('Gemini API call error:', err.message);
+    }
 
-        const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': anthropicApiKey,
-            'anthropic-version': '2023-06-01',
-          },
-          body: JSON.stringify({
-            model: 'claude-3-haiku-20240307',
-            system: systemPrompt,
-            messages: [{ role: 'user', content: message }],
-            max_tokens: 300,
-          }),
-        });
+    // 2. Try OpenAI if Gemini didn't answer and key is provided
+    if (!botResponse) {
+      const openAiApiKey = process.env.OPENAI_API_KEY;
+      if (openAiApiKey && openAiApiKey.trim() !== '') {
+        try {
+          const openAiRes = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${openAiApiKey}`,
+            },
+            body: JSON.stringify({
+              model: 'gpt-4o-mini',
+              messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: message },
+              ],
+              temperature: 0.7,
+              max_tokens: 300,
+            }),
+          });
 
-        if (anthropicRes.ok) {
-          const aiJson = await anthropicRes.json();
-          botResponse = aiJson.content?.[0]?.text || '';
+          if (openAiRes.ok) {
+            const aiJson = await openAiRes.json();
+            botResponse = aiJson.choices?.[0]?.message?.content || '';
+          }
+        } catch (err) {
+          console.warn('OpenAI API call failed, falling back to local engine:', err.message);
         }
-      } catch (err) {
-        console.warn('Anthropic API call failed, falling back to local engine:', err.message);
+      }
+    }
+
+    // 3. Try Anthropic Claude if still no response
+    if (!botResponse) {
+      const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+      if (anthropicApiKey && anthropicApiKey.trim() !== '') {
+        try {
+          const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': anthropicApiKey,
+              'anthropic-version': '2023-06-01',
+            },
+            body: JSON.stringify({
+              model: 'claude-3-haiku-20240307',
+              system: systemPrompt,
+              messages: [{ role: 'user', content: message }],
+              max_tokens: 300,
+            }),
+          });
+
+          if (anthropicRes.ok) {
+            const aiJson = await anthropicRes.json();
+            botResponse = aiJson.content?.[0]?.text || '';
+          }
+        } catch (err) {
+          console.warn('Anthropic API call failed, falling back to local engine:', err.message);
+        }
       }
     }
 

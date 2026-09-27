@@ -51,7 +51,8 @@ This guide details the complete production deployment workflow for the **Sri Rut
    | `JWT_SECRET` | *Random 64+ char secret string* | e.g. run `openssl rand -hex 32` |
    | `JWT_REFRESH_SECRET`| *Different random 64+ char secret* | e.g. run `openssl rand -hex 32` |
    | `FRONTEND_URL` | `https://sriruthralaya.vercel.app` | *Update with your actual frontend URL* |
-   | `OPENAI_API_KEY` | *sk-...* (optional) | Enables AI chatbot & dashboard insights |
+   | `GEMINI_API_KEY` | *AIzaSy...* (optional) | Enables Google Gemini AI chatbot & dashboard insights |
+   | `OPENAI_API_KEY` | *sk-...* (optional) | Fallback AI engine |
 
 6. Click **Deploy Web Service**.
    - Render will automatically install packages and launch the server.
