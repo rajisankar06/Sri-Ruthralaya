@@ -34,7 +34,7 @@ export default function StudentDashboard() {
         setStudentData({
           profile: profileRes.data?.data || user,
           fees: feeRes.data?.data || [],
-          attendance: attRes.data?.data || { stats: { attendancePercentage: 92, total: 15, present: 14 } },
+          attendance: attRes.data?.data || { stats: { attendancePercentage: 100, total: 0, present: 0, absent: 0 } },
         });
       } catch (err) {
         console.warn('Student dashboard data fallback:', err.message);
@@ -52,7 +52,10 @@ export default function StudentDashboard() {
     schedule_time: '05:30 PM - 07:00 PM',
   };
 
-  const attPct = studentData?.attendance?.stats?.attendancePercentage || 93;
+  const attStats = studentData?.attendance?.stats;
+  const attTotal = attStats?.total ?? 0;
+  const attPresent = attStats?.present ?? 0;
+  const attPct = attStats?.attendancePercentage ?? 100;
   const latestFee = studentData?.fees?.[0] || {
     status: 'paid',
     amount: 2400,
@@ -91,9 +94,10 @@ export default function StudentDashboard() {
           <div className="flex items-center gap-3">
             <Link
               to="/student/attendance"
-              className="px-5 py-2.5 rounded-xl bg-[#d4af37] text-[#111111] font-cinzel font-bold text-xs uppercase tracking-wider shadow hover:bg-[#ffd700] hover:scale-105 transition-all"
+              className="px-5 py-2.5 rounded-xl bg-[#d4af37] text-[#111111] font-cinzel font-bold text-xs uppercase tracking-wider shadow hover:bg-[#ffd700] hover:scale-105 transition-all flex items-center gap-2"
             >
-              Attendance View
+              <CalendarCheck className="w-4 h-4 text-[#111111]" />
+              <span>Live Sadhana Records</span>
             </Link>
           </div>
         </div>
@@ -112,11 +116,13 @@ export default function StudentDashboard() {
               <span className="font-cinzel font-bold text-3xl text-white">
                 {attPct}%
               </span>
-              <span className="text-xs text-emerald-400 font-semibold">
-                (Punctual)
+              <span className={`text-xs font-semibold ${attPct >= 85 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                {attTotal === 0 ? '(Enrolled)' : attPct >= 85 ? '(Punctual)' : '(Action Needed)'}
               </span>
             </div>
-            <p className="text-[11px] text-[#666666] mt-1">Target: &gt; 85% for exams</p>
+            <p className="text-[11px] text-[#888888] mt-1">
+              {attTotal > 0 ? `${attPresent} of ${attTotal} sessions attended` : 'Target: > 85% for exams'}
+            </p>
           </div>
           <div className="p-3.5 rounded-2xl bg-[#1a1a1a] text-[#d4af37] border border-[#333333] group-hover:border-[#d4af37]/60 group-hover:scale-105 transition-all">
             <CalendarCheck className="w-6 h-6 text-[#d4af37]" />

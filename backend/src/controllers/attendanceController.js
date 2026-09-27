@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const { z } = require('zod');
 const { db, queryPg, fallbackStore, getIsDbConnected, isProduction, recordAdminActivity, getAdminInfoFromReq } = require('../config/db');
 
@@ -12,14 +13,14 @@ const markAttendanceSchema = z.object({
     })
   ),
 });
-
+zx
 /**
  * Mark attendance for an entire batch on a specific date
  */
 async function markBatchAttendance(req, res, next) {
   try {
     const { batch_id, date, records } = markAttendanceSchema.parse(req.body);
-    const dateObj = new Date(date);
+    const dateStr = date.split('T')[0];
     const isDb = getIsDbConnected();
     const adminInfo = getAdminInfoFromReq(req);
 
@@ -38,7 +39,7 @@ async function markBatchAttendance(req, res, next) {
           where: {
             student_id: rec.student_id,
             batch_id,
-            date: dateObj,
+            date: dateStr,
           },
           update: {
             status: rec.status,
@@ -47,7 +48,7 @@ async function markBatchAttendance(req, res, next) {
           create: {
             student_id: rec.student_id,
             batch_id,
-            date: dateObj,
+            date: dateStr,
             status: rec.status,
             remarks: rec.remarks || null,
           },
@@ -286,10 +287,11 @@ async function getBatchAttendanceByDate(req, res, next) {
 
     if (isDb) {
       const resQuery = await queryPg(
-        `SELECT a.*, u.id as student_id, u.name as student_name, u.email as student_email, u.profile_photo_url 
+        `SELECT a.id, a.batch_id, a.student_id, a.status, a.remarks, to_char(a.date, 'YYYY-MM-DD') as date_str, a.date,
+                u.name as student_name, u.email as student_email, u.profile_photo_url 
          FROM attendances a 
          JOIN users u ON a.student_id = u.id 
-         WHERE a.batch_id = $1 AND a.date = $2`,
+         WHERE a.batch_id = $1 AND a.date = $2::date`,
         [batch_id, dateStr]
       );
 
@@ -297,7 +299,7 @@ async function getBatchAttendanceByDate(req, res, next) {
         id: r.id,
         batch_id: r.batch_id,
         student_id: r.student_id,
-        date: r.date,
+        date: r.date_str || (r.date instanceof Date ? r.date.toISOString().split('T')[0] : String(r.date).split('T')[0]),
         status: r.status,
         remarks: r.remarks,
         student: {
@@ -342,6 +344,7 @@ async function getStudentAttendance(req, res, next) {
   try {
     const student_id = req.params.student_id || req.user.id;
     const isDb = getIsDbConnected();
+    const todayStr = new Date().toISOString().split('T')[0];
 
     if (isProduction && !isDb) {
       return res.status(503).json({
@@ -353,7 +356,10 @@ async function getStudentAttendance(req, res, next) {
 
     if (isDb) {
       const resQuery = await queryPg(
-        `SELECT a.*, b.name as batch_name 
+        `SELECT a.id, a.batch_id, a.student_id, a.status, a.remarks, a.created_at,
+                to_char(a.date, 'YYYY-MM-DD') as date_str,
+                a.date,
+                b.name as batch_name, b.schedule_days, b.schedule_time 
          FROM attendances a 
          LEFT JOIN batches b ON a.batch_id = b.id 
          WHERE a.student_id = $1 
@@ -365,10 +371,16 @@ async function getStudentAttendance(req, res, next) {
         id: r.id,
         batch_id: r.batch_id,
         student_id: r.student_id,
-        date: r.date,
+        date: r.date_str || (r.date instanceof Date ? r.date.toISOString().split('T')[0] : String(r.date).split('T')[0]),
+        raw_date: r.date,
         status: r.status,
         remarks: r.remarks,
-        batch: { id: r.batch_id, name: r.batch_name },
+        batch: {
+          id: r.batch_id,
+          name: r.batch_name,
+          schedule_days: r.schedule_days,
+          schedule_time: r.schedule_time
+        },
       }));
 
       const total = records.length;
@@ -377,11 +389,14 @@ async function getStudentAttendance(req, res, next) {
       const absent = records.filter(r => r.status === 'absent').length;
       const pct = total > 0 ? Math.round(((present + late * 0.5) / total) * 100) : 100;
 
+      const todayRecord = records.find(r => r.date === todayStr);
+
       return res.status(200).json({
         success: true,
         data: {
           records,
           stats: { total, present, late, absent, attendancePercentage: pct },
+          todayRecord: todayRecord || null,
         },
         message: 'Student attendance retrieved.',
       });
@@ -400,13 +415,116 @@ async function getStudentAttendance(req, res, next) {
       const absent = records.filter(r => r.status === 'absent').length;
       const pct = total > 0 ? Math.round(((present + late * 0.5) / total) * 100) : 92;
 
+      const todayRecord = records.find(r => r.date === todayStr);
+
       return res.status(200).json({
         success: true,
         data: {
           records,
           stats: { total, present, late, absent, attendancePercentage: pct },
+          todayRecord: todayRecord || null,
         },
         message: 'Student attendance retrieved.',
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * Student self check-in / live attendance record for today's sadhana
+ */
+async function studentSelfCheckIn(req, res, next) {
+  try {
+    const student_id = req.user.id;
+    const isDb = getIsDbConnected();
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    if (isProduction && !isDb) {
+      return res.status(503).json({
+        success: false,
+        data: null,
+        message: 'Database service is currently unavailable. Please try again shortly.',
+      });
+    }
+
+    if (isDb) {
+      // Find active batch enrollment
+      const enrRes = await queryPg(
+        `SELECT e.batch_id, b.name as batch_name 
+         FROM enrollments e 
+         JOIN batches b ON e.batch_id = b.id 
+         WHERE e.student_id = $1 AND e.status = 'active' 
+         LIMIT 1`,
+        [student_id]
+      );
+
+      let batch_id;
+      if (enrRes.rows[0]) {
+        batch_id = enrRes.rows[0].batch_id;
+      } else {
+        const defaultBatch = await queryPg("SELECT id FROM batches LIMIT 1");
+        batch_id = defaultBatch.rows[0]?.id;
+      }
+
+      if (!batch_id) {
+        return res.status(400).json({
+          success: false,
+          data: null,
+          message: 'No active dance batch enrollment found for your account. Please contact academy admin.',
+        });
+      }
+
+      // Check if attendance already marked today
+      const existing = await queryPg(
+        `SELECT id, status, remarks, to_char(date, 'YYYY-MM-DD') as date_str 
+         FROM attendances 
+         WHERE student_id = $1 AND date = $2 LIMIT 1`,
+        [student_id, todayStr]
+      );
+
+      if (existing.rows.length > 0) {
+        return res.status(200).json({
+          success: true,
+          data: existing.rows[0],
+          alreadyMarked: true,
+          message: `Your sadhana attendance for today (${todayStr}) is already recorded as "${existing.rows[0].status}".`,
+        });
+      }
+
+      const newId = crypto.randomUUID();
+      const insertRes = await queryPg(
+        `INSERT INTO attendances (id, student_id, batch_id, date, status, remarks, created_at) 
+         VALUES ($1, $2, $3, $4, 'present', 'Live Disciple Check-In via Student Portal', NOW()) 
+         RETURNING id, student_id, batch_id, status, remarks, to_char(date, 'YYYY-MM-DD') as date_str, created_at`,
+        [newId, student_id, batch_id, todayStr]
+      );
+
+      return res.status(201).json({
+        success: true,
+        data: insertRes.rows[0],
+        alreadyMarked: false,
+        message: 'Sadhana presence recorded live! Keep up the rhythm and dedication.',
+      });
+    } else {
+      const batch = fallbackStore.batches[0];
+      const newAtt = {
+        id: `att-self-${Date.now()}`,
+        student_id,
+        batch_id: batch?.id || 'batch-1',
+        date: todayStr,
+        status: 'present',
+        remarks: 'Live Disciple Check-In via Student Portal',
+        created_at: new Date(),
+      };
+      fallbackStore.attendances.push(newAtt);
+
+      return res.status(201).json({
+        success: true,
+        data: newAtt,
+        alreadyMarked: false,
+        message: 'Sadhana presence recorded live! Keep up the rhythm and dedication.',
       });
     }
   } catch (error) {
@@ -419,4 +537,5 @@ module.exports = {
   bulkUploadCSV,
   getBatchAttendanceByDate,
   getStudentAttendance,
+  studentSelfCheckIn,
 };

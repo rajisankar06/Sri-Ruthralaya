@@ -3,9 +3,10 @@ const router = express.Router();
 const attendanceController = require('../controllers/attendanceController');
 const { authenticateToken, requireRole } = require('../middleware/auth');
 
-// Student attendance history (authenticated)
+// Student attendance history & live check-in (authenticated)
 router.get('/student', authenticateToken, attendanceController.getStudentAttendance);
 router.get('/student/:student_id', authenticateToken, attendanceController.getStudentAttendance);
+router.post('/checkin', authenticateToken, attendanceController.studentSelfCheckIn);
 
 // Admin/Staff attendance management
 router.get('/batch', authenticateToken, requireRole(['admin', 'staff']), attendanceController.getBatchAttendanceByDate);
