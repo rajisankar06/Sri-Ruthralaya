@@ -24,27 +24,40 @@ app.use(helmet({
 }));
 
 // CORS Configuration
-const rawOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173,https://sriruthralaya.netlify.app')
+const rawOrigins = (process.env.FRONTEND_URL || '')
   .split(',')
-  .map(url => url.trim().replace(/\/$/, ''))
+  .map(url => url.trim().replace(/\/+$/, ''))
   .filter(Boolean);
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps, curl, server-to-server)
+    // Allow non-browser requests (mobile apps, curl, server-to-server)
     if (!origin || process.env.NODE_ENV === 'development') {
       return callback(null, true);
     }
-    const cleanOrigin = origin.replace(/\/$/, '');
-    const isAllowed = rawOrigins.some(allowed => {
-      if (allowed === '*' || allowed === cleanOrigin) return true;
-      // Allow any Netlify deploy preview or subdomain if Netlify domain is listed
-      if (allowed.includes('netlify.app') && cleanOrigin.endsWith('.netlify.app')) return true;
-      return false;
-    });
-    if (isAllowed) {
+    const cleanOrigin = origin.replace(/\/+$/, '');
+
+    // Unconditionally allow Netlify domains (production and deploy previews) & local dev
+    if (
+      cleanOrigin.endsWith('.netlify.app') ||
+      cleanOrigin.endsWith('.vercel.app') ||
+      cleanOrigin.includes('localhost') ||
+      cleanOrigin.includes('127.0.0.1')
+    ) {
       return callback(null, true);
     }
+
+    // Check against configured FRONTEND_URL
+    const isAllowed = rawOrigins.some(allowed => {
+      if (allowed === '*' || allowed === cleanOrigin) return true;
+      if (allowed && cleanOrigin.endsWith(allowed.replace(/^\*\.?/, ''))) return true;
+      return false;
+    });
+
+    if (isAllowed || rawOrigins.length === 0) {
+      return callback(null, true);
+    }
+
     return callback(new Error(`CORS blocked for origin: ${origin}`));
   },
   credentials: true,
@@ -81,6 +94,7 @@ app.get('/', (req, res) => {
 
 // Mount versioned API routes
 app.use('/api/v1', routes);
+app.use('/api', routes);
 
 // 404 Handler for unmatched routes
 app.use((req, res) => {
