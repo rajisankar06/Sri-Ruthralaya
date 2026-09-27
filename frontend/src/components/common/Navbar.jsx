@@ -14,13 +14,17 @@ import {
   Sparkles,
   Phone,
   Menu,
-  X
+  X,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { user, isAuthenticated, logout, isAdmin, isStudent } = useAuth();
+  const { theme, isDark, toggleTheme } = useTheme();
   const location = useLocation();
 
   const navLinks = [
@@ -39,47 +43,62 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-[#111111] text-white shadow-xl border-b border-[#333333]">
-      {/* Top micro-bar */}
-      <div className="bg-[#080808] text-xs py-1.5 px-4 text-[#d4af37] border-b border-[#222222] flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <span className="font-cinzel tracking-widest text-[11px] text-[#d4af37]">
-            || SRI RUTHRALAYAA DANCE ACADEMY — THIRUTHANGAL, SIVAKASI ||
+    <header className="sticky top-0 z-40 transition-colors duration-300 bg-[#111111]/95 dark:bg-[#111111]/95 backdrop-blur-md text-white shadow-xl border-b border-[#333333] dark:border-[#333333]">
+      {/* Top Micro Announce Bar */}
+      <div className="bg-[#080808] dark:bg-[#080808] text-xs py-1.5 px-4 text-[#d4af37] border-b border-[#222222] dark:border-[#222222] flex justify-between items-center transition-colors">
+        <div className="flex items-center gap-2 overflow-hidden">
+          <span className="inline-block w-2 h-2 rounded-full bg-[#d4af37] animate-pulse flex-shrink-0"></span>
+          <span className="font-cinzel tracking-wider text-[10px] sm:text-[11px] text-[#d4af37] truncate font-semibold">
+            SRI RUTHRALAYAA DANCE ACADEMY • THIRUTHANGAL, SIVAKASI
+          </span>
+          <span className="hidden md:inline-block px-2 py-0.5 rounded text-[9px] bg-[#d4af37]/15 border border-[#d4af37]/30 text-[#d4af37] font-semibold uppercase tracking-wider">
+            Admissions Open
           </span>
         </div>
-        <div className="hidden sm:flex items-center gap-4 text-xs text-[#bdbdbd] font-outfit">
-          <span className="flex items-center gap-1.5 hover:text-[#d4af37] transition-colors">
+
+        <div className="flex items-center gap-4 text-xs text-[#bdbdbd] font-outfit flex-shrink-0">
+          <a
+            href="tel:+919842123456"
+            className="flex items-center gap-1.5 hover:text-[#d4af37] transition-colors"
+            title="Call Academy Office"
+          >
             <Phone className="w-3.5 h-3.5 text-[#d4af37]" />
-            +91 98421 23456
+            <span className="hidden sm:inline font-medium">+91 98421 23456</span>
+          </a>
+          <span className="text-[#444444] hidden sm:inline">•</span>
+          <span className="italic font-cormorant text-xs sm:text-sm text-[#aaaaaa] hidden lg:inline">
+            18+ Years Classical Heritage
           </span>
-          <span className="text-[#444444]">•</span>
-          <span className="italic font-cormorant text-sm text-[#aaaaaa]">18+ Years of Classical Dance Heritage</span>
         </div>
       </div>
 
       {/* Main Navbar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-[75px]">
+        <div className="flex items-center justify-between h-[76px]">
 
           {/* Brand Logo & Name */}
           <Link to="/" className="brand flex items-center gap-3 group flex-shrink-0">
-            <div className="w-12 h-12 rounded-full border border-[#d4af37] bg-[#111111] flex items-center justify-center p-1 shadow-[0_0_15px_rgba(212,175,55,0.25)] group-hover:scale-105 transition-transform overflow-hidden">
-              <img src="/logo.png" alt="Sri Ruthraalayaa Logo" className="w-full h-full object-contain" />
+            <div className="w-12 h-12 rounded-full border-2 border-[#d4af37] bg-[#0d0d0d] flex items-center justify-center p-1.5 shadow-[0_0_15px_rgba(212,175,55,0.25)] group-hover:scale-105 group-hover:shadow-[0_0_22px_rgba(212,175,55,0.45)] transition-all overflow-hidden relative">
+              <img
+                src="/logo.png"
+                alt="Sri Ruthraalayaa Logo"
+                className="w-full h-full object-contain filter drop-shadow"
+              />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="logo font-cinzel font-bold text-xl sm:text-2xl tracking-wider text-[#d4af37] group-hover:text-[#ffd700] transition-colors">
+                <span className="logo font-cinzel font-bold text-xl sm:text-2xl tracking-wider text-[#d4af37] group-hover:text-[#ffd700] transition-colors drop-shadow-sm">
                   Sri Ruthraalayaa
                 </span>
               </div>
-              <p className="text-[10px] sm:text-xs text-[#aaaaaa] font-cormorant tracking-widest uppercase">
+              <p className="text-[10px] sm:text-xs text-[#aaaaaa] font-cormorant tracking-widest uppercase font-semibold">
                 Bharathanatyam Academy
               </p>
             </div>
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="nav-links hidden lg:flex items-center gap-2 xl:gap-3">
+          <nav className="nav-links hidden lg:flex items-center gap-1.5 xl:gap-2.5">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const active = isActive(link.path);
@@ -87,101 +106,167 @@ export default function Navbar() {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`group flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-outfit font-medium transition-all ${
+                  className={`group relative flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-outfit font-medium transition-all ${
                     active
-                      ? 'bg-[#0f0f0f] text-[#d4af37] border border-[#d4af37]/60 shadow-inner'
-                      : 'text-white hover:text-[#d4af37] hover:bg-[#0f0f0f]/60'
+                      ? 'bg-[#0f0f0f] text-[#d4af37] border border-[#d4af37]/60 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
+                      : 'text-white hover:text-[#d4af37] hover:bg-[#181818]'
                   }`}
                 >
                   <span
-                    className={`p-1 rounded-md transition-all flex items-center justify-center ${
+                    className={`p-1 rounded-lg transition-all flex items-center justify-center ${
                       active
                         ? 'bg-[#d4af37] text-[#111111]'
-                        : 'bg-[#1a1a1a] text-[#d4af37] group-hover:bg-[#d4af37] group-hover:text-[#111111]'
+                        : 'bg-[#1c1c1c] text-[#d4af37] group-hover:bg-[#d4af37] group-hover:text-[#111111]'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
                   </span>
                   <span>{link.name}</span>
+                  {active && (
+                    <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-4 h-1 bg-[#d4af37] rounded-full shadow-[0_0_8px_#d4af37]"></span>
+                  )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Desktop Auth / Action Buttons with User CSS specifications */}
-          <div className="nav-buttons hidden md:flex items-center gap-3 flex-shrink-0">
-            {isAuthenticated ? (
-              <div className="flex items-center gap-2.5">
-                <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-[#181818] border border-[#333333]">
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#d4af37] to-[#e6c762] text-[#111111] font-bold text-xs flex items-center justify-center font-cinzel shadow">
-                    {user?.name ? user.name[0].toUpperCase() : 'U'}
-                  </div>
-                  <span className="text-xs font-medium text-stone-200 max-w-[110px] truncate hidden xl:inline">
-                    {user?.name?.split(' ')[0] || 'User'}
-                  </span>
-                </div>
-                {isAdmin && (
-                  <Link
-                    to="/admin/dashboard"
-                    className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-md border border-[#d4af37] bg-[#0f0f0f] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#111111] transition-all shadow"
-                  >
-                    <Shield className="w-3.5 h-3.5" />
-                    <span>Admin Panel</span>
-                  </Link>
-                )}
-                {isStudent && (
-                  <Link
-                    to="/student/dashboard"
-                    className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-md border border-[#d4af37] bg-[#0f0f0f] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#111111] transition-all shadow"
-                  >
-                    <User className="w-3.5 h-3.5" />
-                    <span>My Dashboard</span>
-                  </Link>
-                )}
-                <button
-                  onClick={logout}
-                  className="p-2 rounded-lg text-[#999999] hover:text-red-400 hover:bg-[#1a1111] transition-colors border border-transparent hover:border-red-900/30"
-                  title="Logout"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2.5">
-                <Link
-                  to="/login"
-                  className="login-btn"
-                >
-                  <LogIn className="w-3.5 h-3.5 text-[#d4af37]" />
-                  <span>Sign In</span>
-                </Link>
-                <Link
-                  to="/register"
-                  className="join-btn"
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Join Academy</span>
-                </Link>
-              </div>
-            )}
-          </div>
+          {/* Right Controls: Dark/White Mode Switch + Auth/Action Buttons */}
+          <div className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
 
-          {/* Mobile Menu Toggle Button */}
-          <div className="flex lg:hidden items-center">
+            {/* Dark / White Mode Toggle Switch */}
             <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg text-[#d4af37] hover:bg-[#0f0f0f] border border-[#333333] focus:outline-none transition-colors"
-              aria-label="Toggle Navigation Menu"
+              type="button"
+              onClick={toggleTheme}
+              className="p-2 sm:px-2.5 sm:py-2 rounded-xl border border-[#333333] hover:border-[#d4af37] bg-[#161616] text-[#d4af37] hover:bg-[#1f1f1f] shadow-sm flex items-center gap-1.5 transition-all group"
+              title={isDark ? 'Switch to White Mode' : 'Switch to Dark Mode'}
+              aria-label="Toggle Dark and White mode"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isDark ? (
+                <>
+                  <Sun className="w-4 h-4 text-[#ffd700] group-hover:rotate-90 transition-transform duration-300" />
+                  <span className="text-xs font-outfit font-semibold hidden xl:inline text-[#e5e5e5] group-hover:text-[#ffd700]">
+                    White Mode
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-4 h-4 text-[#d4af37] group-hover:-rotate-45 transition-transform duration-300" />
+                  <span className="text-xs font-outfit font-semibold hidden xl:inline text-[#1f2937] group-hover:text-[#d4af37]">
+                    Dark Mode
+                  </span>
+                </>
+              )}
             </button>
+
+            {/* Desktop Auth Section */}
+            <div className="hidden md:flex items-center gap-2.5">
+              {isAuthenticated ? (
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#181818] border border-[#333333] shadow-inner">
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#d4af37] to-[#e6c762] text-[#111111] font-bold text-xs flex items-center justify-center font-cinzel shadow">
+                      {user?.name ? user.name[0].toUpperCase() : 'U'}
+                    </div>
+                    <span className="text-xs font-medium text-stone-200 max-w-[100px] truncate hidden xl:inline font-outfit">
+                      {user?.name?.split(' ')[0] || 'User'}
+                    </span>
+                  </div>
+
+                  {isAdmin && (
+                    <Link
+                      to="/admin/dashboard"
+                      className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl border border-[#d4af37] bg-[#0f0f0f] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#111111] transition-all shadow-md font-cinzel"
+                    >
+                      <Shield className="w-3.5 h-3.5" />
+                      <span>Admin Portal</span>
+                    </Link>
+                  )}
+
+                  {isStudent && (
+                    <Link
+                      to="/student/dashboard"
+                      className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl border border-[#d4af37] bg-[#0f0f0f] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#111111] transition-all shadow-md font-cinzel"
+                    >
+                      <User className="w-3.5 h-3.5" />
+                      <span>Student Studio</span>
+                    </Link>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={logout}
+                    className="p-2 rounded-xl text-[#999999] hover:text-red-400 hover:bg-[#1f1111] transition-colors border border-transparent hover:border-red-900/40"
+                    title="Sign Out"
+                    aria-label="Sign Out"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Link
+                    to="/login"
+                    className="login-btn"
+                  >
+                    <LogIn className="w-3.5 h-3.5 text-[#d4af37]" />
+                    <span>Sign In</span>
+                  </Link>
+
+                  <Link
+                    to="/register"
+                    className="join-btn"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Join Academy</span>
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Menu Toggle Button */}
+            <div className="flex lg:hidden items-center">
+              <button
+                type="button"
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-2 rounded-xl text-[#d4af37] hover:bg-[#181818] border border-[#333333] focus:outline-none transition-colors"
+                aria-label="Toggle Navigation Menu"
+              >
+                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
+
           </div>
         </div>
       </div>
 
-      {/* Mobile Drawer with Arranged Icons */}
+      {/* Mobile Drawer */}
       {isOpen && (
-        <div className="lg:hidden bg-[#111111] border-t border-[#333333] px-4 pt-3 pb-6 space-y-2">
+        <div className="lg:hidden bg-[#111111] dark:bg-[#111111] border-t border-[#333333] px-4 pt-3 pb-6 space-y-2.5 shadow-2xl transition-colors">
+          
+          {/* Quick Display Mode toggle in Mobile Drawer */}
+          <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#161616] border border-[#333333] mb-3">
+            <span className="text-xs font-cinzel text-[#d4af37] font-semibold flex items-center gap-2">
+              {isDark ? <Moon className="w-3.5 h-3.5 text-[#d4af37]" /> : <Sun className="w-3.5 h-3.5 text-[#ffd700]" />}
+              <span>Mode: {isDark ? 'Dark Mode' : 'White Mode'}</span>
+            </span>
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="px-3 py-1.5 rounded-lg text-xs font-outfit font-semibold bg-[#222222] border border-[#d4af37]/40 text-[#d4af37] hover:bg-[#d4af37] hover:text-[#111111] transition-all flex items-center gap-1.5"
+            >
+              {isDark ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-[#ffd700]" />
+                  <span>Switch to White</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-[#d4af37]" />
+                  <span>Switch to Dark</span>
+                </>
+              )}
+            </button>
+          </div>
+
           {navLinks.map((link) => {
             const Icon = link.icon;
             const active = isActive(link.path);
@@ -190,14 +275,14 @@ export default function Navbar() {
                 key={link.path}
                 to={link.path}
                 onClick={() => setIsOpen(false)}
-                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium tracking-wide transition-all ${
+                className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium tracking-wide transition-all ${
                   active
-                    ? 'bg-[#0f0f0f] text-[#d4af37] border-l-4 border-[#d4af37]'
-                    : 'text-white hover:bg-[#0f0f0f] hover:text-[#d4af37]'
+                    ? 'bg-[#0f0f0f] text-[#d4af37] border-l-4 border-[#d4af37] shadow-sm'
+                    : 'text-white hover:bg-[#181818] hover:text-[#d4af37]'
                 }`}
               >
                 <span
-                  className={`p-1.5 rounded-md flex items-center justify-center ${
+                  className={`p-1.5 rounded-lg flex items-center justify-center ${
                     active
                       ? 'bg-[#d4af37] text-[#111111]'
                       : 'bg-[#1c1c1c] text-[#d4af37] border border-[#333333]'
@@ -205,7 +290,7 @@ export default function Navbar() {
                 >
                   <Icon className="w-4 h-4" />
                 </span>
-                <span>{link.name}</span>
+                <span className="font-outfit font-medium">{link.name}</span>
               </Link>
             );
           })}
@@ -217,7 +302,7 @@ export default function Navbar() {
                   <Link
                     to="/admin/dashboard"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold rounded-lg bg-[#d4af37] text-[#111111] shadow"
+                    className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold rounded-xl bg-[#d4af37] text-[#111111] shadow"
                   >
                     <Shield className="w-4 h-4" />
                     <span>Admin Portal</span>
@@ -227,18 +312,19 @@ export default function Navbar() {
                   <Link
                     to="/student/dashboard"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold rounded-lg bg-[#d4af37] text-[#111111] shadow"
+                    className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold rounded-xl bg-[#d4af37] text-[#111111] shadow"
                   >
                     <User className="w-4 h-4" />
-                    <span>Student Portal</span>
+                    <span>Student Studio</span>
                   </Link>
                 )}
                 <button
+                  type="button"
                   onClick={() => {
                     logout();
                     setIsOpen(false);
                   }}
-                  className="flex items-center justify-center gap-2 py-2 text-xs text-[#999999] hover:text-white"
+                  className="flex items-center justify-center gap-2 py-2 text-xs text-[#999999] hover:text-red-400 font-outfit"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Sign Out</span>

@@ -15,14 +15,18 @@ import {
   Menu,
   X,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import MudraIcon from '../components/common/MudraIcon';
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -192,6 +196,16 @@ export default function AdminLayout() {
               <span>Live Site</span>
               <ExternalLink className="w-3 h-3" />
             </Link>
+
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="p-2 rounded-xl border border-[#333333] hover:border-[#d4af37] bg-[#0f0f0f] text-[#d4af37] hover:bg-[#1a1a1a] transition-all shadow-sm"
+              title={isDark ? "Switch to White Mode" : "Switch to Dark Mode"}
+              aria-label="Toggle theme mode"
+            >
+              {isDark ? <Sun className="w-3.5 h-3.5 text-[#ffd700]" /> : <Moon className="w-3.5 h-3.5 text-[#d4af37]" />}
+            </button>
 
             <div className="flex items-center gap-2.5 pl-3 border-l border-[#333333]">
               <div className="w-8 h-8 rounded-full border border-[#d4af37] overflow-hidden bg-[#0a0a0a] flex items-center justify-center">
