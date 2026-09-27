@@ -13,19 +13,15 @@ import {
   LogOut,
   Menu,
   X,
-  Sparkles,
-  Sun,
-  Moon
+  Sparkles
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
 import MudraIcon from '../components/common/MudraIcon';
 import FloatingChatbot from '../components/chatbot/FloatingChatbot';
 
 export default function StudentLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout } = useAuth();
-  const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -63,25 +59,14 @@ export default function StudentLayout() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="p-2 rounded-lg border border-[#333333] text-[#d4af37] hover:bg-[#1a1a1a]"
-            title={isDark ? "Switch to White Mode" : "Switch to Dark Mode"}
-            aria-label="Toggle theme mode"
-          >
-            {isDark ? <Sun className="w-4 h-4 text-[#ffd700]" /> : <Moon className="w-4 h-4 text-[#d4af37]" />}
-          </button>
-          <button
-            type="button"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded-lg text-[#d4af37] hover:bg-[#1a1a1a]"
-            aria-label="Toggle Navigation Menu"
-          >
-            {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="p-2 rounded-lg text-[#d4af37] hover:bg-[#1a1a1a]"
+          aria-label="Toggle Navigation Menu"
+        >
+          {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </div>
 
       {/* Sidebar for Desktop & Mobile Drawer */}
@@ -148,23 +133,12 @@ export default function StudentLayout() {
 
         {/* Sidebar Footer Actions */}
         <div className="p-4 border-t border-[#333333] bg-[#0a0a0a] space-y-2">
-          <div className="flex items-center gap-2">
-            <Link
-              to="/"
-              className="flex items-center justify-center gap-1.5 flex-1 py-2 rounded-lg text-xs text-[#bdbdbd] hover:text-white border border-[#333333] hover:border-[#d4af37] transition-colors font-cinzel"
-            >
-              <span>Academy Site</span>
-            </Link>
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="p-2 rounded-lg border border-[#333333] text-[#d4af37] hover:border-[#d4af37] hover:bg-[#1a1a1a] transition-all"
-              title={isDark ? "Switch to White Mode" : "Switch to Dark Mode"}
-              aria-label="Toggle display mode"
-            >
-              {isDark ? <Sun className="w-4 h-4 text-[#ffd700]" /> : <Moon className="w-4 h-4 text-[#d4af37]" />}
-            </button>
-          </div>
+          <Link
+            to="/"
+            className="flex items-center justify-center gap-2 w-full py-2 rounded-lg text-xs text-[#bdbdbd] hover:text-white border border-[#333333] hover:border-[#d4af37] transition-colors font-cinzel"
+          >
+            <span>Public Academy Site</span>
+          </Link>
 
           <button
             onClick={handleLogout}

@@ -7,45 +7,11 @@
     box-sizing: border-box;
   }
 
-  :root {
-    color-scheme: dark;
-    --bg-main: #0f0f0f;
-    --bg-surface: #111111;
-    --bg-card: #161616;
-    --bg-deep: #080808;
-    --text-main: #bdbdbd;
-    --text-heading: #ffffff;
-    --text-muted: #888888;
-    --border-main: #333333;
-    --border-subtle: #222222;
-    --gold-primary: #d4af37;
-    --gold-hover: #ffd700;
-    --gold-glow: rgba(212, 175, 55, 0.35);
-  }
-
-  html.light,
-  body.light {
-    color-scheme: light;
-    --bg-main: #fcfbf8;
-    --bg-surface: #ffffff;
-    --bg-card: #ffffff;
-    --bg-deep: #f5f0e6;
-    --text-main: #4b5563;
-    --text-heading: #18181b;
-    --text-muted: #6b7280;
-    --border-main: #e5dfd5;
-    --border-subtle: #ede7dc;
-    --gold-primary: #b89025;
-    --gold-hover: #9c771b;
-    --gold-glow: rgba(184, 144, 37, 0.25);
-  }
-
   body {
     background-color: #0f0f0f;
     color: #bdbdbd;
     font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     overflow-x: hidden;
-    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   h1,
@@ -57,7 +23,7 @@
     color: #ffffff;
   }
 
-  /* Custom scrollbars */
+  /* Custom scrollbars with signature Gold and Dark Surface */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -78,184 +44,33 @@
   }
 }
 
-/* =========================================================================
-   LIGHT / WHITE MODE COMPREHENSIVE OVERRIDES (Zero Errors Guarantee)
-   ========================================================================= */
-
-html.light,
-html.light body {
-  background-color: #fcfbf8 !important;
-  color: #374151 !important;
+/* Kolam geometric background motif */
+.bg-kolam-pattern {
+  background-color: #0f0f0f;
+  background-image: radial-gradient(#d4af37 0.75px, transparent 0.75px), radial-gradient(#222222 0.75px, #0f0f0f 0.75px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
 }
 
-html.light h1,
-html.light h2,
-html.light h3,
-html.light h4,
-html.light h5,
-html.light h6 {
-  color: #111827 !important;
+.bg-temple-gold-radial {
+  background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.15) 0%, rgba(15, 15, 15, 0) 70%);
 }
 
-/* Surfaces */
-html.light .bg-\[\#0f0f0f\],
-html.light [class*="bg-[#0f0f0f]"] {
-  background-color: #fbf9f5 !important;
+/* Traditional temple arch clip path */
+.temple-arch-top {
+  border-top-left-radius: 50% 20px;
+  border-top-right-radius: 50% 20px;
 }
 
-html.light .bg-\[\#111111\],
-html.light [class*="bg-[#111111]"] {
-  background-color: #ffffff !important;
-}
-
-html.light .bg-\[\#161616\],
-html.light [class*="bg-[#161616]"] {
-  background-color: #ffffff !important;
-}
-
-html.light .bg-\[\#181818\],
-html.light [class*="bg-[#181818]"] {
-  background-color: #ffffff !important;
-}
-
-html.light .bg-\[\#080808\],
-html.light [class*="bg-[#080808]"] {
-  background-color: #f3eee4 !important;
-}
-
-html.light .bg-\[\#1c1c1c\],
-html.light [class*="bg-[#1c1c1c]"] {
-  background-color: #f7f3eb !important;
-}
-
-html.light .bg-\[\#0d0d0d\],
-html.light [class*="bg-[#0d0d0d]"] {
-  background-color: #f7f3eb !important;
-}
-
-html.light .bg-\[\#0a0a0a\],
-html.light [class*="bg-[#0a0a0a]"] {
-  background-color: #f7f3eb !important;
-}
-
-html.light .bg-\[\#222222\],
-html.light [class*="bg-[#222222]"] {
-  background-color: #ede7dc !important;
-}
-
-/* Borders */
-html.light .border-\[\#333333\],
-html.light [class*="border-[#333333]"] {
-  border-color: #e2dbce !important;
-}
-
-html.light .border-\[\#222222\],
-html.light [class*="border-[#222222]"] {
-  border-color: #ebe4d8 !important;
-}
-
-html.light .border-\[\#444444\],
-html.light [class*="border-[#444444]"] {
-  border-color: #ded6c8 !important;
-}
-
-/* Text Colors */
-html.light .text-\[\#bdbdbd\],
-html.light [class*="text-[#bdbdbd]"] {
-  color: #4b5563 !important;
-}
-
-html.light .text-\[\#aaaaaa\],
-html.light [class*="text-[#aaaaaa]"] {
-  color: #6b7280 !important;
-}
-
-html.light .text-\[\#bbbbbb\],
-html.light [class*="text-[#bbbbbb]"] {
-  color: #4b5563 !important;
-}
-
-html.light .text-\[\#999999\],
-html.light [class*="text-[#999999]"] {
-  color: #6b7280 !important;
-}
-
-html.light .text-\[\#888888\],
-html.light [class*="text-[#888888]"] {
-  color: #6b7280 !important;
-}
-
-html.light .text-\[\#777777\],
-html.light [class*="text-[#777777]"] {
-  color: #6b7280 !important;
-}
-
-html.light .text-stone-300,
-html.light .text-stone-400 {
-  color: #4b5563 !important;
-}
-
-html.light .text-stone-200 {
-  color: #1f2937 !important;
-}
-
-html.light .text-white {
-  color: #111827 !important;
-}
-
-/* Preserve White Text on High-Contrast Colored Chips / Buttons */
-html.light .primary-btn,
-html.light .join-btn,
-html.light .bg-emerald-600 .text-white,
-html.light .bg-red-600 .text-white,
-html.light .bg-temple-maroon .text-white,
-html.light [class*="bg-emerald"] .text-white,
-html.light [class*="bg-red"] .text-white {
-  color: #ffffff !important;
-}
-
-/* Ensure Header Styling in Light Mode */
-html.light header {
-  background-color: rgba(255, 255, 255, 0.95) !important;
-  border-bottom-color: #e5dfd5 !important;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
-}
-
-html.light header .brand .logo {
-  color: #9c771b !important;
-}
-
-html.light header nav a {
-  color: #374151 !important;
-}
-
-html.light header nav a:hover {
-  color: #9c771b !important;
-  background-color: #f7f3eb !important;
-}
-
-/* Scrollbars in Light Mode */
-html.light ::-webkit-scrollbar-track {
-  background: #f4efe6 !important;
-}
-
-html.light ::-webkit-scrollbar-thumb {
-  background: #d4caa8 !important;
-  border: 1px solid #ebe4d8 !important;
-}
-
-html.light ::-webkit-scrollbar-thumb:hover {
-  background: #b89025 !important;
-}
-
-/* Light mode Kolam pattern */
-html.light .bg-kolam-pattern {
-  background-color: #fbf9f5 !important;
-  background-image: radial-gradient(#b89025 0.75px, transparent 0.75px), radial-gradient(#e5dfd5 0.75px, #fbf9f5 0.75px) !important;
+/* Golden shimmer text */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #ffd700 0%, #d4af37 50%, #b89025 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* =========================================================================
-   BUTTON SYSTEMS: Zero Error & High Contrast in Both Modes
+   BUTTON SYSTEMS: Signature Gold & Dark Luxury Styling
    ========================================================================= */
 
 .primary-btn {
@@ -347,101 +162,4 @@ html.light .bg-kolam-pattern {
   background: #ffd700;
   transform: translateY(-1px);
   box-shadow: 0 4px 18px rgba(212, 175, 55, 0.45);
-}
-
-/* Light mode overrides for buttons to prevent invisible text */
-html.light .secondary-btn {
-  background: #ffffff !important;
-  color: #785910 !important;
-  border: 1.5px solid #d4af37 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-}
-
-html.light .secondary-btn:hover {
-  background: #fdfaf2 !important;
-  color: #5c4308 !important;
-  border-color: #b89025 !important;
-}
-
-html.light .login-btn {
-  background: #ffffff !important;
-  color: #1f2937 !important;
-  border: 1.5px solid #d4af37 !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
-}
-
-html.light .login-btn:hover {
-  background: #fdfaf2 !important;
-  color: #785910 !important;
-  border-color: #b89025 !important;
-}
-
-html.light .join-btn {
-  background: #b89025 !important;
-  color: #ffffff !important;
-  border: 1.5px solid #b89025 !important;
-  box-shadow: 0 4px 14px rgba(184, 144, 37, 0.25) !important;
-}
-
-html.light .join-btn:hover {
-  background: #9c771b !important;
-  color: #ffffff !important;
-  border-color: #9c771b !important;
-}
-
-html.light .primary-btn {
-  background: #b89025 !important;
-  color: #ffffff !important;
-  border: 1px solid #b89025 !important;
-  box-shadow: 0 4px 14px rgba(184, 144, 37, 0.25) !important;
-}
-
-html.light .primary-btn:hover {
-  background: #9c771b !important;
-  color: #ffffff !important;
-  box-shadow: 0 6px 20px rgba(184, 144, 37, 0.35) !important;
-}
-
-/* Light mode Form Inputs & Controls */
-html.light input:not([type="checkbox"]):not([type="radio"]),
-html.light select,
-html.light textarea {
-  background-color: #ffffff !important;
-  color: #111827 !important;
-  border-color: #d1d5db !important;
-}
-
-html.light input:focus,
-html.light select:focus,
-html.light textarea:focus {
-  border-color: #b89025 !important;
-  box-shadow: 0 0 0 2px rgba(184, 144, 37, 0.2) !important;
-}
-
-html.light input::placeholder,
-html.light textarea::placeholder {
-  color: #9ca3af !important;
-}
-
-/* Traditional temple motifs */
-.bg-kolam-pattern {
-  background-color: #0f0f0f;
-  background-image: radial-gradient(#d4af37 0.75px, transparent 0.75px), radial-gradient(#222222 0.75px, #0f0f0f 0.75px);
-  background-size: 30px 30px;
-  background-position: 0 0, 15px 15px;
-}
-
-.bg-temple-gold-radial {
-  background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.15) 0%, rgba(15, 15, 15, 0) 70%);
-}
-
-.temple-arch-top {
-  border-top-left-radius: 50% 20px;
-  border-top-right-radius: 50% 20px;
-}
-
-.text-gold-gradient {
-  background: linear-gradient(135deg, #ffd700 0%, #d4af37 50%, #b89025 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }

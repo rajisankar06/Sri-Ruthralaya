@@ -14,17 +14,13 @@ import {
   Sparkles,
   Phone,
   Menu,
-  X,
-  Sun,
-  Moon
+  X
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { useTheme } from '../../context/ThemeContext';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { user, isAuthenticated, logout, isAdmin, isStudent } = useAuth();
-  const { theme, isDark, toggleTheme } = useTheme();
   const location = useLocation();
 
   const navLinks = [
@@ -43,9 +39,9 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 transition-colors duration-300 bg-[#111111]/95 dark:bg-[#111111]/95 backdrop-blur-md text-white shadow-xl border-b border-[#333333] dark:border-[#333333]">
+    <header className="sticky top-0 z-40 bg-[#111111]/95 backdrop-blur-md text-white shadow-xl border-b border-[#333333]">
       {/* Top Micro Announce Bar */}
-      <div className="bg-[#080808] dark:bg-[#080808] text-xs py-1.5 px-4 text-[#d4af37] border-b border-[#222222] dark:border-[#222222] flex justify-between items-center transition-colors">
+      <div className="bg-[#080808] text-xs py-1.5 px-4 text-[#d4af37] border-b border-[#222222] flex justify-between items-center">
         <div className="flex items-center gap-2 overflow-hidden">
           <span className="inline-block w-2 h-2 rounded-full bg-[#d4af37] animate-pulse flex-shrink-0"></span>
           <span className="font-cinzel tracking-wider text-[10px] sm:text-[11px] text-[#d4af37] truncate font-semibold">
@@ -106,7 +102,7 @@ export default function Navbar() {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`group relative flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-outfit font-medium transition-all ${
+                  className={`group relative flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-outfit font-medium transition-all ${
                     active
                       ? 'bg-[#0f0f0f] text-[#d4af37] border border-[#d4af37]/60 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
                       : 'text-white hover:text-[#d4af37] hover:bg-[#181818]'
@@ -130,33 +126,8 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Right Controls: Dark/White Mode Switch + Auth/Action Buttons */}
+          {/* Right Controls: Auth & Action Buttons */}
           <div className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
-
-            {/* Dark / White Mode Toggle Switch */}
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="p-2 sm:px-2.5 sm:py-2 rounded-xl border border-[#333333] hover:border-[#d4af37] bg-[#161616] text-[#d4af37] hover:bg-[#1f1f1f] shadow-sm flex items-center gap-1.5 transition-all group"
-              title={isDark ? 'Switch to White Mode' : 'Switch to Dark Mode'}
-              aria-label="Toggle Dark and White mode"
-            >
-              {isDark ? (
-                <>
-                  <Sun className="w-4 h-4 text-[#ffd700] group-hover:rotate-90 transition-transform duration-300" />
-                  <span className="text-xs font-outfit font-semibold hidden xl:inline text-[#e5e5e5] group-hover:text-[#ffd700]">
-                    White Mode
-                  </span>
-                </>
-              ) : (
-                <>
-                  <Moon className="w-4 h-4 text-[#d4af37] group-hover:-rotate-45 transition-transform duration-300" />
-                  <span className="text-xs font-outfit font-semibold hidden xl:inline text-[#1f2937] group-hover:text-[#d4af37]">
-                    Dark Mode
-                  </span>
-                </>
-              )}
-            </button>
 
             {/* Desktop Auth Section */}
             <div className="hidden md:flex items-center gap-2.5">
@@ -240,33 +211,7 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className="lg:hidden bg-[#111111] dark:bg-[#111111] border-t border-[#333333] px-4 pt-3 pb-6 space-y-2.5 shadow-2xl transition-colors">
-          
-          {/* Quick Display Mode toggle in Mobile Drawer */}
-          <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#161616] border border-[#333333] mb-3">
-            <span className="text-xs font-cinzel text-[#d4af37] font-semibold flex items-center gap-2">
-              {isDark ? <Moon className="w-3.5 h-3.5 text-[#d4af37]" /> : <Sun className="w-3.5 h-3.5 text-[#ffd700]" />}
-              <span>Mode: {isDark ? 'Dark Mode' : 'White Mode'}</span>
-            </span>
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="px-3 py-1.5 rounded-lg text-xs font-outfit font-semibold bg-[#222222] border border-[#d4af37]/40 text-[#d4af37] hover:bg-[#d4af37] hover:text-[#111111] transition-all flex items-center gap-1.5"
-            >
-              {isDark ? (
-                <>
-                  <Sun className="w-3.5 h-3.5 text-[#ffd700]" />
-                  <span>Switch to White</span>
-                </>
-              ) : (
-                <>
-                  <Moon className="w-3.5 h-3.5 text-[#d4af37]" />
-                  <span>Switch to Dark</span>
-                </>
-              )}
-            </button>
-          </div>
-
+        <div className="lg:hidden bg-[#111111] border-t border-[#333333] px-4 pt-3 pb-6 space-y-2.5 shadow-2xl">
           {navLinks.map((link) => {
             const Icon = link.icon;
             const active = isActive(link.path);

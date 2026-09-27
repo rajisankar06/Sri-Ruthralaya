@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import { ThemeProvider } from './context/ThemeContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import PublicLayout from './components/common/PublicLayout';
 
@@ -52,8 +51,7 @@ function ScrollToTop() {
 export default function App() {
   return (
     <BrowserRouter>
-      <ThemeProvider>
-        <AuthProvider>
+      <AuthProvider>
         <ScrollToTop />
         <Routes>
 
@@ -119,8 +117,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
 
         </Routes>
-        </AuthProvider>
-      </ThemeProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
