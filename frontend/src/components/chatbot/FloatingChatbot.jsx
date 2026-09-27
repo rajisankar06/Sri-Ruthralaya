@@ -128,7 +128,7 @@ export default function FloatingChatbot() {
         >
           <div className="absolute -inset-1 rounded-full bg-[#d4af37]/20 blur-sm group-hover:bg-[#d4af37]/40 transition-all animate-pulse"></div>
           <img src="/logo.png" alt="Sri Ruthralaya AI" className="w-9 h-9 object-contain relative z-10" />
-          
+
           <span className="absolute -top-1 -right-1 flex h-4 w-4">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ffd700] opacity-75"></span>
             <span className="relative inline-flex rounded-full h-4 w-4 bg-[#d4af37] border border-[#111111]"></span>
@@ -136,7 +136,7 @@ export default function FloatingChatbot() {
 
           {/* Tooltip */}
           <span className="absolute right-16 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-[#0f0f0f] text-[#d4af37] border border-[#333333] text-xs font-cinzel whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-lg pointer-events-none">
-            Ask Sri Ruthralaya AI
+            Ask Rythm IQ
           </span>
         </button>
       )}
@@ -144,7 +144,7 @@ export default function FloatingChatbot() {
       {/* Chat Window Modal */}
       {isOpen && (
         <div className="w-[360px] sm:w-[420px] h-[550px] max-h-[85vh] bg-[#0f0f0f] rounded-2xl shadow-2xl border border-[#333333] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-          
+
           {/* Header */}
           <div className="bg-[#111111] px-4 py-3.5 text-white border-b border-[#333333] flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -154,7 +154,7 @@ export default function FloatingChatbot() {
               <div>
                 <div className="flex items-center gap-1.5">
                   <h3 className="font-cinzel font-bold text-sm text-[#d4af37] tracking-wide">
-                    Sri Ruthralaya AI
+                    Rythm IQ
                   </h3>
                   <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                 </div>
@@ -189,17 +189,15 @@ export default function FloatingChatbot() {
                 )}
 
                 <div
-                  className={`max-w-[82%] px-4 py-2.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm ${
-                    msg.sender === 'user'
+                  className={`max-w-[82%] px-4 py-2.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm ${msg.sender === 'user'
                       ? 'bg-[#d4af37] text-[#111111] font-medium rounded-br-none'
                       : 'bg-[#161616] text-[#eeeeee] rounded-bl-none border border-[#333333]'
-                  }`}
+                    }`}
                 >
                   <div>{renderFormattedText(msg.text)}</div>
                   <div
-                    className={`text-[9px] mt-1.5 text-right ${
-                      msg.sender === 'user' ? 'text-[#111111]/70' : 'text-[#777777]'
-                    }`}
+                    className={`text-[9px] mt-1.5 text-right ${msg.sender === 'user' ? 'text-[#111111]/70' : 'text-[#777777]'
+                      }`}
                   >
                     {new Date(msg.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </div>
