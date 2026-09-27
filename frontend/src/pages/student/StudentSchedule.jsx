@@ -38,15 +38,15 @@ export default function StudentSchedule() {
   ];
 
   return (
-    <div className="space-y-8 font-outfit">
+    <div className="space-y-8 font-outfit text-[#bdbdbd]">
 
       {/* Header */}
       <div>
-        <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-temple-maroon">
+        <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-white">
           Class Schedule &amp; Timetable
         </h1>
-        <p className="text-xs sm:text-sm text-stone-600 mt-1">
-          Weekly timetable for <strong>{activeBatch.name}</strong> at Sri Ruthraalayaa Dance Academy.
+        <p className="text-xs sm:text-sm text-[#aaaaaa] mt-1">
+          Weekly timetable for <strong className="text-white">{activeBatch.name}</strong> at Sri Ruthraalayaa Dance Academy.
         </p>
       </div>
 
@@ -55,39 +55,39 @@ export default function StudentSchedule() {
         {weeklySchedule.map((item, idx) => (
           <div
             key={idx}
-            className="p-6 rounded-3xl bg-white border-2 border-temple-gold/40 shadow-temple flex flex-col md:flex-row md:items-center justify-between gap-6 hover:border-temple-gold transition-colors"
+            className="p-6 rounded-3xl bg-[#111111] border border-[#333333] hover:border-[#d4af37]/60 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 transition-all"
           >
             <div className="flex items-start gap-4">
-              <div className="p-3.5 rounded-2xl bg-temple-maroon text-temple-gold flex-shrink-0">
+              <div className="p-3.5 rounded-2xl bg-[#1a1a1a] text-[#d4af37] border border-[#333333] flex-shrink-0">
                 <Clock className="w-6 h-6" />
               </div>
 
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-cinzel font-bold text-lg text-temple-maroon">
+                  <h3 className="font-cinzel font-bold text-lg text-white">
                     {item.day}
                   </h3>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-cinzel font-semibold bg-amber-100 text-amber-800">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-cinzel font-semibold bg-[#1a1a1a] text-[#d4af37] border border-[#d4af37]/40">
                     Active Session
                   </span>
                 </div>
 
-                <p className="text-xs sm:text-sm font-semibold text-stone-800 mt-1">
+                <p className="text-xs sm:text-sm font-semibold text-[#e0e0e0] mt-1">
                   {item.time}
                 </p>
 
-                <p className="text-xs text-stone-600 mt-1 leading-relaxed">
-                  Focus: <strong>{item.focus}</strong>
+                <p className="text-xs text-[#aaaaaa] mt-1 leading-relaxed">
+                  Focus: <strong className="text-[#d4af37]">{item.focus}</strong>
                 </p>
               </div>
             </div>
 
-            <div className="md:text-right border-t md:border-t-0 pt-4 md:pt-0 border-stone-100 flex flex-col justify-center">
-              <span className="text-xs text-stone-500 font-outfit flex items-center md:justify-end gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-temple-gold" />
+            <div className="md:text-right border-t md:border-t-0 pt-4 md:pt-0 border-[#222222] flex flex-col justify-center">
+              <span className="text-xs text-[#888888] font-outfit flex items-center md:justify-end gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-[#d4af37]" />
                 {item.room}
               </span>
-              <span className="text-xs text-temple-maroon font-semibold mt-1">
+              <span className="text-xs text-white font-semibold mt-1">
                 Instructor: {item.guru}
               </span>
             </div>
@@ -96,27 +96,27 @@ export default function StudentSchedule() {
       </div>
 
       {/* Classroom Etiquette & Guidelines Card */}
-      <div className="p-6 rounded-3xl bg-gradient-to-br from-amber-50 to-white border border-temple-gold/60 shadow-temple space-y-4">
-        <h3 className="font-cinzel font-bold text-base text-temple-maroon flex items-center gap-2">
-          <MudraIcon name="nataraja" className="w-5 h-5 text-temple-gold" />
+      <div className="p-6 rounded-3xl bg-[#111111] border border-[#333333] shadow-xl space-y-4">
+        <h3 className="font-cinzel font-bold text-base text-white flex items-center gap-2">
+          <MudraIcon name="nataraja" className="w-5 h-5 text-[#d4af37]" />
           Traditional Studio Etiquette (Guru-Shishya Code)
         </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-stone-700 leading-relaxed">
-          <div className="flex items-start gap-2">
-            <CheckCircle className="w-4 h-4 text-temple-maroon flex-shrink-0 mt-0.5" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-[#aaaaaa] leading-relaxed">
+          <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#161616] border border-[#222222]">
+            <CheckCircle className="w-4 h-4 text-[#d4af37] flex-shrink-0 mt-0.5" />
             <span>Arrive 10 minutes prior to session for mandatory Aramandi warm-ups and Dhyana Shloka.</span>
           </div>
-          <div className="flex items-start gap-2">
-            <CheckCircle className="w-4 h-4 text-temple-maroon flex-shrink-0 mt-0.5" />
+          <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#161616] border border-[#222222]">
+            <CheckCircle className="w-4 h-4 text-[#d4af37] flex-shrink-0 mt-0.5" />
             <span>Attire: Cotton practice dance saree or comfortable ethnic salwar with dupatta securely pinned.</span>
           </div>
-          <div className="flex items-start gap-2">
-            <CheckCircle className="w-4 h-4 text-temple-maroon flex-shrink-0 mt-0.5" />
+          <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#161616] border border-[#222222]">
+            <CheckCircle className="w-4 h-4 text-[#d4af37] flex-shrink-0 mt-0.5" />
             <span>Carry leather-padded Salangai bells, theoretical notebook, and water bottle to all weekend classes.</span>
           </div>
-          <div className="flex items-start gap-2">
-            <CheckCircle className="w-4 h-4 text-temple-maroon flex-shrink-0 mt-0.5" />
+          <div className="flex items-start gap-2.5 p-3 rounded-xl bg-[#161616] border border-[#222222]">
+            <CheckCircle className="w-4 h-4 text-[#d4af37] flex-shrink-0 mt-0.5" />
             <span>Perform Namaskaram to Mother Earth, Nataraja, and Guru before stepping onto and off the dance floor.</span>
           </div>
         </div>

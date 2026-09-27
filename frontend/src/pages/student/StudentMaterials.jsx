@@ -47,14 +47,14 @@ export default function StudentMaterials() {
   ];
 
   return (
-    <div className="space-y-8 font-outfit">
+    <div className="space-y-8 font-outfit text-[#bdbdbd]">
       
       {/* Header */}
       <div>
-        <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-temple-maroon">
+        <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-white">
           Study Materials &amp; Practice Media
         </h1>
-        <p className="text-xs sm:text-sm text-stone-600 mt-1">
+        <p className="text-xs sm:text-sm text-[#aaaaaa] mt-1">
           Authorized curriculum guides, solkattu audio tracks, and theory papers uploaded by Guru V. Suriya Sathian.
         </p>
       </div>
@@ -65,35 +65,35 @@ export default function StudentMaterials() {
           return (
             <div
               key={idx}
-              className="p-6 rounded-3xl bg-white border-2 border-temple-gold/40 shadow-temple flex flex-col justify-between hover:shadow-temple-lg transition-all"
+              className="p-6 rounded-3xl bg-[#111111] border border-[#333333] hover:border-[#d4af37]/60 shadow-xl flex flex-col justify-between transition-all"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <span className="px-3 py-1 rounded-full text-[10px] font-cinzel font-semibold bg-temple-maroon/10 text-temple-maroon border border-temple-gold/30">
+                  <span className="px-3 py-1 rounded-full text-[10px] font-cinzel font-semibold bg-[#1a1a1a] text-[#d4af37] border border-[#d4af37]/30">
                     {m.type}
                   </span>
-                  <span className="text-[11px] text-stone-400">{m.size}</span>
+                  <span className="text-[11px] text-[#888888]">{m.size}</span>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <div className="p-3 rounded-2xl bg-amber-50 text-temple-maroon border border-temple-gold/30 mt-1 flex-shrink-0">
-                    <Icon className="w-5 h-5 text-temple-maroon" />
+                  <div className="p-3 rounded-2xl bg-[#1a1a1a] text-[#d4af37] border border-[#333333] mt-1 flex-shrink-0">
+                    <Icon className="w-5 h-5 text-[#d4af37]" />
                   </div>
                   <div>
-                    <h3 className="font-cinzel font-bold text-sm sm:text-base text-temple-maroon">
+                    <h3 className="font-cinzel font-bold text-sm sm:text-base text-white">
                       {m.title}
                     </h3>
-                    <p className="text-xs text-stone-600 mt-1 leading-relaxed">
+                    <p className="text-xs text-[#aaaaaa] mt-1 leading-relaxed">
                       {m.description}
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-stone-100 flex items-center justify-end">
+              <div className="mt-6 pt-4 border-t border-[#222222] flex items-center justify-end">
                 <button
                   onClick={() => alert(`Downloading '${m.title}'... Authorized academy discipled resource.`)}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-temple-maroon text-temple-gold hover:bg-temple-maroon-dark text-xs font-cinzel font-bold shadow transition-all"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0f0f0f] border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#111111] text-xs font-cinzel font-bold shadow transition-all"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Download Resource</span>

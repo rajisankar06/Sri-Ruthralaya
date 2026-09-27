@@ -92,12 +92,18 @@ export default function StudentLayout() {
             </div>
 
             {/* Student Mini Profile Card */}
-            <div className="mt-4 p-3 rounded-xl bg-[#1a1a1a] border border-[#333333] flex items-center gap-3">
-              <img
-                src={user?.profile_photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'}
-                alt={user?.name}
-                className="w-10 h-10 rounded-full object-cover border border-[#d4af37]"
-              />
+            <div className="mt-4 p-3 rounded-xl bg-[#161616] border border-[#262626] flex items-center gap-3">
+              {user?.profile_photo_url ? (
+                <img
+                  src={user.profile_photo_url}
+                  alt={user?.name}
+                  className="w-10 h-10 rounded-full object-cover border border-[#d4af37] flex-shrink-0"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#d4af37] to-[#e6c762] text-[#111111] font-bold text-sm flex items-center justify-center font-cinzel shadow flex-shrink-0">
+                  {user?.name ? user.name[0].toUpperCase() : 'D'}
+                </div>
+              )}
               <div className="overflow-hidden">
                 <p className="font-cinzel text-xs font-bold text-white truncate">{user?.name}</p>
                 <span className="inline-block text-[10px] px-2 py-0.5 rounded-full bg-[#d4af37] text-[#111111] font-semibold mt-0.5">

@@ -10,7 +10,7 @@ export default function FloatingChatbot() {
     {
       id: 'init-1',
       sender: 'bot',
-      text: 'Namaskaram! 🙏 I am your **Sri Ruthralaya AI Assistant**. How may I guide your Bharatanatyam journey today?',
+      text: 'Namaskaram! 🙏 I am your Rythm IQ. How may I guide your Bharatanatyam journey today?',
       time: new Date(),
     },
   ]);

@@ -51,47 +51,47 @@ export default function StudentProgress() {
   ];
 
   return (
-    <div className="space-y-8 font-outfit">
+    <div className="space-y-8 font-outfit text-[#bdbdbd]">
       
       {/* Header */}
       <div>
-        <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-temple-maroon">
+        <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-white">
           Sadhana Progress &amp; Certifications
         </h1>
-        <p className="text-xs sm:text-sm text-stone-600 mt-1">
+        <p className="text-xs sm:text-sm text-[#aaaaaa] mt-1">
           Detailed tracker of Adavus, Margam choreography, and Tamil Nadu Music &amp; Fine Arts University certifications.
         </p>
       </div>
 
       {/* University Accreditation Badge */}
-      <div className="p-6 rounded-3xl bg-gradient-to-r from-temple-maroon via-temple-maroon-dark to-temple-maroon text-white border-2 border-temple-gold shadow-temple flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="p-6 rounded-3xl bg-gradient-to-r from-[#181818] via-[#121212] to-[#0a0a0a] text-white border-2 border-[#d4af37] shadow-[0_0_25px_rgba(212,175,55,0.2)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-temple-gold text-temple-maroon-deep flex items-center justify-center font-cinzel font-bold text-lg shadow-gold-glow flex-shrink-0">
+          <div className="w-12 h-12 rounded-full bg-[#d4af37] text-[#111111] flex items-center justify-center font-cinzel font-bold text-lg shadow-[0_0_15px_rgba(212,175,55,0.4)] flex-shrink-0">
             A+
           </div>
           <div>
-            <span className="font-cinzel text-xs text-temple-gold uppercase tracking-wider block">
+            <span className="font-cinzel text-xs text-[#d4af37] uppercase tracking-wider block">
               Latest Examination Grade
             </span>
             <h3 className="font-cinzel font-bold text-lg text-white">
               University Grade 1 Certification (Distinction)
             </h3>
-            <p className="text-xs text-amber-200/80 font-cormorant italic">
+            <p className="text-xs text-[#ffd700]/90 font-cormorant italic">
               Conducted by Tamil Nadu Music and Fine Arts University • Score: 94/100
             </p>
           </div>
         </div>
 
-        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-900/60 border border-emerald-400 text-emerald-300 text-xs font-semibold self-start sm:self-auto">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-700 text-emerald-300 text-xs font-semibold self-start sm:self-auto">
           <CheckCircle className="w-4 h-4 text-emerald-400" />
           <span>Accredited</span>
         </span>
       </div>
 
       {/* Section 1: Adavus Tracker */}
-      <div className="bg-white rounded-3xl border-2 border-temple-gold/40 shadow-temple p-6 sm:p-8">
-        <h2 className="font-cinzel font-bold text-lg text-temple-maroon mb-6 flex items-center gap-2">
-          <MudraIcon name="pataka" className="w-5 h-5 text-temple-gold" />
+      <div className="bg-[#111111] rounded-3xl border border-[#333333] shadow-xl p-6 sm:p-8">
+        <h2 className="font-cinzel font-bold text-lg text-white mb-6 flex items-center gap-2">
+          <MudraIcon name="pataka" className="w-5 h-5 text-[#d4af37]" />
           Adavu Mastery Matrix
         </h2>
 
@@ -99,38 +99,38 @@ export default function StudentProgress() {
           {adavuCategories.map((adavu, idx) => (
             <div
               key={idx}
-              className="p-4 rounded-2xl bg-temple-cream/50 border border-amber-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+              className="p-4 rounded-2xl bg-[#161616] border border-[#262626] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
             >
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-cinzel font-bold text-sm text-stone-800">
+                  <h3 className="font-cinzel font-bold text-sm text-white">
                     {adavu.category}
                   </h3>
                   <span className={`px-2 py-0.5 rounded text-[10px] font-cinzel font-semibold ${
                     adavu.status === 'Mastered'
-                      ? 'bg-emerald-100 text-emerald-800'
+                      ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800'
                       : adavu.status === 'In Progress'
-                      ? 'bg-amber-100 text-amber-800'
-                      : 'bg-stone-100 text-stone-600'
+                      ? 'bg-amber-950/80 text-amber-400 border border-amber-800'
+                      : 'bg-[#222222] text-[#888888] border border-[#333333]'
                   }`}>
                     {adavu.status}
                   </span>
                 </div>
-                <p className="text-xs text-stone-500 mt-1">
-                  Speed Status: <strong>{adavu.speed}</strong> • Variations: {adavu.completed} of {adavu.variations} cleared
+                <p className="text-xs text-[#aaaaaa] mt-1">
+                  Speed Status: <strong className="text-white">{adavu.speed}</strong> • Variations: {adavu.completed} of {adavu.variations} cleared
                 </p>
 
                 {/* Progress bar */}
-                <div className="w-full sm:max-w-xs h-2 rounded-full bg-stone-200 overflow-hidden mt-2">
+                <div className="w-full sm:max-w-xs h-2 rounded-full bg-[#222222] overflow-hidden border border-[#333333] mt-2">
                   <div
-                    className="h-full bg-temple-maroon rounded-full"
+                    className="h-full bg-gradient-to-r from-[#b89025] to-[#ffd700] rounded-full"
                     style={{ width: `${(adavu.completed / adavu.variations) * 100}%` }}
                   ></div>
                 </div>
               </div>
 
               <div className="text-right">
-                <span className="font-cinzel font-bold text-xs text-temple-maroon">
+                <span className="font-cinzel font-bold text-xs text-[#d4af37]">
                   {Math.round((adavu.completed / adavu.variations) * 100)}%
                 </span>
               </div>
@@ -140,9 +140,9 @@ export default function StudentProgress() {
       </div>
 
       {/* Section 2: Margam Repertoire */}
-      <div className="bg-white rounded-3xl border-2 border-temple-gold/40 shadow-temple p-6 sm:p-8">
-        <h2 className="font-cinzel font-bold text-lg text-temple-maroon mb-6 flex items-center gap-2">
-          <MudraIcon name="nataraja" className="w-5 h-5 text-temple-gold" />
+      <div className="bg-[#111111] rounded-3xl border border-[#333333] shadow-xl p-6 sm:p-8">
+        <h2 className="font-cinzel font-bold text-lg text-white mb-6 flex items-center gap-2">
+          <MudraIcon name="nataraja" className="w-5 h-5 text-[#d4af37]" />
           Margam Classical Repertoire
         </h2>
 
@@ -150,24 +150,24 @@ export default function StudentProgress() {
           {margamRepertoire.map((item, idx) => (
             <div
               key={idx}
-              className="p-4 rounded-2xl bg-white border border-amber-200/80 shadow-xs flex items-center justify-between gap-3"
+              className="p-4 rounded-2xl bg-[#161616] border border-[#262626] hover:border-[#d4af37]/40 shadow-sm flex items-center justify-between gap-3 transition-colors"
             >
               <div>
-                <h3 className="font-cinzel font-bold text-sm text-stone-800">
+                <h3 className="font-cinzel font-bold text-sm text-white">
                   {item.item}
                 </h3>
-                <p className="text-xs text-stone-500 mt-0.5">Duration: {item.duration}</p>
-                <span className="text-[11px] font-semibold text-temple-maroon block mt-1">
+                <p className="text-xs text-[#888888] mt-0.5">Duration: {item.duration}</p>
+                <span className="text-[11px] font-semibold text-[#d4af37] block mt-1">
                   Status: {item.status}
                 </span>
               </div>
 
               {item.certified ? (
-                <div className="p-2 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200" title="Stage Certified">
+                <div className="p-2 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-800" title="Stage Certified">
                   <CheckCircle className="w-5 h-5" />
                 </div>
               ) : (
-                <div className="p-2 rounded-full bg-stone-50 text-stone-400 border border-stone-200" title="Learning Stage">
+                <div className="p-2 rounded-full bg-[#222222] text-[#666666] border border-[#333333]" title="Learning Stage">
                   <Clock className="w-5 h-5" />
                 </div>
               )}
