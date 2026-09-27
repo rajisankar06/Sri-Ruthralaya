@@ -42,7 +42,14 @@ export default function LoginPage() {
         setErrorMessage(res.message || 'Login failed. Please verify credentials.');
       }
     } catch (err) {
-      setErrorMessage(err.response?.data?.message || 'Login failed. Please check your credentials.');
+      const serverMsg = err.response?.data?.message;
+      if (serverMsg) {
+        setErrorMessage(serverMsg);
+      } else if (err.message && err.message.includes('Network Error')) {
+        setErrorMessage('Cannot connect to backend API server. Please ensure VITE_API_BASE_URL is set in Netlify and Render is running.');
+      } else {
+        setErrorMessage(err.response?.data?.message || err.message || 'Login failed. Please check your credentials or server connection.');
+      }
     }
   };
 

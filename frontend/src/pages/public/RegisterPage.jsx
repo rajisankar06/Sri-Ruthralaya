@@ -68,7 +68,14 @@ export default function RegisterPage() {
         setErrorMessage(res.message || 'Registration failed.');
       }
     } catch (err) {
-      setErrorMessage(err.response?.data?.message || 'Registration failed. Please check inputs.');
+      const serverMsg = err.response?.data?.message;
+      if (serverMsg) {
+        setErrorMessage(serverMsg);
+      } else if (err.message && err.message.includes('Network Error')) {
+        setErrorMessage('Cannot connect to backend API server. Please ensure VITE_API_BASE_URL is set in Netlify and Render is running.');
+      } else {
+        setErrorMessage(err.response?.data?.message || err.message || 'Registration failed. Please check inputs or server connection.');
+      }
     }
   };
 
