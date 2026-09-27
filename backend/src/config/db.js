@@ -31,7 +31,7 @@ const fallbackStore = {
       password_hash: bcrypt.hashSync('Admin@123', 10),
       role: 'admin',
       phone: '+91 98421 23456',
-      profile_photo_url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80',
+      profile_photo_url: null,
       status: 'active',
       created_at: new Date('2024-01-01'),
     },

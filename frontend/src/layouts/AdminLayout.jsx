@@ -194,11 +194,11 @@ export default function AdminLayout() {
             </Link>
 
             <div className="flex items-center gap-2.5 pl-3 border-l border-[#333333]">
-              <div className="w-8 h-8 rounded-full border border-[#d4af37] overflow-hidden bg-[#0a0a0a]">
+              <div className="w-8 h-8 rounded-full border border-[#d4af37] overflow-hidden bg-[#0a0a0a] flex items-center justify-center">
                 <img
-                  src={user?.profile_photo_url || '/logo.png'}
-                  alt={user?.name}
-                  className="w-full h-full object-cover"
+                  src="/logo.png"
+                  alt={user?.name || 'Academy Administration'}
+                  className="w-5 h-5 object-contain"
                 />
               </div>
               <div className="text-left text-xs">

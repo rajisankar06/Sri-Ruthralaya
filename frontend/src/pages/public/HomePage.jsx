@@ -193,20 +193,42 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mt-12">
             <div className="lg:col-span-5 flex justify-center">
-              <div className="relative">
-                <div className="w-72 h-88 sm:w-80 sm:h-96 rounded-2xl overflow-hidden border-2 border-[#d4af37] shadow-[0_0_25px_rgba(212,175,55,0.25)] bg-[#111111]">
-                  <img
-                    src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80"
-                    alt="Guru Nattiyakalaimani V. Suriya Sathian"
-                    className="w-full h-full object-cover object-center"
-                  />
+              <div className="w-full max-w-sm rounded-3xl p-8 bg-gradient-to-b from-[#181818] via-[#121212] to-[#0a0a0a] border-2 border-[#d4af37] shadow-[0_0_35px_rgba(212,175,55,0.25)] relative overflow-hidden text-center">
+                {/* Decorative corner accents */}
+                <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-[#d4af37]/60"></div>
+                <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-[#d4af37]/60"></div>
+                <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-[#d4af37]/60"></div>
+                <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-[#d4af37]/60"></div>
+
+                {/* Glowing Aura & Academy Seal */}
+                <div className="relative mx-auto w-28 h-28 flex items-center justify-center mb-6">
+                  <div className="absolute inset-0 rounded-full bg-[#d4af37]/15 blur-xl"></div>
+                  <div className="w-24 h-24 rounded-full border-2 border-[#d4af37] p-3 bg-[#0a0a0a] shadow-inner flex items-center justify-center">
+                    <img
+                      src="/logo.png"
+                      alt="Sri Ruthraalayaa Academy Seal"
+                      className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(212,175,55,0.4)]"
+                    />
+                  </div>
                 </div>
-                <div className="absolute -bottom-5 -right-5 p-4 rounded-xl bg-[#111111] text-white border border-[#d4af37] shadow-xl text-center max-w-[230px]">
-                  <p className="font-cinzel text-xs font-bold text-[#d4af37]">
-                    Guru V. Suriya Sathian
+
+                <span className="text-[10px] uppercase font-cinzel tracking-[3px] text-[#d4af37] block font-semibold mb-1">
+                  Artistic Director &amp; Guru
+                </span>
+                <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-white tracking-wide">
+                  Guru V. Suriya Sathian
+                </h3>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/40 text-[#d4af37] text-xs font-semibold mt-3">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Title of "Nattiyakalaimani"</span>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-[#333333] space-y-1">
+                  <p className="text-xs text-[#cccccc] font-outfit">
+                    Diploma in Dance • Pursuing BFA in Dance
                   </p>
-                  <p className="text-[10px] text-[#aaaaaa] font-cormorant italic mt-0.5 leading-tight">
-                    Diploma in Dance, Title of Nattiyakalaimani and now doing BFA in Dance
+                  <p className="text-[11px] text-[#888888] font-cormorant italic">
+                    18+ Years of Guru-Shishya Tradition
                   </p>
                 </div>
               </div>
@@ -450,8 +472,8 @@ export default function HomePage() {
             </div>
             <div className="gallery-item h-64 overflow-hidden rounded-xl border border-[#333333] group bg-[#0f0f0f]">
               <img
-                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80"
-                alt="Guru V. Suriya Sathian"
+                src="https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=600&q=80"
+                alt="Classical Margam Repertoire & Abhinaya"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>

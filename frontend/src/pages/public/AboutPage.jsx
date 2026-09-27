@@ -37,34 +37,45 @@ export default function AboutPage() {
         <div className="my-16 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
           <div className="lg:col-span-5 flex flex-col items-center">
-            <div className="relative">
-              <div className="w-80 h-96 rounded-2xl overflow-hidden border-2 border-[#d4af37] shadow-[0_0_25px_rgba(212,175,55,0.25)] bg-[#111111]">
-                <img
-                  src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=700&q=80"
-                  alt="Guru Nattiyakalaimani V. Suriya Sathian"
-                  className="w-full h-full object-cover object-top"
-                />
+            <div className="w-full max-w-sm rounded-3xl p-8 bg-gradient-to-b from-[#181818] via-[#121212] to-[#0c0c0c] border-2 border-[#d4af37] shadow-[0_0_35px_rgba(212,175,55,0.25)] relative overflow-hidden text-center">
+              {/* Decorative corner accents */}
+              <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-[#d4af37]/60"></div>
+              <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-[#d4af37]/60"></div>
+              <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-[#d4af37]/60"></div>
+              <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-[#d4af37]/60"></div>
+
+              {/* Glowing Aura & Academy Seal */}
+              <div className="relative mx-auto w-28 h-28 flex items-center justify-center mb-6">
+                <div className="absolute inset-0 rounded-full bg-[#d4af37]/15 blur-xl"></div>
+                <div className="w-24 h-24 rounded-full border-2 border-[#d4af37] p-3 bg-[#0a0a0a] shadow-inner flex items-center justify-center">
+                  <img
+                    src="/logo.png"
+                    alt="Sri Ruthraalayaa Academy Seal"
+                    className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(212,175,55,0.4)]"
+                  />
+                </div>
               </div>
 
-              {/* Title Crest */}
-              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-11/12 p-4 rounded-xl bg-[#111111] text-white border border-[#d4af37] shadow-xl text-center">
-                <h2 className="font-cinzel text-sm sm:text-base font-bold text-[#d4af37] tracking-wide">
-                  Guru V. Suriya Sathian
-                </h2>
-                <p className="text-[11px] text-[#aaaaaa] font-cormorant italic mt-0.5">
-                  Founder &amp; Artistic Director
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-12 text-center space-y-1">
-              <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#d4af37]">
-                <Award className="w-4 h-4 text-[#d4af37]" />
+              {/* Guru Crest Info */}
+              <span className="text-[10px] uppercase font-cinzel tracking-[3px] text-[#d4af37] block font-semibold mb-1">
+                Founder &amp; Artistic Director
+              </span>
+              <h2 className="font-cinzel text-xl sm:text-2xl font-bold text-white tracking-wide">
+                Guru V. Suriya Sathian
+              </h2>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/40 text-[#d4af37] text-xs font-semibold mt-3">
+                <Award className="w-3.5 h-3.5" />
                 <span>Title of "Nattiyakalaimani"</span>
               </div>
-              <p className="text-xs text-[#777777] font-outfit">
-                Diploma in Dance • Title of Nattiyakalaimani • Pursuing BFA in Dance
-              </p>
+
+              <div className="mt-5 pt-5 border-t border-[#333333] space-y-1.5">
+                <p className="text-xs text-[#cccccc] font-outfit font-medium">
+                  Diploma in Dance • Pursuing BFA in Dance
+                </p>
+                <p className="text-[11px] text-[#888888] font-cormorant italic">
+                  18+ Years of Guru-Shishya Sadhana • Thiruthangal &amp; Sivakasi
+                </p>
+              </div>
             </div>
           </div>
 
