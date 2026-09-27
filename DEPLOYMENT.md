@@ -133,10 +133,10 @@ Before clicking Deploy, click **Add environment variables** (or configure them u
 1. Open your Netlify site URL in your browser.
 2. Check public pages:
    - **Home**: Banner, batches, cultural philosophy, upcoming events.
-   - **About Guru**: Credentials of Guru Nattiyakalaimani R. Sridevi.
+   - **About Guru**: Credentials of Guru Nattiyakalaimani V. Suriya Sathian.
    - **Courses / Batches**: Fee structure, schedules.
    - **Gallery**: Photo & video showcase.
-   - **Chatbot**: Click the bottom-right floating icon and ask `"What are the class timings?"` or `"Tell me about Guru Sridevi"`.
+   - **Chatbot**: Click the bottom-right floating icon and ask `"What are the class timings?"` or `"Tell me about Guru V. Suriya Sathian"`.
 3. Test Administrator Login:
    - Go to `/login`.
    - Email: `admin@sriruthralaya.com`

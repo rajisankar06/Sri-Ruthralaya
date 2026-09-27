@@ -118,7 +118,7 @@ export default function RegisterPage() {
                 Namaskaram <strong className="text-white">{successData.name}</strong>! Your registration for Sri Ruthralaya has been recorded with status: <span className="font-bold text-[#d4af37] uppercase">Pending Admin Approval</span>.
               </p>
               <p className="p-3 bg-[#111111] rounded-lg border border-[#333333] text-[#aaaaaa]">
-                To preserve academic excellence and proper batch levels, Guru Sridevi approves applications within 24 hours. You can sign in once verified.
+                To preserve academic excellence and proper batch levels, Guru V. Suriya Sathian approves applications within 24 hours. You can sign in once verified.
               </p>
             </div>
 
@@ -135,7 +135,7 @@ export default function RegisterPage() {
             <div className="p-3 bg-[#0a0a0a] rounded-lg border border-[#333333] text-[11px] text-[#aaaaaa] font-outfit leading-relaxed flex items-center gap-2">
               <span className="text-base">🛕</span>
               <span>
-                New admissions undergo review by <strong className="text-white">Guru Sridevi</strong>. Once approved, your student dashboard and calendar will activate.
+                New admissions undergo review by <strong className="text-white">Guru V. Suriya Sathian</strong>. Once approved, your student dashboard and calendar will activate.
               </span>
             </div>
 

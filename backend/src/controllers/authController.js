@@ -192,7 +192,7 @@ async function login(req, res, next) {
       return res.status(403).json({
         success: false,
         data: null,
-        message: 'Your registration is still pending approval by the academy administrator. Please contact Guru Sridevi or office administration.',
+        message: 'Your registration is still pending approval by the academy administrator. Please contact Guru V. Suriya Sathian or office administration.',
       });
     }
 

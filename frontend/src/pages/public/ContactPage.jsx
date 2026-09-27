@@ -59,7 +59,7 @@ export default function ContactPage() {
               Send an Enquiry / <span className="text-[#d4af37]">Trial Request</span>
             </h2>
             <p className="text-xs sm:text-sm text-[#aaaaaa] font-outfit mb-6">
-              Interested in joining a batch or scheduling an observation session with Guru Sridevi? Fill out the details below.
+              Interested in joining a batch or scheduling an observation session with Guru V. Suriya Sathian? Fill out the details below.
             </p>
 
             {submitted ? (
@@ -194,7 +194,7 @@ export default function ContactPage() {
                   <a href="tel:+919842123456" className="text-xs sm:text-sm text-[#d4af37] font-semibold hover:underline block mt-1">
                     +91 98421 23456
                   </a>
-                  <p className="text-[11px] text-[#777777]">Guru Sridevi / Academy Office</p>
+                  <p className="text-[11px] text-[#777777]">Guru V. Suriya Sathian / Academy Office</p>
                 </div>
               </div>
 

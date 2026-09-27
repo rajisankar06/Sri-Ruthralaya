@@ -47,7 +47,7 @@ export default function StudentDashboard() {
 
   const activeBatch = studentData?.profile?.activeBatch || user?.enrollments?.[0]?.batch || {
     name: 'Madhyama (Intermediate Jatiswaram & Shabdam)',
-    instructor_name: 'Guru Nattiyakalaimani R. Sridevi',
+    instructor_name: 'Guru Nattiyakalaimani V. Suriya Sathian',
     schedule_days: 'Tue, Thu, Sat',
     schedule_time: '05:30 PM - 07:00 PM',
   };

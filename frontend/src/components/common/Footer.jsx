@@ -30,7 +30,7 @@ export default function Footer() {
             </div>
             
             <p className="text-xs text-[#999999] leading-relaxed font-outfit mb-3">
-              Founded and directed by <strong className="text-white">Guru Nattiyakalaimani R. Sridevi</strong> (Diploma in Dance, Title of Nattiyakalaimani, BFA Dance). Over 18 years dedicated to preserving the pristine Pandanallur and Vazhuvoor traditions in Thiruthangal and Sivakasi.
+              Founded and directed by <strong className="text-white">Guru Nattiyakalaimani V. Suriya Sathian</strong> (Diploma in Dance, Title of Nattiyakalaimani and now doing BFA in Dance). Over 18 years dedicated to preserving the pristine Pandanallur and Vazhuvoor traditions in Thiruthangal and Sivakasi.
             </p>
 
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-[#111111] border border-[#333333] text-xs text-[#d4af37]">

@@ -26,7 +26,7 @@ const fallbackStore = {
   users: [
     {
       id: '374a6ea5-21cb-4f19-a436-aa8195e52d74',
-      name: 'Guru Nattiyakalaimani R. Sridevi',
+      name: 'Guru Nattiyakalaimani V. Suriya Sathian',
       email: 'admin@sriruthralaya.com',
       password_hash: bcrypt.hashSync('Admin@123', 10),
       role: 'admin',
@@ -117,7 +117,7 @@ const fallbackStore = {
       id: 'd979992a-24b4-41d2-bd34-1709097d3d43',
       name: 'Bala Natya (Beginner Adavus)',
       level: 'Beginner',
-      instructor_name: 'Guru Nattiyakalaimani R. Sridevi',
+      instructor_name: 'Guru Nattiyakalaimani V. Suriya Sathian',
       schedule_days: 'Mon, Wed, Fri',
       schedule_time: '04:30 PM - 05:30 PM',
       fee_amount: 1800,
@@ -137,7 +137,7 @@ const fallbackStore = {
       id: '01797166-7685-4641-824c-d898c29786a4',
       name: 'Visharada (Advanced Varnam & Padam)',
       level: 'Advanced',
-      instructor_name: 'Guru Nattiyakalaimani R. Sridevi',
+      instructor_name: 'Guru Nattiyakalaimani V. Suriya Sathian',
       schedule_days: 'Saturday, Sunday',
       schedule_time: '08:00 AM - 10:30 AM',
       fee_amount: 3200,
@@ -147,7 +147,7 @@ const fallbackStore = {
       id: '22a16b97-4584-4865-84db-99fc59482bdd',
       name: 'Arangetram Margam Intensive',
       level: 'Arangetram Prep',
-      instructor_name: 'Guru Nattiyakalaimani R. Sridevi',
+      instructor_name: 'Guru Nattiyakalaimani V. Suriya Sathian',
       schedule_days: 'Saturday, Sunday',
       schedule_time: '04:00 PM - 07:00 PM',
       fee_amount: 4500,
@@ -995,7 +995,7 @@ async function recordAdminActivity(params) {
 function getAdminInfoFromReq(req) {
   return {
     admin_id: req.user?.id || '374a6ea5-21cb-4f19-a436-aa8195e52d74',
-    admin_name: req.user?.name || 'Guru Nattiyakalaimani R. Sridevi',
+    admin_name: req.user?.name || 'Guru Nattiyakalaimani V. Suriya Sathian',
     admin_email: req.user?.email || 'admin@sriruthralaya.com',
     ip_address: req.ip || req.headers['x-forwarded-for'] || '127.0.0.1',
   };

@@ -16,7 +16,7 @@ export default function StudentMaterials() {
       title: 'Tatta & Natta Adavu Solkattu Audio Drills',
       type: 'Audio Guide (MP3)',
       size: '8.1 MB',
-      description: 'High-clarity nattuvangam practice beats in 1st, 2nd, and 3rd speeds recorded by Guru Sridevi.',
+      description: 'High-clarity nattuvangam practice beats in 1st, 2nd, and 3rd speeds recorded by Guru V. Suriya Sathian.',
       icon: Music,
       link: '#',
     },
@@ -55,7 +55,7 @@ export default function StudentMaterials() {
           Study Materials &amp; Practice Media
         </h1>
         <p className="text-xs sm:text-sm text-stone-600 mt-1">
-          Authorized curriculum guides, solkattu audio tracks, and theory papers uploaded by Guru Sridevi.
+          Authorized curriculum guides, solkattu audio tracks, and theory papers uploaded by Guru V. Suriya Sathian.
         </p>
       </div>
 

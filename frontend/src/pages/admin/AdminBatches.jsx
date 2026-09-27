@@ -11,7 +11,7 @@ export default function AdminBatches() {
   const [formData, setFormData] = useState({
     name: '',
     level: 'Beginner',
-    instructor_name: 'Guru Nattiyakalaimani R. Sridevi',
+    instructor_name: 'Guru Nattiyakalaimani V. Suriya Sathian',
     schedule_days: 'Mon, Wed, Fri',
     schedule_time: '04:30 PM - 05:30 PM',
     fee_amount: 1800,
@@ -39,7 +39,7 @@ export default function AdminBatches() {
     setFormData({
       name: '',
       level: 'Beginner',
-      instructor_name: 'Guru Nattiyakalaimani R. Sridevi',
+      instructor_name: 'Guru Nattiyakalaimani V. Suriya Sathian',
       schedule_days: 'Mon, Wed, Fri',
       schedule_time: '04:30 PM - 05:30 PM',
       fee_amount: 1800,

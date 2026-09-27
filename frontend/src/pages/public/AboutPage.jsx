@@ -41,7 +41,7 @@ export default function AboutPage() {
               <div className="w-80 h-96 rounded-2xl overflow-hidden border-2 border-[#d4af37] shadow-[0_0_25px_rgba(212,175,55,0.25)] bg-[#111111]">
                 <img
                   src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=700&q=80"
-                  alt="Guru Nattiyakalaimani R. Sridevi"
+                  alt="Guru Nattiyakalaimani V. Suriya Sathian"
                   className="w-full h-full object-cover object-top"
                 />
               </div>
@@ -49,7 +49,7 @@ export default function AboutPage() {
               {/* Title Crest */}
               <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-11/12 p-4 rounded-xl bg-[#111111] text-white border border-[#d4af37] shadow-xl text-center">
                 <h2 className="font-cinzel text-sm sm:text-base font-bold text-[#d4af37] tracking-wide">
-                  Guru R. Sridevi
+                  Guru V. Suriya Sathian
                 </h2>
                 <p className="text-[11px] text-[#aaaaaa] font-cormorant italic mt-0.5">
                   Founder &amp; Artistic Director
@@ -63,7 +63,7 @@ export default function AboutPage() {
                 <span>Title of "Nattiyakalaimani"</span>
               </div>
               <p className="text-xs text-[#777777] font-outfit">
-                Diploma in Dance • BFA in Classical Dance
+                Diploma in Dance • Title of Nattiyakalaimani • Pursuing BFA in Dance
               </p>
             </div>
           </div>
@@ -75,10 +75,10 @@ export default function AboutPage() {
                 <span>Guru's Journey &amp; Legacy</span>
               </h3>
               <p className="text-sm sm:text-base leading-relaxed text-[#bbbbbb]">
-                For the past <strong className="text-white">18 years</strong>, Guru <strong className="text-white">Nattiyakalaimani R. Sridevi</strong> has been nurturing Sri Ruthraalaya Dance Academy in <strong className="text-white">Thiruthangal near Sivakasi</strong>, teaching more than 100+ students from early childhood to professional Arangetram solo debuts.
+                For the past <strong className="text-white">18 years</strong>, Guru <strong className="text-white">Nattiyakalaimani V. Suriya Sathian</strong> has been nurturing Sri Ruthraalaya Dance Academy in <strong className="text-white">Thiruthangal near Sivakasi</strong>, teaching more than 100+ students from early childhood to professional Arangetram solo debuts.
               </p>
               <p className="text-sm sm:text-base leading-relaxed text-[#bbbbbb] mt-3">
-                Holding a prestigious <strong className="text-white">Diploma in Dance</strong>, the revered title of <strong className="text-white">Nattiyakalaimani</strong>, and having completed her <strong className="text-white">BFA in Dance</strong>, she brings deep theoretical and practical mastery of the Natyashastra and Abhinaya Darpana to every disciple.
+                Holding a prestigious <strong className="text-white">Diploma in Dance</strong>, the revered title of <strong className="text-white">Nattiyakalaimani</strong>, and currently completing his <strong className="text-white">BFA in Dance</strong>, he brings deep theoretical and practical mastery of the Natyashastra and Abhinaya Darpana to every disciple.
               </p>
             </div>
 

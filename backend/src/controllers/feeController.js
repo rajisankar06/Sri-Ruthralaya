@@ -363,7 +363,7 @@ async function generateReceiptPDF(req, res, next) {
     doc.text('Computer-generated receipt, valid without physical seal.', 45, signY + 16);
 
     doc.fillColor('#333333').font('Helvetica-Bold').fontSize(10);
-    doc.text('Guru Nattiyakalaimani R. Sridevi', 350, signY, { align: 'right' });
+    doc.text('Guru Nattiyakalaimani V. Suriya Sathian', 350, signY, { align: 'right' });
     doc.font('Helvetica').fontSize(9).fillColor('#666666');
     doc.text('Founder & Principal Instructor\nSri Ruthralaya Dance Academy', 350, signY + 14, { align: 'right' });
 

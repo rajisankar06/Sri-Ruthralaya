@@ -8,7 +8,7 @@ export default function StudentSchedule() {
 
   const activeBatch = user?.enrollments?.[0]?.batch || {
     name: 'Madhyama (Intermediate Jatiswaram & Shabdam)',
-    instructor_name: 'Guru Nattiyakalaimani R. Sridevi',
+    instructor_name: 'Guru Nattiyakalaimani V. Suriya Sathian',
     schedule_days: 'Tue, Thu, Sat',
     schedule_time: '05:30 PM - 07:00 PM',
   };
@@ -39,7 +39,7 @@ export default function StudentSchedule() {
 
   return (
     <div className="space-y-8 font-outfit">
-      
+
       {/* Header */}
       <div>
         <h1 className="font-cinzel text-2xl sm:text-3xl font-bold text-temple-maroon">

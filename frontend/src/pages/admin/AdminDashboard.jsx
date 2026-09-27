@@ -106,10 +106,10 @@ export default function AdminDashboard() {
   const recentActivity = analytics?.recentActivity || [];
 
   const batchCapacities = [
-    { name: 'Bala Natya (Beginner)', level: 'Beginner', enrolled: 32, capacity: 35, time: 'Mon, Wed, Fri • 4:30 PM', instructor: 'Guru R. Sridevi' },
-    { name: 'Madhyama Natya (Intermediate)', level: 'Intermediate', enrolled: 26, capacity: 30, time: 'Tue, Thu, Sat • 5:00 PM', instructor: 'Guru R. Sridevi' },
-    { name: 'Natya Praveena (Advanced)', level: 'Advanced', enrolled: 22, capacity: 25, time: 'Mon, Wed, Sat • 6:30 PM', instructor: 'Guru R. Sridevi' },
-    { name: 'Arangetram Margam Intensive', level: 'Arangetram Prep', enrolled: 15, capacity: 15, time: 'Daily Sadhana • 6:00 AM', instructor: 'Guru R. Sridevi' },
+    { name: 'Bala Natya (Beginner)', level: 'Beginner', enrolled: 32, capacity: 35, time: 'Mon, Wed, Fri • 4:30 PM', instructor: 'Guru V. Suriya Sathian' },
+    { name: 'Madhyama Natya (Intermediate)', level: 'Intermediate', enrolled: 26, capacity: 30, time: 'Tue, Thu, Sat • 5:00 PM', instructor: 'Guru V. Suriya Sathian' },
+    { name: 'Natya Praveena (Advanced)', level: 'Advanced', enrolled: 22, capacity: 25, time: 'Mon, Wed, Sat • 6:30 PM', instructor: 'Guru V. Suriya Sathian' },
+    { name: 'Arangetram Margam Intensive', level: 'Arangetram Prep', enrolled: 15, capacity: 15, time: 'Daily Sadhana • 6:00 AM', instructor: 'Guru V. Suriya Sathian' },
   ];
 
   return (

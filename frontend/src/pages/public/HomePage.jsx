@@ -85,7 +85,7 @@ export default function HomePage() {
               <div className="pt-6 border-t border-[#333333] flex items-center justify-center lg:justify-start gap-3 text-xs text-[#aaaaaa] font-outfit">
                 <Award className="w-5 h-5 text-[#d4af37] flex-shrink-0" />
                 <span>
-                  Under the Guidance of <strong className="text-white">Guru Nattiyakalaimani R. Sridevi</strong> (Diploma in Dance, BFA Dance)
+                  Under the Guidance of <strong className="text-white">Guru Nattiyakalaimani V. Suriya Sathian</strong> (Diploma in Dance, Title of Nattiyakalaimani, pursuing BFA in Dance)
                 </span>
               </div>
             </div>
@@ -197,16 +197,16 @@ export default function HomePage() {
                 <div className="w-72 h-88 sm:w-80 sm:h-96 rounded-2xl overflow-hidden border-2 border-[#d4af37] shadow-[0_0_25px_rgba(212,175,55,0.25)] bg-[#111111]">
                   <img
                     src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80"
-                    alt="Guru Nattiyakalaimani R. Sridevi"
+                    alt="Guru Nattiyakalaimani V. Suriya Sathian"
                     className="w-full h-full object-cover object-center"
                   />
                 </div>
-                <div className="absolute -bottom-5 -right-5 p-4 rounded-xl bg-[#111111] text-white border border-[#d4af37] shadow-xl text-center max-w-[210px]">
+                <div className="absolute -bottom-5 -right-5 p-4 rounded-xl bg-[#111111] text-white border border-[#d4af37] shadow-xl text-center max-w-[230px]">
                   <p className="font-cinzel text-xs font-bold text-[#d4af37]">
-                    Guru R. Sridevi
+                    Guru V. Suriya Sathian
                   </p>
-                  <p className="text-[10px] text-[#aaaaaa] font-cormorant italic mt-0.5">
-                    Diploma in Dance, Title of Nattiyakalaimani, BFA Dance
+                  <p className="text-[10px] text-[#aaaaaa] font-cormorant italic mt-0.5 leading-tight">
+                    Diploma in Dance, Title of Nattiyakalaimani and now doing BFA in Dance
                   </p>
                 </div>
               </div>
@@ -218,7 +218,7 @@ export default function HomePage() {
               </h3>
 
               <p className="font-outfit text-sm sm:text-base text-[#bdbdbd] leading-relaxed">
-                Founded and directed by <strong className="text-white">Guru Nattiyakalaimani R. Sridevi</strong>, the academy has trained over 100+ students and prepared disciples for Tamil Nadu Music and Fine Arts University grade examinations with a 100% record of distinction.
+                Founded and directed by <strong className="text-white">Guru Nattiyakalaimani V. Suriya Sathian</strong>, the academy has trained over 100+ students and prepared disciples for Tamil Nadu Music and Fine Arts University grade examinations with a 100% record of distinction.
               </p>
 
               <div className="about-features grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
@@ -268,7 +268,7 @@ export default function HomePage() {
                   to="/about"
                   className="inline-flex items-center gap-2 text-sm font-cinzel font-bold text-[#d4af37] hover:text-[#ffd700] transition-colors"
                 >
-                  <span>Read Guru Sridevi's Full Pedagogical Biography</span>
+                  <span>Read Guru V. Suriya Sathian's Pedagogical Biography</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -451,7 +451,7 @@ export default function HomePage() {
             <div className="gallery-item h-64 overflow-hidden rounded-xl border border-[#333333] group bg-[#0f0f0f]">
               <img
                 src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80"
-                alt="Guru Sridevi"
+                alt="Guru V. Suriya Sathian"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
@@ -500,7 +500,7 @@ export default function HomePage() {
                 Begin Your Classical <span className="text-[#d4af37]">Dance Journey</span>
               </h2>
               <p className="font-cormorant italic text-base sm:text-xl text-[#bdbdbd] mt-2 max-w-xl mx-auto">
-                Admissions are now open for new batches. Join Guru Sridevi's lineage and awaken your inner Nataraja.
+                Admissions are now open for new batches. Join Guru V. Suriya Sathian's lineage and awaken your inner Nataraja.
               </p>
 
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">

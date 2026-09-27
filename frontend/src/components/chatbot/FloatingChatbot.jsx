@@ -37,7 +37,7 @@ export default function FloatingChatbot() {
   const guestSuggestions = [
     "Class timings & batches",
     "Monthly fee structure",
-    "About Guru Sridevi's legacy",
+    "About Guru V. Suriya Sathian's legacy",
     "How do I enroll as a beginner?",
     "Salangai Pooja & Arangetram",
   ];

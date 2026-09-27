@@ -6,7 +6,7 @@
 
 ## 🏛️ Reference Branding & Visual Design Language
 - **Academy**: Sri Ruthraalayaa (Sri Ruthralaya Bharathanatyam Academy)
-- **Founder & Director**: Guru Nattiyakalaimani R. Sridevi (Diploma in Dance, Title of *Nattiyakalaimani*, BFA in Classical Dance)
+- **Founder & Director**: Guru Nattiyakalaimani V. Suriya Sathian (Diploma in Dance, Title of *Nattiyakalaimani*, now doing BFA in Dance)
 - **Legacy**: 18+ Years of Classical Dance Heritage in Thiruthangal near Sivakasi, Tamil Nadu
 - **Affiliation**: Tamil Nadu Music and Fine Arts University (Grade Examinations 1–7)
 - **Palette**:
@@ -199,7 +199,7 @@ Visit **http://localhost:5173** to view the application.
 
 ### 2. Context-Aware AI Chatbot Widget
 - Floats on all public and student pages.
-- **Public Mode**: Answers visitors regarding class timings, monthly fees, Guru Sridevi's 18-year legacy, and admission criteria.
+- **Public Mode**: Answers visitors regarding class timings, monthly fees, Guru V. Suriya Sathian's 18-year legacy, and admission criteria.
 - **Student Disciple Mode**: Queries PostgreSQL for the authenticated student's personalized metrics (e.g., *"What is my attendance this month?"* -> *"Namaskaram Ananya! Your current attendance is 93.3% across 15 sessions."*).
 - All conversations recorded in `chatbot_logs` for administrative quality review.
 

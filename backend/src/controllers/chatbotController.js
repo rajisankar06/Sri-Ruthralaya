@@ -30,11 +30,11 @@ function generateLocalAcademyResponse(message, studentData, academyData) {
       if (batch) {
         return `Namaskaram ${name}! You are enrolled in **${batch.name}** under **${batch.instructor_name}**. Your classes are scheduled on **${batch.schedule_days}** at **${batch.schedule_time}**. Please arrive 10 minutes prior for warm-up and Aramandi practice.`;
       }
-      return `Namaskaram ${name}! You are currently being assigned to your class batch. Please consult Guru Sridevi for your updated schedule.`;
+      return `Namaskaram ${name}! You are currently being assigned to your class batch. Please consult Guru V. Suriya Sathian for your updated schedule.`;
     }
 
     if (q.includes('my guru') || q.includes('instructor') || q.includes('teacher')) {
-      return `Your training is guided by **${batch?.instructor_name || 'Guru Nattiyakalaimani R. Sridevi'}**. With over 18 years of pedagogical lineage in Thiruthangal, each disciple receives personalized nattuvangam and stylistic corrections.`;
+      return `Your training is guided by **${batch?.instructor_name || 'Guru Nattiyakalaimani V. Suriya Sathian'}**. With over 18 years of pedagogical lineage in Thiruthangal, each disciple receives personalized nattuvangam and stylistic corrections.`;
     }
 
     if (q.includes('exam') || q.includes('grade') || q.includes('certificate')) {
@@ -57,12 +57,12 @@ function generateLocalAcademyResponse(message, studentData, academyData) {
     return `📍 **Sri Ruthralaya Dance Academy** is located in **Thiruthangal near Sivakasi**, Virudhunagar District, Tamil Nadu (PIN: 626130).\n\n📞 Phone: **+91 98421 23456**\n✉️ Email: **info@sriruthralaya.com**\nVisiting hours: Monday to Saturday, 04:00 PM – 07:30 PM.`;
   }
 
-  if (q.includes('guru') || q.includes('founder') || q.includes('sridevi') || q.includes('qualification')) {
-    return `Our revered founder and artistic director is **Guru Nattiyakalaimani R. Sridevi**. She holds a prestigious Diploma in Dance, the honoured title of *Nattiyakalaimani*, and a Bachelor of Fine Arts (BFA) in Classical Bharatanatyam. She has dedicated over 18 years to training hundreds of disciples in Thiruthangal and Sivakasi.`;
+  if (q.includes('guru') || q.includes('founder') || q.includes('suriya') || q.includes('sathian') || q.includes('qualification')) {
+    return `Our revered founder and artistic director is **Guru Nattiyakalaimani V. Suriya Sathian**. He holds a prestigious **Diploma in Dance**, the honoured title of ***Nattiyakalaimani***, and is **now doing BFA in Dance**. He has dedicated over 18 years to training hundreds of disciples in Thiruthangal and Sivakasi.`;
   }
 
   if (q.includes('arangetram') || q.includes('debut') || q.includes('solo')) {
-    return `An **Arangetram** ('ascending the stage') is the sacred graduation solo recital of a Bharatanatyam disciple, presenting a complete 2.5-hour Margam with live Carnatic orchestra. Guru Sridevi personally guides senior disciples through intensive 1-on-1 Margam rehearsals.`;
+    return `An **Arangetram** ('ascending the stage') is the sacred graduation solo recital of a Bharatanatyam disciple, presenting a complete 2.5-hour Margam with live Carnatic orchestra. Guru V. Suriya Sathian personally guides senior disciples through intensive 1-on-1 Margam rehearsals.`;
   }
 
   if (q.includes('salangai') || q.includes('bells') || q.includes('pooja') || q.includes('ghungroo')) {
@@ -73,7 +73,7 @@ function generateLocalAcademyResponse(message, studentData, academyData) {
     return `Admissions are open for learners aged 5 and above! Beginners are placed in the **Bala Natya** batch. You can register online directly on this portal by clicking **Join Academy** in the top navigation.`;
   }
 
-  return `Namaskaram! Welcome to Sri Ruthralaya Bharathanatyam Academy, Thiruthangal. I can assist you with batch schedules, fee structure, Guru Sridevi's credentials, university examinations, or enrollment guidelines. If you are an enrolled student, please sign in to check your attendance and fee records!`;
+  return `Namaskaram! Welcome to Sri Ruthralaya Bharathanatyam Academy, Thiruthangal. I can assist you with batch schedules, fee structure, Guru V. Suriya Sathian's credentials, university examinations, or enrollment guidelines. If you are an enrolled student, please sign in to check your attendance and fee records!`;
 }
 
 /**
@@ -150,7 +150,7 @@ async function handleChatbotMessage(req, res, next) {
 
     const { generateGeminiContent } = require('../utils/gemini');
 
-    const systemPrompt = `You are the knowledgeable, polite AI Assistant for "Sri Ruthralaya Bharathanatyam Academy" (Sri Ruthraalayaa) in Thiruthangal near Sivakasi, Tamil Nadu, founded by Guru Nattiyakalaimani R. Sridevi (Diploma in Dance, Title of Nattiyakalaimani, BFA in Dance).
+    const systemPrompt = `You are the knowledgeable, polite AI Assistant for "Sri Ruthralaya Bharathanatyam Academy" (Sri Ruthraalayaa) in Thiruthangal near Sivakasi, Tamil Nadu, founded by Guru Nattiyakalaimani V. Suriya Sathian (Diploma in Dance, Title of Nattiyakalaimani and now doing BFA in Dance).
 Academy Context:
 - Batches: ${JSON.stringify(academyData.batches)}
 - Upcoming Events: ${JSON.stringify(academyData.events)}
