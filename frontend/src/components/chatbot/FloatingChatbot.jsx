@@ -190,8 +190,8 @@ export default function FloatingChatbot() {
 
                 <div
                   className={`max-w-[82%] px-4 py-2.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm ${msg.sender === 'user'
-                      ? 'bg-[#d4af37] text-[#111111] font-medium rounded-br-none'
-                      : 'bg-[#161616] text-[#eeeeee] rounded-bl-none border border-[#333333]'
+                    ? 'bg-[#d4af37] text-[#111111] font-medium rounded-br-none'
+                    : 'bg-[#161616] text-[#eeeeee] rounded-bl-none border border-[#333333]'
                     }`}
                 >
                   <div>{renderFormattedText(msg.text)}</div>
